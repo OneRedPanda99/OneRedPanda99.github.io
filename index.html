@@ -363,22 +363,35 @@
             updateStats();
             loadRandomSentence();
 
-            // Event listeners for drawing
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDrawing);
-            canvas.addEventListener('mouseout', stopDrawing);
+            // Debug: Show what events are supported
+            console.log('Touch events supported:', 'ontouchstart' in window);
+            console.log('Pointer events supported:', 'onpointerdown' in window);
 
-            // Touch events for iPad/mobile - more specific handling
+            // Try multiple event types for maximum compatibility
+            
+            // Mouse events (for desktop/testing)
+            canvas.addEventListener('mousedown', handleMouseDown);
+            canvas.addEventListener('mousemove', handleMouseMove);
+            canvas.addEventListener('mouseup', handleMouseUp);
+            canvas.addEventListener('mouseout', handleMouseUp);
+
+            // Touch events (iOS/Android)
             canvas.addEventListener('touchstart', handleTouchStart, {passive: false});
             canvas.addEventListener('touchmove', handleTouchMove, {passive: false});
             canvas.addEventListener('touchend', handleTouchEnd, {passive: false});
             canvas.addEventListener('touchcancel', handleTouchEnd, {passive: false});
 
-            // Prevent scrolling when drawing
-            document.addEventListener('touchstart', preventScroll, {passive: false});
-            document.addEventListener('touchend', preventScroll, {passive: false});
-            document.addEventListener('touchmove', preventScroll, {passive: false});
+            // Pointer events (modern browsers, Apple Pencil)
+            if ('onpointerdown' in window) {
+                canvas.addEventListener('pointerdown', handlePointerDown);
+                canvas.addEventListener('pointermove', handlePointerMove);
+                canvas.addEventListener('pointerup', handlePointerUp);
+                canvas.addEventListener('pointercancel', handlePointerUp);
+            }
+
+            // Prevent default behaviors that might interfere
+            canvas.addEventListener('selectstart', e => e.preventDefault());
+            canvas.addEventListener('dragstart', e => e.preventDefault());
 
             // Handle orientation changes
             window.addEventListener('orientationchange', () => {
@@ -387,6 +400,8 @@
                     drawGuidelines();
                 }, 100);
             });
+
+            console.log('Event listeners attached');
         }
 
         function resizeCanvas() {
@@ -402,10 +417,16 @@
         }
 
         function preventScroll(e) {
-            if (e.target === canvas) {
+            if (e.target === canvas || canvas.contains(e.target)) {
                 e.preventDefault();
+                e.stopPropagation();
             }
         }
+
+        // Add global touch prevention
+        document.addEventListener('touchstart', preventScroll, {passive: false});
+        document.addEventListener('touchend', preventScroll, {passive: false});
+        document.addEventListener('touchmove', preventScroll, {passive: false});
 
         function setupCanvas() {
             ctx.strokeStyle = '#333';
