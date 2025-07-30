@@ -38,7 +38,7 @@
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 20px;
+            padding: 15px;
             width: 100%;
             height: 100%;
             max-width: 1024px;
@@ -56,12 +56,12 @@
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             flex-shrink: 0;
         }
 
         .title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: #333;
             margin-bottom: 5px;
             background: linear-gradient(45deg, #667eea, #764ba2);
@@ -70,31 +70,50 @@
             background-clip: text;
         }
 
-        .subtitle {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
+        .mode-selector {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            background: white;
+            color: #667eea;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn.active {
+            background: #667eea;
+            color: white;
         }
 
         .progress-section {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             flex-shrink: 0;
         }
 
         .progress-label {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: 600;
             color: #333;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
+            height: 6px;
             background: #e0e0e0;
-            border-radius: 4px;
+            border-radius: 3px;
             overflow: hidden;
             position: relative;
         }
@@ -104,35 +123,47 @@
             background: linear-gradient(90deg, #667eea, #764ba2);
             width: 0%;
             transition: width 0.3s ease;
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
         .sentence-display {
             background: #f8f9fa;
             border: 2px solid #e9ecef;
             border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 12px;
+            margin-bottom: 10px;
             text-align: center;
             flex-shrink: 0;
+            position: relative;
         }
 
         .sentence-text {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             color: #333;
-            line-height: 1.4;
+            line-height: 1.3;
             font-weight: 600;
+        }
+
+        .word-count {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 0.7rem;
+            color: #666;
+            background: rgba(255,255,255,0.8);
+            padding: 2px 6px;
+            border-radius: 10px;
         }
 
         .canvas-container {
             border: 3px solid #667eea;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             background: white;
             position: relative;
             overflow: hidden;
             flex: 1;
-            min-height: 200px;
+            min-height: 150px;
         }
 
         #drawingCanvas, #guidelineCanvas {
@@ -146,45 +177,65 @@
 
         .guidelines {
             pointer-events: none;
-            opacity: 0.3;
+            opacity: 0.2;
         }
 
-        .controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+        .quick-controls {
+            display: flex;
+            gap: 8px;
             margin-bottom: 10px;
             flex-shrink: 0;
         }
 
-        @media (orientation: landscape) and (min-width: 768px) {
-            .controls {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 12px;
-            }
-        }
-
-        .btn {
-            padding: 12px 16px;
+        .quick-btn {
+            flex: 1;
+            padding: 12px;
             border: none;
             border-radius: 6px;
             font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
             touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        .btn-primary {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+        .quick-next {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            flex: 2;
+        }
+
+        .quick-clear {
+            background: #6c757d;
             color: white;
         }
 
-        .btn-primary:active {
+        .quick-skip {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .quick-btn:active {
             transform: scale(0.98);
+        }
+
+        .secondary-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
         }
 
         .btn-secondary {
@@ -192,38 +243,32 @@
             color: white;
         }
 
-        .btn-secondary:active {
-            transform: scale(0.98);
-            background: #5a6268;
-        }
-
         .btn-danger {
             background: #dc3545;
             color: white;
         }
 
-        .btn-danger:active {
+        .btn:active {
             transform: scale(0.98);
-            background: #c82333;
         }
 
         .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
+            gap: 6px;
             flex-shrink: 0;
         }
 
         .stat-card {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 8px;
+            padding: 6px;
             border-radius: 6px;
             text-align: center;
             border: 1px solid #dee2e6;
         }
 
         .stat-number {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             color: #667eea;
             display: block;
@@ -231,65 +276,89 @@
 
         .stat-label {
             color: #666;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             margin-top: 2px;
         }
 
-        /* iPad-specific optimizations */
-        @media (min-width: 768px) and (max-width: 1024px) {
+        .speed-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(40, 167, 69, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .speed-indicator.show {
+            opacity: 1;
+        }
+
+        .auto-advance {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* iPad Pro optimizations */
+        @media (min-width: 1024px) {
             .container {
-                padding: 25px;
+                padding: 20px;
             }
             
             .title {
-                font-size: 2rem;
+                font-size: 1.6rem;
             }
             
             .sentence-text {
-                font-size: 1.4rem;
+                font-size: 1.6rem;
             }
             
-            .btn {
-                padding: 14px 18px;
+            .quick-btn {
+                padding: 14px;
                 font-size: 1rem;
-            }
-            
-            .stat-number {
-                font-size: 1.4rem;
-            }
-            
-            .stat-label {
-                font-size: 0.8rem;
             }
         }
 
-        .debug-info {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.8);
+        .streak-counter {
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            background: linear-gradient(45deg, #ff9a56, #ff6b6b);
             color: white;
-            padding: 5px;
-            font-size: 10px;
-            border-radius: 3px;
-            z-index: 1000;
-            display: none;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
-    <div class="debug-info" id="debugInfo">Debug info</div>
-    
     <div class="container">
         <div class="header">
-            <h1 class="title">Handwriting Collector</h1>
-            <p class="subtitle">Train your personal AI handwriting model</p>
+            <h1 class="title">⚡ Speed Handwriting Collector</h1>
+        </div>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" id="sentenceMode">📝 Sentences</button>
+            <button class="mode-btn" id="wordMode">🔤 Words</button>
+            <button class="mode-btn" id="letterMode">🔠 Letters</button>
         </div>
 
         <div class="progress-section">
             <div class="progress-label">
-                <span>Training Progress</span>
-                <span><span id="currentSample">0</span> / <span id="targetSamples">500</span> samples</span>
+                <span id="modeLabel">Sentence Mode</span>
+                <span><span id="currentSample">0</span> / <span id="targetSamples">1000</span></span>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
@@ -297,7 +366,11 @@
         </div>
 
         <div class="sentence-display">
-            <p class="sentence-text" id="sentenceText">The quick brown fox jumps over the lazy dog.</p>
+            <div class="streak-counter" id="streakCounter">🔥 0</div>
+            <div class="word-count" id="wordCount">3 words</div>
+            <p class="sentence-text" id="sentenceText">Loading...</p>
+            <div class="speed-indicator" id="speedIndicator">⚡ Fast!</div>
+            <div class="auto-advance" id="autoAdvance" style="display: none;">Auto-advance in 3s</div>
         </div>
 
         <div class="canvas-container" id="canvasContainer">
@@ -305,29 +378,33 @@
             <canvas class="guidelines" id="guidelineCanvas"></canvas>
         </div>
 
-        <div class="controls">
-            <button class="btn btn-primary" id="nextBtn">Next Sentence</button>
-            <button class="btn btn-secondary" id="clearBtn">Clear</button>
-            <button class="btn btn-secondary" id="guidelinesBtn">Toggle Guidelines</button>
-            <button class="btn btn-danger" id="exportBtn">Export Data</button>
+        <div class="quick-controls">
+            <button class="quick-btn quick-next" id="nextBtn">✅ Next (Space)</button>
+            <button class="quick-btn quick-clear" id="clearBtn">🗑️ Clear</button>
+            <button class="quick-btn quick-skip" id="skipBtn">⏭️ Skip</button>
+        </div>
+
+        <div class="secondary-controls">
+            <button class="btn btn-secondary" id="guidelinesBtn">Guidelines</button>
+            <button class="btn btn-danger" id="exportBtn">📤 Export</button>
         </div>
 
         <div class="stats">
             <div class="stat-card">
                 <span class="stat-number" id="totalStrokes">0</span>
-                <div class="stat-label">Total Strokes</div>
+                <div class="stat-label">Strokes</div>
             </div>
             <div class="stat-card">
                 <span class="stat-number" id="totalWords">0</span>
-                <div class="stat-label">Words Written</div>
+                <div class="stat-label">Words</div>
             </div>
             <div class="stat-card">
-                <span class="stat-number" id="sessionTime">0m</span>
-                <div class="stat-label">Session Time</div>
+                <span class="stat-number" id="wpm">0</span>
+                <div class="stat-label">WPM</div>
             </div>
             <div class="stat-card">
                 <span class="stat-number" id="dataSize">0KB</span>
-                <div class="stat-label">Data Collected</div>
+                <div class="stat-label">Data</div>
             </div>
         </div>
     </div>
@@ -340,69 +417,48 @@
         let allStrokes = [];
         let currentSampleData = [];
         let sampleCount = 0;
-        let targetSamples = 500;
+        let targetSamples = 1000;
         let startTime = Date.now();
         let totalStrokes = 0;
         let showGuidelines = true;
-        let debugMode = false;
+        let currentMode = 'sentence';
+        let streak = 0;
+        let lastSampleTime = Date.now();
+        let sessionWordCount = 0;
+        let autoAdvanceTimer = null;
 
-        const sentences = [
-            "Netflix and chill vibes", "Main character energy", "That hits different though",
-            "No cap this is fire", "Living my best life", "Touch grass immediately",
-            "Big mood honestly", "This is not it chief", "Sending good vibes only",
-            "Manifesting success today", "Pizza at midnight hits different", 
-            "Coffee before conversation please", "Tacos solve everything always",
-            "Ice cream for breakfast", "Pasta is my love language", 
-            "Chocolate fixes bad days", "Avocado toast generation represent",
-            "Spicy food builds character", "Cereal is acceptable dinner",
-            "Cookies make everything better", "My plants are judging me",
-            "Socks disappear in dryers", "Monday energy is questionable",
-            "Procrastination is my superpower", "Adulting is highly overrated",
-            "Sleep is for winners", "Chaos is my natural state",
-            "Cats have secret meetings", "WiFi password is everything",
-            "Laundry breeds when ignored", "Dream big work harder",
-            "Create your own sunshine", "Adventure awaits beyond comfort",
-            "Growth happens outside zones", "Believe in your weird",
-            "Magic happens when trying", "Progress over perfection always",
-            "Kindness is always trendy", "Your vibe attracts tribe",
-            "Courage over comfort zone", "WiFi stronger than relationships",
-            "Googling everything is normal", "Phone battery anxiety real",
-            "Screenshot for evidence always", "Airplane mode saves sanity",
-            "Password must contain soul", "Update later means never",
-            "Bluetooth pairing is witchcraft", "Cloud storage saves lives",
-            "Autocorrect creates chaos daily", "Clouds look like thoughts",
-            "Music speaks without words", "Books are portable magic",
-            "Dancing requires no audience", "Laughter is contagious medicine",
-            "Stars shine despite darkness", "Waves whisper ancient secrets",
-            "Time flies without permission", "Colors have hidden emotions",
-            "Silence speaks volumes sometimes", "Penguins wear natural tuxedos",
-            "Unicorns are just shy", "Dragons collect vintage teacups",
-            "Robots dream of pizza", "Aliens prefer pineapple pizza",
-            "Mermaids use waterproof makeup", "Wizards struggle with technology",
-            "Ninjas order food quietly", "Pirates use GPS now",
-            "Vampires avoid ring lights", "Autumn leaves whisper secrets",
-            "Winter demands cozy vibes", "Spring brings fresh possibilities",
-            "Summer energy is unmatched", "Rain sounds like meditation",
-            "Snow days feel magical", "Sunshine fixes almost everything",
-            "Thunderstorms are nature's concerts", "Rainbows appear after storms",
-            "Fog creates mysterious mornings"
-        ];
-        
-        
+        // Enhanced sentence collections
+        const sentenceCollections = {
+            sentence: [
+                "Netflix and chill vibes", "Main character energy", "That hits different though",
+                "No cap this is fire", "Living my best life", "Touch grass immediately",
+                "Big mood honestly", "This is not it chief", "Sending good vibes only",
+                "Pizza at midnight", "Coffee before conversation", "Tacos solve everything",
+                "Ice cream breakfast", "Pasta love language", "Chocolate fixes days",
+                "My plants judging", "Socks disappear dryers", "Monday energy questionable",
+                "Dream big work", "Create own sunshine", "Adventure awaits beyond",
+                "WiFi stronger relationships", "Phone battery anxiety", "Screenshot for evidence",
+                "Clouds look thoughts", "Music speaks words", "Books portable magic",
+                "Penguins wear tuxedos", "Unicorns are shy", "Dragons collect teacups"
+            ],
+            word: [
+                "amazing", "brilliant", "creative", "dynamic", "fantastic", "gorgeous", "incredible",
+                "pizza", "coffee", "music", "books", "travel", "friends", "family", "dreams",
+                "happy", "excited", "motivated", "inspired", "grateful", "peaceful", "confident",
+                "technology", "adventure", "mystery", "magic", "wonder", "discovery", "journey",
+                "sunshine", "rainbow", "ocean", "mountain", "forest", "river", "sunset",
+                "love", "hope", "faith", "trust", "kindness", "courage", "strength"
+            ],
+            letter: [
+                "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+                "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+                "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+                "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+                "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+            ]
+        };
 
-        function debug(msg) {
-            if (debugMode) {
-                console.log(msg);
-                const debugEl = document.getElementById('debugInfo');
-                debugEl.textContent = msg;
-                debugEl.style.display = 'block';
-            }
-        }
-
-        // Initialize the application
         function init() {
-            debug('Initializing...');
-            
             canvas = document.getElementById('drawingCanvas');
             ctx = canvas.getContext('2d');
             guidelineCanvas = document.getElementById('guidelineCanvas');
@@ -412,104 +468,200 @@
             setupCanvas();
             drawGuidelines();
             updateStats();
-            loadRandomSentence();
-
-            // Event listeners with better iPad support
+            loadContent();
             setupEventListeners();
-            
-            debug('Initialization complete');
+            setupKeyboardShortcuts();
         }
 
         function setupEventListeners() {
-            // Prevent default touch behaviors on the entire document
-            document.addEventListener('touchstart', (e) => {
-                if (e.target === canvas) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-
-            document.addEventListener('touchmove', (e) => {
-                if (e.target === canvas) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-
-            document.addEventListener('touchend', (e) => {
-                if (e.target === canvas) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-
-            // Touch events for drawing (primary for iPad)
+            // Canvas events
             canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
             canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
             canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
-            canvas.addEventListener('touchcancel', handleTouchEnd, { passive: false });
-
-            // Mouse events for desktop testing
             canvas.addEventListener('mousedown', handleMouseDown);
             canvas.addEventListener('mousemove', handleMouseMove);
             canvas.addEventListener('mouseup', handleMouseUp);
-            canvas.addEventListener('mouseout', handleMouseUp);
 
-            // Button event listeners
-            document.getElementById('nextBtn').addEventListener('click', nextSentence);
+            // Button events
+            document.getElementById('nextBtn').addEventListener('click', nextSample);
             document.getElementById('clearBtn').addEventListener('click', clearCanvas);
+            document.getElementById('skipBtn').addEventListener('click', skipSample);
             document.getElementById('guidelinesBtn').addEventListener('click', toggleGuidelines);
             document.getElementById('exportBtn').addEventListener('click', exportData);
 
-            // Handle orientation changes and resize
+            // Mode buttons
+            document.getElementById('sentenceMode').addEventListener('click', () => setMode('sentence'));
+            document.getElementById('wordMode').addEventListener('click', () => setMode('word'));
+            document.getElementById('letterMode').addEventListener('click', () => setMode('letter'));
+
+            // Prevent scrolling
+            document.addEventListener('touchstart', (e) => {
+                if (e.target === canvas) e.preventDefault();
+            }, { passive: false });
+            document.addEventListener('touchmove', (e) => {
+                if (e.target === canvas) e.preventDefault();
+            }, { passive: false });
+
+            // Resize handling
             window.addEventListener('orientationchange', () => {
                 setTimeout(() => {
                     resizeCanvas();
                     drawGuidelines();
                 }, 200);
             });
+        }
 
-            window.addEventListener('resize', () => {
-                setTimeout(() => {
-                    resizeCanvas();
-                    drawGuidelines();
-                }, 100);
-            });
-
-            // Enable debug mode with triple tap
-            let tapCount = 0;
-            canvas.addEventListener('touchend', (e) => {
-                tapCount++;
-                if (tapCount >= 3) {
-                    debugMode = !debugMode;
-                    debug(debugMode ? 'Debug mode ON' : 'Debug mode OFF');
-                    tapCount = 0;
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    nextSample();
+                } else if (e.code === 'KeyC') {
+                    clearCanvas();
+                } else if (e.code === 'KeyS') {
+                    skipSample();
                 }
-                setTimeout(() => { tapCount = 0; }, 1000);
             });
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            
+            // Update UI
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(mode + 'Mode').classList.add('active');
+            
+            // Update targets
+            const targets = { sentence: 1000, word: 2000, letter: 3000 };
+            targetSamples = targets[mode];
+            document.getElementById('targetSamples').textContent = targetSamples;
+            
+            // Update label
+            const labels = { sentence: 'Sentence Mode', word: 'Word Mode', letter: 'Letter Mode' };
+            document.getElementById('modeLabel').textContent = labels[mode];
+            
+            loadContent();
+            updateProgress();
+        }
+
+        function loadContent() {
+            const collection = sentenceCollections[currentMode];
+            const randomIndex = Math.floor(Math.random() * collection.length);
+            const content = collection[randomIndex];
+            
+            document.getElementById('sentenceText').textContent = content;
+            
+            // Update word count
+            const wordCount = currentMode === 'letter' ? '1 char' : 
+                             currentMode === 'word' ? '1 word' : 
+                             content.split(' ').length + ' words';
+            document.getElementById('wordCount').textContent = wordCount;
+            
+            clearAutoAdvance();
+        }
+
+        function nextSample() {
+            if (allStrokes.length === 0) {
+                showSpeedFeedback('Write something first! ✍️', 'warning');
+                return;
+            }
+
+            // Save sample
+            const currentText = document.getElementById('sentenceText').textContent;
+            currentSampleData.push({
+                text: currentText,
+                strokes: allStrokes.map(stroke => stroke.map(point => [point.x, point.y])),
+                timestamp: Date.now(),
+                mode: currentMode
+            });
+
+            // Update counters
+            sampleCount++;
+            const wordsInSample = currentMode === 'letter' ? 0.2 : 
+                                 currentMode === 'word' ? 1 : 
+                                 currentText.split(' ').length;
+            sessionWordCount += wordsInSample;
+
+            // Speed feedback
+            const currentTime = Date.now();
+            const timeDiff = (currentTime - lastSampleTime) / 1000;
+            if (timeDiff < 30) {
+                streak++;
+                showSpeedFeedback('⚡ Speed demon!', 'success');
+                
+                // Auto-advance for fast users
+                if (streak >= 3 && timeDiff < 15) {
+                    startAutoAdvance();
+                }
+            } else {
+                streak = 0;
+            }
+            lastSampleTime = currentTime;
+
+            updateProgress();
+            updateStats();
+            clearCanvas();
+            loadContent();
+        }
+
+        function skipSample() {
+            loadContent();
+            showSpeedFeedback('⏭️ Skipped', 'info');
+        }
+
+        function startAutoAdvance() {
+            let countdown = 3;
+            const autoAdvanceEl = document.getElementById('autoAdvance');
+            autoAdvanceEl.style.display = 'block';
+            
+            autoAdvanceTimer = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    autoAdvanceEl.textContent = `Auto-advance in ${countdown}s`;
+                } else {
+                    clearAutoAdvance();
+                    if (allStrokes.length > 0) {
+                        nextSample();
+                    }
+                }
+            }, 1000);
+        }
+
+        function clearAutoAdvance() {
+            if (autoAdvanceTimer) {
+                clearInterval(autoAdvanceTimer);
+                autoAdvanceTimer = null;
+            }
+            document.getElementById('autoAdvance').style.display = 'none';
+        }
+
+        function showSpeedFeedback(message, type) {
+            const indicator = document.getElementById('speedIndicator');
+            indicator.textContent = message;
+            indicator.className = 'speed-indicator show';
+            
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
         }
 
         function resizeCanvas() {
             const container = document.getElementById('canvasContainer');
             const rect = container.getBoundingClientRect();
             
-            const width = Math.floor(rect.width);
-            const height = Math.floor(rect.height);
-            
-            canvas.width = width;
-            canvas.height = height;
-            guidelineCanvas.width = width;
-            guidelineCanvas.height = height;
-            
-            debug(`Canvas resized to ${width}x${height}`);
+            canvas.width = Math.floor(rect.width);
+            canvas.height = Math.floor(rect.height);
+            guidelineCanvas.width = canvas.width;
+            guidelineCanvas.height = canvas.height;
             
             setupCanvas();
         }
 
         function setupCanvas() {
             ctx.strokeStyle = '#333';
-            ctx.fillStyle = '#333';
             ctx.lineWidth = 3;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
-            // Improve smoothness
             ctx.imageSmoothingEnabled = true;
         }
 
@@ -519,7 +671,6 @@
             const scaleY = canvas.height / rect.height;
             
             let clientX, clientY;
-            
             if (e.touches && e.touches.length > 0) {
                 clientX = e.touches[0].clientX;
                 clientY = e.touches[0].clientY;
@@ -528,43 +679,35 @@
                 clientY = e.clientY;
             }
             
-            const x = (clientX - rect.left) * scaleX;
-            const y = (clientY - rect.top) * scaleY;
-            
-            return { x, y };
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
         }
 
-        // Touch event handlers
         function handleTouchStart(e) {
             e.preventDefault();
-            debug('Touch start');
-            const pos = getEventPos(e);
-            startDrawing(pos);
+            clearAutoAdvance();
+            startDrawing(getEventPos(e));
         }
 
         function handleTouchMove(e) {
             e.preventDefault();
-            if (!isDrawing) return;
-            const pos = getEventPos(e);
-            draw(pos);
+            if (isDrawing) draw(getEventPos(e));
         }
 
         function handleTouchEnd(e) {
             e.preventDefault();
-            debug('Touch end');
             stopDrawing();
         }
 
-        // Mouse event handlers (for desktop testing)
         function handleMouseDown(e) {
-            const pos = getEventPos(e);
-            startDrawing(pos);
+            clearAutoAdvance();
+            startDrawing(getEventPos(e));
         }
 
         function handleMouseMove(e) {
-            if (!isDrawing) return;
-            const pos = getEventPos(e);
-            draw(pos);
+            if (isDrawing) draw(getEventPos(e));
         }
 
         function handleMouseUp(e) {
@@ -573,23 +716,17 @@
 
         function startDrawing(pos) {
             isDrawing = true;
-            currentStroke = [];
-            
-            currentStroke.push({x: pos.x, y: pos.y, time: Date.now()});
+            currentStroke = [{x: pos.x, y: pos.y, time: Date.now()}];
             ctx.beginPath();
             ctx.moveTo(pos.x, pos.y);
-            
-            debug(`Drawing started at ${pos.x}, ${pos.y}`);
         }
 
         function draw(pos) {
             if (!isDrawing) return;
             
-            // Distance-based filtering for smoother lines
             if (currentStroke.length > 0) {
                 const lastPoint = currentStroke[currentStroke.length - 1];
                 const distance = Math.sqrt((pos.x - lastPoint.x) ** 2 + (pos.y - lastPoint.y) ** 2);
-                
                 if (distance < 2.0) return;
             }
             
@@ -602,13 +739,19 @@
             if (!isDrawing) return;
             isDrawing = false;
             
-            debug(`Stroke completed with ${currentStroke.length} points`);
-            
             if (currentStroke.length > 1) {
                 allStrokes.push([...currentStroke]);
                 totalStrokes++;
                 updateStats();
             }
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            totalStrokes = totalStrokes - allStrokes.length;
+            allStrokes = [];
+            clearAutoAdvance();
+            updateStats();
         }
 
         function drawGuidelines() {
@@ -618,97 +761,30 @@
             
             const height = guidelineCanvas.height;
             const width = guidelineCanvas.width;
+            const margin = 30;
             
-            const baselineY = height * 0.7;
-            const topLineY = height * 0.3;
-            const middleLineY = height * 0.5;
-            const descenderLineY = height * 0.85;
-            
-            const leftMargin = 30;
-            const rightMargin = width - 30;
-
-            // Draw horizontal guidelines
-            guidelineCtx.strokeStyle = '#666666';
+            // Simple guidelines for speed
+            guidelineCtx.strokeStyle = '#cccccc';
             guidelineCtx.lineWidth = 1;
             
             // Baseline
+            const baseline = height * 0.7;
             guidelineCtx.beginPath();
-            guidelineCtx.moveTo(leftMargin, baselineY);
-            guidelineCtx.lineTo(rightMargin, baselineY);
+            guidelineCtx.moveTo(margin, baseline);
+            guidelineCtx.lineTo(width - margin, baseline);
             guidelineCtx.stroke();
-
+            
             // Top line
+            const topline = height * 0.3;
             guidelineCtx.beginPath();
-            guidelineCtx.moveTo(leftMargin, topLineY);
-            guidelineCtx.lineTo(rightMargin, topLineY);
-            guidelineCtx.stroke();
-
-            // Descender line
-            guidelineCtx.strokeStyle = '#999999';
-            guidelineCtx.beginPath();
-            guidelineCtx.moveTo(leftMargin, descenderLineY);
-            guidelineCtx.lineTo(rightMargin, descenderLineY);
-            guidelineCtx.stroke();
-
-            // Middle line (dashed)
-            guidelineCtx.strokeStyle = '#bbbbbb';
-            guidelineCtx.setLineDash([5, 5]);
-            guidelineCtx.beginPath();
-            guidelineCtx.moveTo(leftMargin, middleLineY);
-            guidelineCtx.lineTo(rightMargin, middleLineY);
-            guidelineCtx.stroke();
-            guidelineCtx.setLineDash([]);
-
-            // Vertical margins
-            guidelineCtx.strokeStyle = '#666666';
-            guidelineCtx.lineWidth = 2;
-            
-            guidelineCtx.beginPath();
-            guidelineCtx.moveTo(leftMargin, topLineY - 10);
-            guidelineCtx.lineTo(leftMargin, descenderLineY + 10);
-            guidelineCtx.stroke();
-            
-            guidelineCtx.beginPath();
-            guidelineCtx.moveTo(rightMargin, topLineY - 10);
-            guidelineCtx.lineTo(rightMargin, descenderLineY + 10);
+            guidelineCtx.moveTo(margin, topline);
+            guidelineCtx.lineTo(width - margin, topline);
             guidelineCtx.stroke();
         }
 
-        function clearCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            totalStrokes = totalStrokes - allStrokes.length;
-            allStrokes = [];
-            updateStats();
-            debug('Canvas cleared');
-        }
-
-        function loadRandomSentence() {
-            const randomIndex = Math.floor(Math.random() * sentences.length);
-            document.getElementById('sentenceText').textContent = sentences[randomIndex];
-        }
-
-        function nextSentence() {
-            debug('Next sentence clicked');
-            
-            if (allStrokes.length === 0) {
-                alert('Please write the sentence first!');
-                return;
-            }
-
-            const currentSentence = document.getElementById('sentenceText').textContent;
-            currentSampleData.push({
-                text: currentSentence,
-                strokes: allStrokes.map(stroke => stroke.map(point => [point.x, point.y])),
-                timestamp: Date.now()
-            });
-
-            sampleCount++;
-            updateProgress();
-            clearCanvas();
-            loadRandomSentence();
-            updateStats();
-            
-            debug(`Sample ${sampleCount} saved`);
+        function toggleGuidelines() {
+            showGuidelines = !showGuidelines;
+            drawGuidelines();
         }
 
         function updateProgress() {
@@ -717,23 +793,15 @@
             document.getElementById('currentSample').textContent = sampleCount;
         }
 
-        function toggleGuidelines() {
-            showGuidelines = !showGuidelines;
-            if (showGuidelines) {
-                drawGuidelines();
-                guidelineCanvas.style.opacity = '0.3';
-            } else {
-                guidelineCtx.clearRect(0, 0, guidelineCanvas.width, guidelineCanvas.height);
-                guidelineCanvas.style.opacity = '0';
-            }
-        }
-
         function updateStats() {
             document.getElementById('totalStrokes').textContent = totalStrokes;
-            document.getElementById('totalWords').textContent = sampleCount * 3;
+            document.getElementById('totalWords').textContent = Math.floor(sessionWordCount);
+            document.getElementById('streakCounter').textContent = '🔥 ' + streak;
             
-            const sessionMinutes = Math.floor((Date.now() - startTime) / 60000);
-            document.getElementById('sessionTime').textContent = sessionMinutes + 'm';
+            // Calculate WPM
+            const sessionMinutes = (Date.now() - startTime) / 60000;
+            const wpm = sessionMinutes > 0 ? Math.round(sessionWordCount / sessionMinutes) : 0;
+            document.getElementById('wpm').textContent = wpm;
             
             const dataSize = Math.round((JSON.stringify(currentSampleData).length / 1024));
             document.getElementById('dataSize').textContent = dataSize + 'KB';
@@ -741,7 +809,7 @@
 
         function exportData() {
             if (currentSampleData.length === 0) {
-                alert('No data to export! Write some sentences first.');
+                alert('No data to export! Write some samples first.');
                 return;
             }
 
@@ -749,35 +817,31 @@
                 metadata: {
                     totalSamples: currentSampleData.length,
                     totalStrokes: totalStrokes,
+                    sessionWords: Math.floor(sessionWordCount),
                     createdAt: new Date().toISOString(),
-                    version: '1.0',
-                    device: 'iPad'
+                    version: '2.0',
+                    device: 'iPad',
+                    modes: [...new Set(currentSampleData.map(s => s.mode))]
                 },
                 samples: currentSampleData
             };
 
             const dataStr = JSON.stringify(exportData, null, 2);
-            const fileSizeKB = Math.round(dataStr.length / 1024);
-            
             const dataBlob = new Blob([dataStr], {type: 'application/json'});
             const link = document.createElement('a');
             link.href = URL.createObjectURL(dataBlob);
-            const filename = `handwriting_data_${Date.now()}.json`;
-            link.download = filename;
+            link.download = `handwriting_data_${Date.now()}.json`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            
-            const message = `✅ Exported ${currentSampleData.length} samples (${fileSizeKB}KB)\n\n📁 File: ${filename}\n\nTo save to GitHub:\n1. Upload to your repo\n2. Commit changes`;
-            
-            alert(message);
+
+            const fileSizeKB = Math.round(dataStr.length / 1024);
+            alert(`✅ Exported ${currentSampleData.length} samples (${fileSizeKB}KB)\n🚀 Great job on your data collection!`);
         }
 
-        // Initialize when page loads
+        // Initialize
         window.addEventListener('load', init);
-        
-        // Update stats periodically
-        setInterval(updateStats, 30000);
+        setInterval(updateStats, 10000);
     </script>
 </body>
 </html>
