@@ -640,14 +640,30 @@
             };
 
             const dataStr = JSON.stringify(exportData, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const fileSizeKB = Math.round(dataStr.length / 1024);
             
+            // Always download for large files - much more practical
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
             const link = document.createElement('a');
             link.href = URL.createObjectURL(dataBlob);
-            link.download = `handwriting_data_${Date.now()}.json`;
+            const filename = `handwriting_data_${Date.now()}.json`;
+            link.download = filename;
             link.click();
             
-            alert(`Exported ${currentSampleData.length} handwriting samples!`);
+            // Show practical instructions
+            const message = `✅ Exported ${currentSampleData.length} samples (${fileSizeKB}KB)
+            
+📁 File downloaded: ${filename}
+
+To save to GitHub:
+1. Go to your repo on GitHub
+2. Click "Upload files" 
+3. Drag the downloaded file
+4. Commit with message: "Add handwriting data (${currentSampleData.length} samples)"
+
+💡 Much better than clipboard for ${fileSizeKB}KB of data!`;
+            
+            alert(message);
         }
 
         // Initialize when page loads
