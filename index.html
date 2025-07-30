@@ -1,7 +1,660 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <title>Handwriting Data Collector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 95vw;
+            width: 100%;
+            max-height: 95vh;
+            height: auto;
+            animation: slideUp 0.6s ease-out;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @media (orientation: landscape) {
+            .container {
+                max-width: 90vw;
+                max-height: 90vh;
+                padding: 25px;
+            }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 8px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .progress-section {
+            margin-bottom: 30px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .sentence-display {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .sentence-text {
+            font-size: 1.5rem;
+            color: #333;
+            line-height: 1.4;
+            font-weight: 600;
+        }
+
+        .canvas-container {
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #drawingCanvas {
+            display: block;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        @media (orientation: landscape) {
+            .controls {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+            }
+        }
+
+        .btn {
+            padding: 16px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #dee2e6;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .guidelines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+    </style>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Handwriting Collector</h1>
+            <p class="subtitle">Train your personal AI handwriting model</p>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-label">
+                <span>Training Progress</span>
+                <span><span id="currentSample">0</span> / <span id="targetSamples">500</span> samples</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="sentence-display">
+            <p class="sentence-text" id="sentenceText">The quick brown fox jumps over the lazy dog.</p>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="drawingCanvas"></canvas>
+            <canvas class="guidelines" id="guidelineCanvas"></canvas>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="nextSentence()">Next Sentence</button>
+            <button class="btn btn-secondary" onclick="clearCanvas()">Clear</button>
+            <button class="btn btn-secondary" onclick="toggleGuidelines()">Toggle Guidelines</button>
+            <button class="btn btn-danger" onclick="exportData()">Export Training Data</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <span class="stat-number" id="totalStrokes">0</span>
+                <div class="stat-label">Total Strokes</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="totalWords">0</span>
+                <div class="stat-label">Words Written</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="sessionTime">0m</span>
+                <div class="stat-label">Session Time</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="dataSize">0KB</span>
+                <div class="stat-label">Data Collected</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let canvas, ctx, guidelineCanvas, guidelineCtx;
+        let isDrawing = false;
+        let currentStroke = [];
+        let allStrokes = [];
+        let currentSampleData = [];
+        let sampleCount = 0;
+        let targetSamples = 500;
+        let startTime = Date.now();
+        let totalStrokes = 0;
+        let showGuidelines = true;
+
+        // Sample sentences for training - shorter and varied
+        const sentences = [
+            "Hello world",
+            "Thank you",
+            "Good morning",
+            "How are you",
+            "Nice to meet you",
+            "Have a great day",
+            "See you later",
+            "Take care",
+            "Best wishes",
+            "Good luck",
+            "Happy birthday",
+            "Congratulations",
+            "I love you",
+            "Please help me",
+            "You are welcome",
+            "Excuse me",
+            "I am sorry",
+            "No problem",
+            "Of course",
+            "Absolutely",
+            "Maybe later",
+            "Not today",
+            "Yes please",
+            "No thanks",
+            "Sounds good",
+            "Perfect timing",
+            "Almost done",
+            "Getting started",
+            "Work in progress",
+            "Mission complete",
+            "Ready to go",
+            "All set",
+            "Let me know",
+            "Keep in touch",
+            "Talk soon",
+            "Call me back",
+            "Send an email",
+            "Check this out",
+            "What do you think",
+            "That looks great"
+        ];
+
+        // Initialize the application
+        function init() {
+            canvas = document.getElementById('drawingCanvas');
+            ctx = canvas.getContext('2d');
+            guidelineCanvas = document.getElementById('guidelineCanvas');
+            guidelineCtx = guidelineCanvas.getContext('2d');
+
+            // Set canvas size to container size
+            resizeCanvas();
+            setupCanvas();
+            drawGuidelines();
+            updateStats();
+            loadRandomSentence();
+
+            // Event listeners for drawing
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+
+            // Touch events for iPad/mobile - more specific handling
+            canvas.addEventListener('touchstart', handleTouchStart, {passive: false});
+            canvas.addEventListener('touchmove', handleTouchMove, {passive: false});
+            canvas.addEventListener('touchend', handleTouchEnd, {passive: false});
+            canvas.addEventListener('touchcancel', handleTouchEnd, {passive: false});
+
+            // Prevent scrolling when drawing
+            document.addEventListener('touchstart', preventScroll, {passive: false});
+            document.addEventListener('touchend', preventScroll, {passive: false});
+            document.addEventListener('touchmove', preventScroll, {passive: false});
+
+            // Handle orientation changes
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    resizeCanvas();
+                    drawGuidelines();
+                }, 100);
+            });
+        }
+
+        function resizeCanvas() {
+            const container = document.querySelector('.canvas-container');
+            const rect = container.getBoundingClientRect();
+            
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            guidelineCanvas.width = rect.width;
+            guidelineCanvas.height = rect.height;
+            
+            setupCanvas();
+        }
+
+        function preventScroll(e) {
+            if (e.target === canvas) {
+                e.preventDefault();
+            }
+        }
+
+        function setupCanvas() {
+            ctx.strokeStyle = '#333';
+            ctx.fillStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+
+        function drawGuidelines() {
+            if (!showGuidelines) return;
+            
+            guidelineCtx.clearRect(0, 0, guidelineCanvas.width, guidelineCanvas.height);
+            guidelineCtx.strokeStyle = '#000000';
+            guidelineCtx.lineWidth = 1;
+
+            const height = guidelineCanvas.height;
+            const width = guidelineCanvas.width;
+            
+            // Main writing lines
+            const baselineY = height * 0.7;      // Bottom line for letters
+            const topLineY = height * 0.3;       // Top line for capitals
+            const middleLineY = height * 0.5;    // Middle line
+            const descenderLineY = height * 0.85; // For letters like g, j, p
+            
+            // Left and right margins
+            const leftMargin = 50;
+            const rightMargin = width - 50;
+
+            // Draw horizontal guidelines
+            guidelineCtx.strokeStyle = '#000000';
+            guidelineCtx.lineWidth = 1.5;
+            
+            // Baseline (main writing line)
+            guidelineCtx.beginPath();
+            guidelineCtx.moveTo(leftMargin, baselineY);
+            guidelineCtx.lineTo(rightMargin, baselineY);
+            guidelineCtx.stroke();
+
+            // Top line (for capital letters)
+            guidelineCtx.beginPath();
+            guidelineCtx.moveTo(leftMargin, topLineY);
+            guidelineCtx.lineTo(rightMargin, topLineY);
+            guidelineCtx.stroke();
+
+            // Descender line (for g, j, p, q, y)
+            guidelineCtx.strokeStyle = '#333333';
+            guidelineCtx.lineWidth = 1;
+            guidelineCtx.beginPath();
+            guidelineCtx.moveTo(leftMargin, descenderLineY);
+            guidelineCtx.lineTo(rightMargin, descenderLineY);
+            guidelineCtx.stroke();
+
+            // Middle line (dashed)
+            guidelineCtx.strokeStyle = '#666666';
+            guidelineCtx.setLineDash([8, 8]);
+            guidelineCtx.beginPath();
+            guidelineCtx.moveTo(leftMargin, middleLineY);
+            guidelineCtx.lineTo(rightMargin, middleLineY);
+            guidelineCtx.stroke();
+            guidelineCtx.setLineDash([]);
+
+            // Vertical margin guidelines
+            guidelineCtx.strokeStyle = '#000000';
+            guidelineCtx.lineWidth = 2;
+            
+            // Left margin
+            guidelineCtx.beginPath();
+            guidelineCtx.moveTo(leftMargin, topLineY - 10);
+            guidelineCtx.lineTo(leftMargin, descenderLineY + 10);
+            guidelineCtx.stroke();
+            
+            // Right margin
+            guidelineCtx.beginPath();
+            guidelineCtx.moveTo(rightMargin, topLineY - 10);
+            guidelineCtx.lineTo(rightMargin, descenderLineY + 10);
+            guidelineCtx.stroke();
+
+            // Add margin labels
+            guidelineCtx.fillStyle = '#000000';
+            guidelineCtx.font = '12px sans-serif';
+            guidelineCtx.textAlign = 'center';
+            
+            // Top line label
+            guidelineCtx.fillText('Capital Line', leftMargin - 25, topLineY + 4);
+            
+            // Baseline label
+            guidelineCtx.fillText('Base Line', leftMargin - 25, baselineY + 4);
+            
+            // Descender label
+            guidelineCtx.fillText('Descender', leftMargin - 25, descenderLineY + 4);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            currentStroke = [];
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            currentStroke.push({x, y, time: Date.now()});
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Simple distance-based filtering to reduce redundant points
+            if (currentStroke.length > 0) {
+                const lastPoint = currentStroke[currentStroke.length - 1];
+                const distance = Math.sqrt((x - lastPoint.x) ** 2 + (y - lastPoint.y) ** 2);
+                
+                // Only add point if it's moved at least 1 pixel
+                if (distance < 1.0) return;
+            }
+            
+            currentStroke.push({x, y, time: Date.now()});
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            if (!isDrawing) return;
+            isDrawing = false;
+            
+            console.log('Stopping drawing, stroke length:', currentStroke.length);
+            
+            if (currentStroke.length > 0) {
+                allStrokes.push([...currentStroke]);
+                totalStrokes++;
+                updateStats();
+                console.log('Stroke added, total strokes:', totalStrokes, 'all strokes:', allStrokes.length);
+            }
+        }
+
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 
+                                           e.type === 'touchmove' ? 'mousemove' : 'mouseup', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Reset stroke count by subtracting current strokes
+            totalStrokes = totalStrokes - allStrokes.length;
+            allStrokes = [];
+            updateStats();
+        }
+
+        function loadRandomSentence() {
+            const randomIndex = Math.floor(Math.random() * sentences.length);
+            document.getElementById('sentenceText').textContent = sentences[randomIndex];
+        }
+
+        function nextSentence() {
+            console.log('Next sentence clicked, strokes:', allStrokes.length);
+            
+            if (allStrokes.length === 0) {
+                alert('Please write the sentence first!');
+                return;
+            }
+
+            // Save current sample
+            const currentSentence = document.getElementById('sentenceText').textContent;
+            currentSampleData.push({
+                text: currentSentence,
+                strokes: allStrokes.map(stroke => stroke.map(point => [point.x, point.y])),
+                timestamp: Date.now()
+            });
+
+            sampleCount++;
+            updateProgress();
+            clearCanvas();
+            loadRandomSentence();
+            updateStats();
+            
+            console.log('Sample saved, total samples:', sampleCount);
+        }
+
+        function updateProgress() {
+            const progress = (sampleCount / targetSamples) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('currentSample').textContent = sampleCount;
+        }
+
+        function toggleGuidelines() {
+            showGuidelines = !showGuidelines;
+            if (showGuidelines) {
+                drawGuidelines();
+                guidelineCanvas.style.opacity = '0.3';
+            } else {
+                guidelineCtx.clearRect(0, 0, guidelineCanvas.width, guidelineCanvas.height);
+                guidelineCanvas.style.opacity = '0';
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalStrokes').textContent = totalStrokes;
+            document.getElementById('totalWords').textContent = sampleCount * 8; // Rough estimate
+            
+            const sessionMinutes = Math.floor((Date.now() - startTime) / 60000);
+            document.getElementById('sessionTime').textContent = sessionMinutes + 'm';
+            
+            const dataSize = Math.round((JSON.stringify(currentSampleData).length / 1024));
+            document.getElementById('dataSize').textContent = dataSize + 'KB';
+        }
+
+        function exportData() {
+            if (currentSampleData.length === 0) {
+                alert('No data to export! Write some sentences first.');
+                return;
+            }
+
+            const exportData = {
+                metadata: {
+                    totalSamples: currentSampleData.length,
+                    totalStrokes: totalStrokes,
+                    createdAt: new Date().toISOString(),
+                    version: '1.0'
+                },
+                samples: currentSampleData
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `handwriting_data_${Date.now()}.json`;
+            link.click();
+            
+            alert(`Exported ${currentSampleData.length} handwriting samples!`);
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', init);
+
+        // Update stats every 30 seconds
+        setInterval(updateStats, 30000);
+    </script>
 </body>
 </html>
