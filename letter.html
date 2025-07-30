@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <title>⚡ Letter Collection Speedrun</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 15px;
+            width: 100%;
+            height: 100%;
+            max-width: 1024px;
+            max-height: 768px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+        }
+
+        .title {
+            font-size: 1.4rem;
+            color: #333;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #dee2e6;
+        }
+
+        .stat-number {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.7rem;
+            margin-top: 2px;
+        }
+
+        .current-letter {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .letter-display {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .letter-info {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .progress-ring {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+        }
+
+        .progress-circle {
+            transform: rotate(-90deg);
+        }
+
+        .canvas-container {
+            border: 3px solid #28a745;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            background: white;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            min-height: 200px;
+        }
+
+        #drawingCanvas, #guidelineCanvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .guidelines {
+            pointer-events: none;
+            opacity: 0.25;
+        }
+
+        .speed-controls {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .btn-next {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .btn-skip {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-clear {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .alphabet-progress {
+            display: grid;
+            grid-template-columns: repeat(13, 1fr);
+            gap: 3px;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .letter-box {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #666;
+        }
+
+        .letter-box.completed {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border-color: #28a745;
+        }
+
+        .letter-box.current {
+            background: linear-gradient(45deg, #ffc107, #fd7e14);
+            color: #212529;
+            border-color: #ffc107;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .speed-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(40, 167, 69, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .speed-indicator.show {
+            opacity: 1;
+        }
+
+        .collection-mode {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 8px;
+            border: 2px solid #28a745;
+            border-radius: 6px;
+            background: white;
+            color: #28a745;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .mode-btn.active {
+            background: #28a745;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">⚡ Letter Collection Speedrun</h1>
+            <p class="subtitle">Maximize your letter data collection</p>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <span class="stat-number" id="totalCollected">0</span>
+                <div class="stat-label">Letters Done</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="currentStreak">0</span>
+                <div class="stat-label">Streak 🔥</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="lettersPerMin">0</span>
+                <div class="stat-label">Letters/Min</div>
+            </div>
+        </div>
+
+        <div class="collection-mode">
+            <button class="mode-btn active" id="sequentialMode">📝 Sequential</button>
+            <button class="mode-btn" id="randomMode">🎲 Random</button>
+            <button class="mode-btn" id="focusMode">🎯 Missing</button>
+            <button class="mode-btn" id="categoryMode">📂 By Category</button>
+        </div>
+
+        <div class="category-selector" id="categorySelector" style="display: none;">
+            <button class="mode-btn" id="uppercaseBtn">ABC</button>
+            <button class="mode-btn" id="lowercaseBtn">abc</button>
+            <button class="mode-btn" id="numbersBtn">123</button>
+            <button class="mode-btn" id="symbolsBtn">!@#</button>
+            <button class="mode-btn" id="punctBtn">.,?</button>
+            <button class="mode-btn" id="mathBtn">±×÷</button>
+        </div>
+
+        <div class="current-letter">
+            <div class="letter-display" id="currentLetter">A</div>
+            <div class="letter-info" id="letterInfo">Uppercase • Target: 10 samples</div>
+            <div class="progress-ring">
+                <svg class="progress-circle" width="40" height="40">
+                    <circle cx="20" cy="20" r="16" fill="none" stroke="#ffffff50" stroke-width="3"/>
+                    <circle cx="20" cy="20" r="16" fill="none" stroke="white" stroke-width="3" 
+                            stroke-dasharray="100" stroke-dashoffset="100" id="progressCircle"/>
+                </svg>
+            </div>
+            <div class="speed-indicator" id="speedIndicator">⚡ Fast!</div>
+        </div>
+
+        <div class="alphabet-progress" id="alphabetProgress">
+            <!-- Letters A-Z will be populated by JavaScript -->
+        </div>
+
+        <div class="canvas-container" id="canvasContainer">
+            <canvas id="drawingCanvas"></canvas>
+            <canvas class="guidelines" id="guidelineCanvas"></canvas>
+        </div>
+
+        <div class="speed-controls">
+            <button class="btn btn-next" id="nextBtn">✅ Next Letter (Space)</button>
+            <button class="btn btn-skip" id="skipBtn">⏭️ Skip</button>
+            <button class="btn btn-clear" id="clearBtn">🗑️ Clear</button>
+        </div>
+    </div>
+
+    <script>
+        // Optimized for letter collection
+        let canvas, ctx, guidelineCanvas, guidelineCtx;
+        let isDrawing = false;
+        let currentStroke = [];
+        let allStrokes = [];
+        let sampleData = [];
+        
+        // Collection tracking
+        let collectionMode = 'sequential'; // sequential, random, focus, category
+        let currentCategory = 'uppercase';
+        let currentLetterIndex = 0;
+        let letterCounts = {};
+        let targetPerLetter = 5;  // Reduced since we have way more characters now
+        let startTime = Date.now();
+        let lastLetterTime = Date.now();
+        let streak = 0;
+        let totalCollected = 0;
+
+        // Complete character set - EVERYTHING!
+        const characterSets = {
+            uppercase: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+            lowercase: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
+            numbers: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+            basic_symbols: ['!', '@', '#', '
+
+        // Initialize all character counts
+        allCharacters.forEach(char => letterCounts[char] = 0);
+
+        function init() {
+            canvas = document.getElementById('drawingCanvas');
+            ctx = canvas.getContext('2d');
+            guidelineCanvas = document.getElementById('guidelineCanvas');
+            guidelineCtx = guidelineCanvas.getContext('2d');
+
+            resizeCanvas();
+            setupCanvas();
+            drawGuidelines();
+            setupEventListeners();
+            setupAlphabetProgress();
+            updateCurrentLetter();
+            updateStats();
+        }
+
+        function setupEventListeners() {
+            // Canvas events
+            canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+            canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+            canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+            canvas.addEventListener('mousedown', handleMouseDown);
+            canvas.addEventListener('mousemove', handleMouseMove);
+            canvas.addEventListener('mouseup', handleMouseUp);
+
+            // Button events
+            document.getElementById('nextBtn').addEventListener('click', nextLetter);
+            document.getElementById('skipBtn').addEventListener('click', skipLetter);
+            document.getElementById('clearBtn').addEventListener('click', clearCanvas);
+
+            // Mode buttons
+            document.getElementById('sequentialMode').addEventListener('click', () => setMode('sequential'));
+            document.getElementById('randomMode').addEventListener('click', () => setMode('random'));
+            document.getElementById('focusMode').addEventListener('click', () => setMode('focus'));
+            document.getElementById('categoryMode').addEventListener('click', () => setMode('category'));
+
+            // Category buttons
+            document.getElementById('uppercaseBtn').addEventListener('click', () => setCategory('uppercase'));
+            document.getElementById('lowercaseBtn').addEventListener('click', () => setCategory('lowercase'));
+            document.getElementById('numbersBtn').addEventListener('click', () => setCategory('numbers'));
+            document.getElementById('symbolsBtn').addEventListener('click', () => setCategory('basic_symbols'));
+            document.getElementById('punctBtn').addEventListener('click', () => setCategory('punctuation'));
+            document.getElementById('mathBtn').addEventListener('click', () => setCategory('math'));
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    nextLetter();
+                } else if (e.code === 'KeyC') {
+                    clearCanvas();
+                } else if (e.code === 'KeyS') {
+                    skipLetter();
+                }
+            });
+
+            // Prevent scrolling
+            document.addEventListener('touchstart', (e) => {
+                if (e.target === canvas) e.preventDefault();
+            }, { passive: false });
+            document.addEventListener('touchmove', (e) => {
+                if (e.target === canvas) e.preventDefault();
+            }, { passive: false });
+
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    resizeCanvas();
+                    drawGuidelines();
+                }, 200);
+            });
+        }
+
+        function setMode(mode) {
+            collectionMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(mode + 'Mode').classList.add('active');
+            
+            // Show/hide category selector
+            const categorySelector = document.getElementById('categorySelector');
+            if (mode === 'category') {
+                categorySelector.style.display = 'flex';
+                setCategory('uppercase'); // Default to uppercase
+            } else {
+                categorySelector.style.display = 'none';
+            }
+            
+            updateCurrentLetter();
+            updateAlphabetProgress();
+        }
+
+        function setCategory(category) {
+            currentCategory = category;
+            currentLetterIndex = 0; // Reset index when changing category
+            
+            // Update category button states
+            document.querySelectorAll('#categorySelector .mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(category + 'Btn').classList.add('active');
+            
+            updateCurrentLetter();
+            updateAlphabetProgress();
+        }
+
+        function setupAlphabetProgress() {
+            const container = document.getElementById('alphabetProgress');
+            container.innerHTML = '';
+            
+            // Show current category or all letters based on mode
+            let displayChars = [];
+            
+            if (collectionMode === 'category') {
+                displayChars = characterSets[currentCategory] || characterSets.uppercase;
+            } else {
+                // Show first 26 most important (uppercase letters)
+                displayChars = characterSets.uppercase;
+            }
+            
+            // Adjust grid to fit content
+            const gridCols = Math.min(displayChars.length, 13);
+            container.style.gridTemplateColumns = `repeat(${gridCols}, 1fr)`;
+            
+            displayChars.forEach(char => {
+                const box = document.createElement('div');
+                box.className = 'letter-box';
+                box.textContent = char;
+                box.id = `letter-${char.charCodeAt(0)}`; // Use char code for special chars
+                container.appendChild(box);
+            });
+        }
+
+        function updateAlphabetProgress() {
+            let displayChars = [];
+            
+            if (collectionMode === 'category') {
+                displayChars = characterSets[currentCategory] || characterSets.uppercase;
+            } else {
+                displayChars = characterSets.uppercase; // Default view
+            }
+            
+            displayChars.forEach(char => {
+                const box = document.getElementById(`letter-${char.charCodeAt(0)}`);
+                if (!box) return;
+                
+                const count = letterCounts[char] || 0;
+                box.classList.remove('completed', 'current');
+                
+                if (count >= targetPerLetter) {
+                    box.classList.add('completed');
+                } else if (char === getCurrentLetter()) {
+                    box.classList.add('current');
+                }
+            });
+        }
+
+        function getCurrentLetter() {
+            switch (collectionMode) {
+                case 'sequential':
+                    return allCharacters[currentLetterIndex % allCharacters.length];
+                
+                case 'random':
+                    return allCharacters[Math.floor(Math.random() * allCharacters.length)];
+                
+                case 'focus':
+                    // Find characters with lowest counts
+                    const incompleteChar = allCharacters.find(char => 
+                        (letterCounts[char] || 0) < targetPerLetter
+                    );
+                    return incompleteChar || allCharacters[0];
+                
+                case 'category':
+                    const categoryChars = characterSets[currentCategory] || characterSets.uppercase;
+                    return categoryChars[currentLetterIndex % categoryChars.length];
+                
+                default:
+                    return allCharacters[0];
+            }
+        }
+
+        function updateCurrentLetter() {
+            const char = getCurrentLetter();
+            const count = letterCounts[char] || 0;
+            
+            // Determine character type
+            let charType = '';
+            if (/[A-Z]/.test(char)) charType = 'Uppercase Letter';
+            else if (/[a-z]/.test(char)) charType = 'Lowercase Letter';
+            else if (/[0-9]/.test(char)) charType = 'Number';
+            else if (/[!@#$%^&*()_+=\-]/.test(char)) charType = 'Symbol';
+            else if (/[.,:;"'?!\/\\]/.test(char)) charType = 'Punctuation';
+            else if (/[{}[\]<>|]/.test(char)) charType = 'Bracket';
+            else if (/[+\-=×÷±∞√^°]/.test(char)) charType = 'Math Symbol';
+            else if (/[$€£¥¢₹₽]/.test(char)) charType = 'Currency';
+            else charType = 'Special Character';
+            
+            document.getElementById('currentLetter').textContent = char;
+            document.getElementById('letterInfo').textContent = 
+                `${charType} • ${count}/${targetPerLetter} samples`;
+            
+            // Update progress circle
+            const progress = Math.min(count / targetPerLetter * 100, 100);
+            const circumference = 2 * Math.PI * 16;
+            const offset = circumference - (progress / 100) * circumference;
+            document.getElementById('progressCircle').style.strokeDashoffset = offset;
+        }
+
+        function nextLetter() {
+            if (allStrokes.length === 0) {
+                showSpeedFeedback('✍️ Write the letter first!');
+                return;
+            }
+
+            const currentLetter = getCurrentLetter();
+            
+            // Save sample
+            sampleData.push({
+                text: currentLetter,
+                strokes: allStrokes.map(stroke => stroke.map(point => [point.x, point.y])),
+                timestamp: Date.now(),
+                mode: 'letter'
+            });
+
+            // Update counts
+            letterCounts[currentLetter] = (letterCounts[currentLetter] || 0) + 1;
+            totalCollected++;
+
+            // Speed tracking
+            const now = Date.now();
+            const timeDiff = (now - lastLetterTime) / 1000;
+            if (timeDiff < 8) {
+                streak++;
+                showSpeedFeedback(`🔥 Streak: ${streak}!`);
+            } else {
+                streak = 0;
+            }
+            lastLetterTime = now;
+
+            // Advance to next character
+            if (collectionMode === 'sequential' || collectionMode === 'category') {
+                currentLetterIndex++;
+            }
+
+            clearCanvas();
+            updateCurrentLetter();
+            updateAlphabetProgress();
+            updateStats();
+        }
+
+        function skipLetter() {
+            if (collectionMode === 'sequential' || collectionMode === 'category') {
+                currentLetterIndex++;
+            }
+            updateCurrentLetter();
+            updateAlphabetProgress();
+            showSpeedFeedback('⏭️ Skipped');
+        }
+
+        function showSpeedFeedback(message) {
+            const indicator = document.getElementById('speedIndicator');
+            indicator.textContent = message;
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 1500);
+        }
+
+        function updateStats() {
+            document.getElementById('totalCollected').textContent = totalCollected;
+            document.getElementById('currentStreak').textContent = streak;
+            
+            const sessionMinutes = (Date.now() - startTime) / 60000;
+            const lettersPerMin = sessionMinutes > 0 ? Math.round(totalCollected / sessionMinutes) : 0;
+            document.getElementById('lettersPerMin').textContent = lettersPerMin;
+        }
+
+        function exportData() {
+            if (sampleData.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+
+            const exportData = {
+                metadata: {
+                    totalSamples: sampleData.length,
+                    letterCounts: letterCounts,
+                    createdAt: new Date().toISOString(),
+                    version: '3.0',
+                    device: 'iPad',
+                    mode: 'letter_speedrun'
+                },
+                samples: sampleData
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `letter_collection_${Date.now()}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert(`✅ Exported ${sampleData.length} letter samples!`);
+        }
+
+        // Touch and drawing functions (same as before)
+        function resizeCanvas() {
+            const container = document.getElementById('canvasContainer');
+            const rect = container.getBoundingClientRect();
+            canvas.width = Math.floor(rect.width);
+            canvas.height = Math.floor(rect.height);
+            guidelineCanvas.width = canvas.width;
+            guidelineCanvas.height = canvas.height;
+            setupCanvas();
+        }
+
+        function setupCanvas() {
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+
+        function drawGuidelines() {
+            guidelineCtx.clearRect(0, 0, guidelineCanvas.width, guidelineCanvas.height);
+            
+            const height = guidelineCanvas.height;
+            const width = guidelineCanvas.width;
+            const margin = 40;
+            
+            guidelineCtx.strokeStyle = '#cccccc';
+            guidelineCtx.lineWidth = 1;
+            
+            // Main baseline
+            const baseline = height * 0.7;
+            guidelineCtx.beginPath();
+            guidelineCtx.moveTo(margin, baseline);
+            guidelineCtx.lineTo(width - margin, baseline);
+            guidelineCtx.stroke();
+        }
+
+        function getEventPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            let clientX, clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            startDrawing(getEventPos(e));
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            if (isDrawing) draw(getEventPos(e));
+        }
+
+        function handleTouchEnd(e) {
+            e.preventDefault();
+            stopDrawing();
+        }
+
+        function handleMouseDown(e) {
+            startDrawing(getEventPos(e));
+        }
+
+        function handleMouseMove(e) {
+            if (isDrawing) draw(getEventPos(e));
+        }
+
+        function handleMouseUp(e) {
+            stopDrawing();
+        }
+
+        function startDrawing(pos) {
+            isDrawing = true;
+            currentStroke = [{x: pos.x, y: pos.y, time: Date.now()}];
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(pos) {
+            if (!isDrawing) return;
+            
+            if (currentStroke.length > 0) {
+                const lastPoint = currentStroke[currentStroke.length - 1];
+                const distance = Math.sqrt((pos.x - lastPoint.x) ** 2 + (pos.y - lastPoint.y) ** 2);
+                if (distance < 2.0) return;
+            }
+            
+            currentStroke.push({x: pos.x, y: pos.y, time: Date.now()});
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            if (!isDrawing) return;
+            isDrawing = false;
+            
+            if (currentStroke.length > 1) {
+                allStrokes.push([...currentStroke]);
+            }
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            allStrokes = [];
+        }
+
+        // Auto-export every 50 letters
+        setInterval(() => {
+            if (totalCollected > 0 && totalCollected % 50 === 0) {
+                exportData();
+            }
+        }, 5000);
+
+        // Initialize
+        window.addEventListener('load', init);
+        setInterval(updateStats, 10000);
+    </script>
+</body>
+</html>, '%', '^', '&', '*', '(', ')', '-', '_', '+', '='],
+            punctuation: ['.', ',', '?', '!', ';', ':', '"', "'", '/', '\\'],
+            brackets: ['[', ']', '{', '}', '<', '>', '|'],
+            math: ['+', '-', '=', '×', '÷', '±', '∞', '√', '^', '°'],
+            currency: ['
+
+        // Initialize letter counts
+        alphabet.forEach(letter => letterCounts[letter] = 0);
+
+        function init() {
+            canvas = document.getElementById('drawingCanvas');
+            ctx = canvas.getContext('2d');
+            guidelineCanvas = document.getElementById('guidelineCanvas');
+            guidelineCtx = guidelineCanvas.getContext('2d');
+
+            resizeCanvas();
+            setupCanvas();
+            drawGuidelines();
+            setupEventListeners();
+            setupAlphabetProgress();
+            updateCurrentLetter();
+            updateStats();
+        }
+
+        function setupEventListeners() {
+            // Canvas events
+            canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+            canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+            canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+            canvas.addEventListener('mousedown', handleMouseDown);
+            canvas.addEventListener('mousemove', handleMouseMove);
+            canvas.addEventListener('mouseup', handleMouseUp);
+
+            // Button events
+            document.getElementById('nextBtn').addEventListener('click', nextLetter);
+            document.getElementById('skipBtn').addEventListener('click', skipLetter);
+            document.getElementById('clearBtn').addEventListener('click', clearCanvas);
+
+            // Mode buttons
+            document.getElementById('sequentialMode').addEventListener('click', () => setMode('sequential'));
+            document.getElementById('randomMode').addEventListener('click', () => setMode('random'));
+            document.getElementById('focusMode').addEventListener('click', () => setMode('focus'));
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    nextLetter();
+                } else if (e.code === 'KeyC') {
+                    clearCanvas();
+                } else if (e.code === 'KeyS') {
+                    skipLetter();
+                }
+            });
+
+            // Prevent scrolling
+            document.addEventListener('touchstart', (e) => {
+                if (e.target === canvas) e.preventDefault();
+            }, { passive: false });
+            document.addEventListener('touchmove', (e) => {
+                if (e.target === canvas) e.preventDefault();
+            }, { passive: false });
+
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    resizeCanvas();
+                    drawGuidelines();
+                }, 200);
+            });
+        }
+
+        function setMode(mode) {
+            collectionMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(mode + 'Mode').classList.add('active');
+            updateCurrentLetter();
+            updateAlphabetProgress();
+        }
+
+        function setupAlphabetProgress() {
+            const container = document.getElementById('alphabetProgress');
+            container.innerHTML = '';
+            
+            // Show first 26 letters (A-Z or a-z based on what we're focusing on)
+            const displayLetters = alphabet.slice(0, 26); // A-Z
+            
+            displayLetters.forEach(letter => {
+                const box = document.createElement('div');
+                box.className = 'letter-box';
+                box.textContent = letter;
+                box.id = `letter-${letter}`;
+                container.appendChild(box);
+            });
+        }
+
+        function updateAlphabetProgress() {
+            alphabet.slice(0, 26).forEach(letter => {
+                const box = document.getElementById(`letter-${letter}`);
+                if (!box) return;
+                
+                const count = letterCounts[letter] || 0;
+                box.classList.remove('completed', 'current');
+                
+                if (count >= targetPerLetter) {
+                    box.classList.add('completed');
+                } else if (letter === getCurrentLetter()) {
+                    box.classList.add('current');
+                }
+            });
+        }
+
+        function getCurrentLetter() {
+            switch (collectionMode) {
+                case 'sequential':
+                    return alphabet[currentLetterIndex % alphabet.length];
+                
+                case 'random':
+                    return alphabet[Math.floor(Math.random() * alphabet.length)];
+                
+                case 'focus':
+                    // Find letters with lowest counts
+                    const incompleteLetter = alphabet.find(letter => 
+                        (letterCounts[letter] || 0) < targetPerLetter
+                    );
+                    return incompleteLetter || alphabet[0];
+                
+                default:
+                    return alphabet[0];
+            }
+        }
+
+        function updateCurrentLetter() {
+            const letter = getCurrentLetter();
+            const count = letterCounts[letter] || 0;
+            const isUppercase = letter === letter.toUpperCase();
+            
+            document.getElementById('currentLetter').textContent = letter;
+            document.getElementById('letterInfo').textContent = 
+                `${isUppercase ? 'Uppercase' : 'Lowercase'} • ${count}/${targetPerLetter} samples`;
+            
+            // Update progress circle
+            const progress = Math.min(count / targetPerLetter * 100, 100);
+            const circumference = 2 * Math.PI * 16;
+            const offset = circumference - (progress / 100) * circumference;
+            document.getElementById('progressCircle').style.strokeDashoffset = offset;
+        }
+
+        function nextLetter() {
+            if (allStrokes.length === 0) {
+                showSpeedFeedback('✍️ Write the letter first!');
+                return;
+            }
+
+            const currentLetter = getCurrentLetter();
+            
+            // Save sample
+            sampleData.push({
+                text: currentLetter,
+                strokes: allStrokes.map(stroke => stroke.map(point => [point.x, point.y])),
+                timestamp: Date.now(),
+                mode: 'letter'
+            });
+
+            // Update counts
+            letterCounts[currentLetter] = (letterCounts[currentLetter] || 0) + 1;
+            totalCollected++;
+
+            // Speed tracking
+            const now = Date.now();
+            const timeDiff = (now - lastLetterTime) / 1000;
+            if (timeDiff < 8) {
+                streak++;
+                showSpeedFeedback(`🔥 Streak: ${streak}!`);
+            } else {
+                streak = 0;
+            }
+            lastLetterTime = now;
+
+            // Advance to next letter
+            if (collectionMode === 'sequential') {
+                currentLetterIndex++;
+            }
+
+            clearCanvas();
+            updateCurrentLetter();
+            updateAlphabetProgress();
+            updateStats();
+        }
+
+        function skipLetter() {
+            if (collectionMode === 'sequential') {
+                currentLetterIndex++;
+            }
+            updateCurrentLetter();
+            updateAlphabetProgress();
+            showSpeedFeedback('⏭️ Skipped');
+        }
+
+        function showSpeedFeedback(message) {
+            const indicator = document.getElementById('speedIndicator');
+            indicator.textContent = message;
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 1500);
+        }
+
+        function updateStats() {
+            document.getElementById('totalCollected').textContent = totalCollected;
+            document.getElementById('currentStreak').textContent = streak;
+            
+            const sessionMinutes = (Date.now() - startTime) / 60000;
+            const lettersPerMin = sessionMinutes > 0 ? Math.round(totalCollected / sessionMinutes) : 0;
+            document.getElementById('lettersPerMin').textContent = lettersPerMin;
+        }
+
+        function exportData() {
+            if (sampleData.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+
+            const exportData = {
+                metadata: {
+                    totalSamples: sampleData.length,
+                    letterCounts: letterCounts,
+                    createdAt: new Date().toISOString(),
+                    version: '3.0',
+                    device: 'iPad',
+                    mode: 'letter_speedrun'
+                },
+                samples: sampleData
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `letter_collection_${Date.now()}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert(`✅ Exported ${sampleData.length} letter samples!`);
+        }
+
+        // Touch and drawing functions (same as before)
+        function resizeCanvas() {
+            const container = document.getElementById('canvasContainer');
+            const rect = container.getBoundingClientRect();
+            canvas.width = Math.floor(rect.width);
+            canvas.height = Math.floor(rect.height);
+            guidelineCanvas.width = canvas.width;
+            guidelineCanvas.height = canvas.height;
+            setupCanvas();
+        }
+
+        function setupCanvas() {
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+
+        function drawGuidelines() {
+            guidelineCtx.clearRect(0, 0, guidelineCanvas.width, guidelineCanvas.height);
+            
+            const height = guidelineCanvas.height;
+            const width = guidelineCanvas.width;
+            const margin = 40;
+            
+            guidelineCtx.strokeStyle = '#cccccc';
+            guidelineCtx.lineWidth = 1;
+            
+            // Main baseline
+            const baseline = height * 0.7;
+            guidelineCtx.beginPath();
+            guidelineCtx.moveTo(margin, baseline);
+            guidelineCtx.lineTo(width - margin, baseline);
+            guidelineCtx.stroke();
+        }
+
+        function getEventPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            let clientX, clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            startDrawing(getEventPos(e));
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            if (isDrawing) draw(getEventPos(e));
+        }
+
+        function handleTouchEnd(e) {
+            e.preventDefault();
+            stopDrawing();
+        }
+
+        function handleMouseDown(e) {
+            startDrawing(getEventPos(e));
+        }
+
+        function handleMouseMove(e) {
+            if (isDrawing) draw(getEventPos(e));
+        }
+
+        function handleMouseUp(e) {
+            stopDrawing();
+        }
+
+        function startDrawing(pos) {
+            isDrawing = true;
+            currentStroke = [{x: pos.x, y: pos.y, time: Date.now()}];
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(pos) {
+            if (!isDrawing) return;
+            
+            if (currentStroke.length > 0) {
+                const lastPoint = currentStroke[currentStroke.length - 1];
+                const distance = Math.sqrt((pos.x - lastPoint.x) ** 2 + (pos.y - lastPoint.y) ** 2);
+                if (distance < 2.0) return;
+            }
+            
+            currentStroke.push({x: pos.x, y: pos.y, time: Date.now()});
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            if (!isDrawing) return;
+            isDrawing = false;
+            
+            if (currentStroke.length > 1) {
+                allStrokes.push([...currentStroke]);
+            }
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            allStrokes = [];
+        }
+
+        // Auto-export every 50 letters
+        setInterval(() => {
+            if (totalCollected > 0 && totalCollected % 50 === 0) {
+                exportData();
+            }
+        }, 5000);
+
+        // Initialize
+        window.addEventListener('load', init);
+        setInterval(updateStats, 10000);
+    </script>
+</body>
+</html>, '€', '£', '¥', '¢', '₹', '₽'],
+            special: ['~', '`', '§', '¶', '©', '®', '™', '•', '…', '—', '–']
+        };
+
+        // Flatten all characters
+        const allCharacters = [
+            ...characterSets.uppercase,
+            ...characterSets.lowercase, 
+            ...characterSets.numbers,
+            ...characterSets.basic_symbols,
+            ...characterSets.punctuation,
+            ...characterSets.brackets,
+            ...characterSets.math,
+            ...characterSets.currency,
+            ...characterSets.special
+        ];
+
+        const alphabet = allCharacters;
+
+        // Initialize letter counts
+        alphabet.forEach(letter => letterCounts[letter] = 0);
+
+        function init() {
+            canvas = document.getElementById('drawingCanvas');
+            ctx = canvas.getContext('2d');
+            guidelineCanvas = document.getElementById('guidelineCanvas');
+            guidelineCtx = guidelineCanvas.getContext('2d');
+
+            resizeCanvas();
+            setupCanvas();
+            drawGuidelines();
+            setupEventListeners();
+            setupAlphabetProgress();
+            updateCurrentLetter();
+            updateStats();
+        }
+
+        function setupEventListeners() {
+            // Canvas events
+            canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+            canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+            canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+            canvas.addEventListener('mousedown', handleMouseDown);
+            canvas.addEventListener('mousemove', handleMouseMove);
+            canvas.addEventListener('mouseup', handleMouseUp);
+
+            // Button events
+            document.getElementById('nextBtn').addEventListener('click', nextLetter);
+            document.getElementById('skipBtn').addEventListener('click', skipLetter);
+            document.getElementById('clearBtn').addEventListener('click', clearCanvas);
+
+            // Mode buttons
+            document.getElementById('sequentialMode').addEventListener('click', () => setMode('sequential'));
+            document.getElementById('randomMode').addEventListener('click', () => setMode('random'));
+            document.getElementById('focusMode').addEventListener('click', () => setMode('focus'));
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    nextLetter();
+                } else if (e.code === 'KeyC') {
+                    clearCanvas();
+                } else if (e.code === 'KeyS') {
+                    skipLetter();
+                }
+            });
+
+            // Prevent scrolling
+            document.addEventListener('touchstart', (e) => {
+                if (e.target === canvas) e.preventDefault();
+            }, { passive: false });
+            document.addEventListener('touchmove', (e) => {
+                if (e.target === canvas) e.preventDefault();
+            }, { passive: false });
+
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    resizeCanvas();
+                    drawGuidelines();
+                }, 200);
+            });
+        }
+
+        function setMode(mode) {
+            collectionMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(mode + 'Mode').classList.add('active');
+            updateCurrentLetter();
+            updateAlphabetProgress();
+        }
+
+        function setupAlphabetProgress() {
+            const container = document.getElementById('alphabetProgress');
+            container.innerHTML = '';
+            
+            // Show first 26 letters (A-Z or a-z based on what we're focusing on)
+            const displayLetters = alphabet.slice(0, 26); // A-Z
+            
+            displayLetters.forEach(letter => {
+                const box = document.createElement('div');
+                box.className = 'letter-box';
+                box.textContent = letter;
+                box.id = `letter-${letter}`;
+                container.appendChild(box);
+            });
+        }
+
+        function updateAlphabetProgress() {
+            alphabet.slice(0, 26).forEach(letter => {
+                const box = document.getElementById(`letter-${letter}`);
+                if (!box) return;
+                
+                const count = letterCounts[letter] || 0;
+                box.classList.remove('completed', 'current');
+                
+                if (count >= targetPerLetter) {
+                    box.classList.add('completed');
+                } else if (letter === getCurrentLetter()) {
+                    box.classList.add('current');
+                }
+            });
+        }
+
+        function getCurrentLetter() {
+            switch (collectionMode) {
+                case 'sequential':
+                    return alphabet[currentLetterIndex % alphabet.length];
+                
+                case 'random':
+                    return alphabet[Math.floor(Math.random() * alphabet.length)];
+                
+                case 'focus':
+                    // Find letters with lowest counts
+                    const incompleteLetter = alphabet.find(letter => 
+                        (letterCounts[letter] || 0) < targetPerLetter
+                    );
+                    return incompleteLetter || alphabet[0];
+                
+                default:
+                    return alphabet[0];
+            }
+        }
+
+        function updateCurrentLetter() {
+            const letter = getCurrentLetter();
+            const count = letterCounts[letter] || 0;
+            const isUppercase = letter === letter.toUpperCase();
+            
+            document.getElementById('currentLetter').textContent = letter;
+            document.getElementById('letterInfo').textContent = 
+                `${isUppercase ? 'Uppercase' : 'Lowercase'} • ${count}/${targetPerLetter} samples`;
+            
+            // Update progress circle
+            const progress = Math.min(count / targetPerLetter * 100, 100);
+            const circumference = 2 * Math.PI * 16;
+            const offset = circumference - (progress / 100) * circumference;
+            document.getElementById('progressCircle').style.strokeDashoffset = offset;
+        }
+
+        function nextLetter() {
+            if (allStrokes.length === 0) {
+                showSpeedFeedback('✍️ Write the letter first!');
+                return;
+            }
+
+            const currentLetter = getCurrentLetter();
+            
+            // Save sample
+            sampleData.push({
+                text: currentLetter,
+                strokes: allStrokes.map(stroke => stroke.map(point => [point.x, point.y])),
+                timestamp: Date.now(),
+                mode: 'letter'
+            });
+
+            // Update counts
+            letterCounts[currentLetter] = (letterCounts[currentLetter] || 0) + 1;
+            totalCollected++;
+
+            // Speed tracking
+            const now = Date.now();
+            const timeDiff = (now - lastLetterTime) / 1000;
+            if (timeDiff < 8) {
+                streak++;
+                showSpeedFeedback(`🔥 Streak: ${streak}!`);
+            } else {
+                streak = 0;
+            }
+            lastLetterTime = now;
+
+            // Advance to next letter
+            if (collectionMode === 'sequential') {
+                currentLetterIndex++;
+            }
+
+            clearCanvas();
+            updateCurrentLetter();
+            updateAlphabetProgress();
+            updateStats();
+        }
+
+        function skipLetter() {
+            if (collectionMode === 'sequential') {
+                currentLetterIndex++;
+            }
+            updateCurrentLetter();
+            updateAlphabetProgress();
+            showSpeedFeedback('⏭️ Skipped');
+        }
+
+        function showSpeedFeedback(message) {
+            const indicator = document.getElementById('speedIndicator');
+            indicator.textContent = message;
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 1500);
+        }
+
+        function updateStats() {
+            document.getElementById('totalCollected').textContent = totalCollected;
+            document.getElementById('currentStreak').textContent = streak;
+            
+            const sessionMinutes = (Date.now() - startTime) / 60000;
+            const lettersPerMin = sessionMinutes > 0 ? Math.round(totalCollected / sessionMinutes) : 0;
+            document.getElementById('lettersPerMin').textContent = lettersPerMin;
+        }
+
+        function exportData() {
+            if (sampleData.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+
+            const exportData = {
+                metadata: {
+                    totalSamples: sampleData.length,
+                    letterCounts: letterCounts,
+                    createdAt: new Date().toISOString(),
+                    version: '3.0',
+                    device: 'iPad',
+                    mode: 'letter_speedrun'
+                },
+                samples: sampleData
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `letter_collection_${Date.now()}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert(`✅ Exported ${sampleData.length} letter samples!`);
+        }
+
+        // Touch and drawing functions (same as before)
+        function resizeCanvas() {
+            const container = document.getElementById('canvasContainer');
+            const rect = container.getBoundingClientRect();
+            canvas.width = Math.floor(rect.width);
+            canvas.height = Math.floor(rect.height);
+            guidelineCanvas.width = canvas.width;
+            guidelineCanvas.height = canvas.height;
+            setupCanvas();
+        }
+
+        function setupCanvas() {
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+
+        function drawGuidelines() {
+            guidelineCtx.clearRect(0, 0, guidelineCanvas.width, guidelineCanvas.height);
+            
+            const height = guidelineCanvas.height;
+            const width = guidelineCanvas.width;
+            const margin = 40;
+            
+            guidelineCtx.strokeStyle = '#cccccc';
+            guidelineCtx.lineWidth = 1;
+            
+            // Main baseline
+            const baseline = height * 0.7;
+            guidelineCtx.beginPath();
+            guidelineCtx.moveTo(margin, baseline);
+            guidelineCtx.lineTo(width - margin, baseline);
+            guidelineCtx.stroke();
+        }
+
+        function getEventPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            let clientX, clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            startDrawing(getEventPos(e));
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            if (isDrawing) draw(getEventPos(e));
+        }
+
+        function handleTouchEnd(e) {
+            e.preventDefault();
+            stopDrawing();
+        }
+
+        function handleMouseDown(e) {
+            startDrawing(getEventPos(e));
+        }
+
+        function handleMouseMove(e) {
+            if (isDrawing) draw(getEventPos(e));
+        }
+
+        function handleMouseUp(e) {
+            stopDrawing();
+        }
+
+        function startDrawing(pos) {
+            isDrawing = true;
+            currentStroke = [{x: pos.x, y: pos.y, time: Date.now()}];
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(pos) {
+            if (!isDrawing) return;
+            
+            if (currentStroke.length > 0) {
+                const lastPoint = currentStroke[currentStroke.length - 1];
+                const distance = Math.sqrt((pos.x - lastPoint.x) ** 2 + (pos.y - lastPoint.y) ** 2);
+                if (distance < 2.0) return;
+            }
+            
+            currentStroke.push({x: pos.x, y: pos.y, time: Date.now()});
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            if (!isDrawing) return;
+            isDrawing = false;
+            
+            if (currentStroke.length > 1) {
+                allStrokes.push([...currentStroke]);
+            }
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            allStrokes = [];
+        }
+
+        // Auto-export every 50 letters
+        setInterval(() => {
+            if (totalCollected > 0 && totalCollected % 50 === 0) {
+                exportData();
+            }
+        }, 5000);
+
+        // Initialize
+        window.addEventListener('load', init);
+        setInterval(updateStats, 10000);
+    </script>
+</body>
+</html>
