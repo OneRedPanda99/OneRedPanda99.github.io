@@ -5,152 +5,208 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Ultimate Handwriting Data Collector</title>
+    <title>Professional Handwriting Data Collector</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --text: #f8fafc;
+            --text-muted: #cbd5e1;
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow: rgba(0, 0, 0, 0.25);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-user-select: none;
             -moz-user-select: none;
-            -ms-user-select: none;
             user-select: none;
             -webkit-touch-callout: none;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            color: white;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: var(--background);
+            color: var(--text);
             overflow: hidden;
             height: 100vh;
             position: fixed;
             width: 100%;
             touch-action: none;
+            font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
         }
 
-        .container {
+        .app-container {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            height: 100vh;
+            background: var(--gradient-1);
+            position: relative;
+        }
+
+        .sidebar {
+            background: var(--glass);
+            backdrop-filter: blur(40px) saturate(180%);
+            border-right: 1px solid var(--glass-border);
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            padding: max(10px, env(safe-area-inset-top)) max(15px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(15px, env(safe-area-inset-left));
+            padding: 24px;
+            gap: 24px;
+            overflow-y: auto;
         }
 
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            gap: 20px;
+            min-height: 0;
+        }
+
+        /* Header */
         .header {
             text-align: center;
-            padding: 15px 0;
-            background: rgba(0,0,0,0.15);
-            border-radius: 20px;
-            margin-bottom: 12px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .title {
-            font-size: 1.6em;
+        .app-title {
+            font-size: 24px;
             font-weight: 800;
-            margin-bottom: 8px;
-            background: linear-gradient(45deg, #FFD700, #FFA500, #FF6B35);
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 4px;
+            letter-spacing: -0.02em;
         }
 
-        .subtitle {
-            font-size: 0.9em;
-            opacity: 0.9;
-            color: #E8F4FD;
+        .app-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+            opacity: 0.8;
         }
 
-        .mode-selector {
+        /* Mode Selector */
+        .mode-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .mode-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: 1fr;
             gap: 8px;
-            margin-bottom: 12px;
         }
 
         .mode-btn {
-            padding: 12px 16px;
-            border: none;
-            border-radius: 16px;
-            font-weight: 600;
-            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(255,255,255,0.15);
-            color: white;
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
 
-        .mode-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .mode-btn:hover::before {
-            left: 100%;
+        .mode-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
         }
 
         .mode-btn.active {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            transform: scale(1.02);
-            box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
-            border: 1px solid rgba(255,255,255,0.3);
+            background: var(--primary);
+            border-color: var(--primary-dark);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
         }
 
-        .progress-section {
-            background: rgba(0,0,0,0.2);
-            border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 12px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .progress-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 16px;
-            margin-bottom: 12px;
-        }
-
-        .progress-item {
+        .mode-icon {
+            font-size: 18px;
+            width: 20px;
             text-align: center;
         }
 
-        .progress-item h3 {
-            font-size: 1em;
-            margin-bottom: 8px;
-            color: #FFD700;
+        /* Progress Section */
+        .progress-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .progress-item {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .progress-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .progress-title {
+            font-size: 13px;
             font-weight: 600;
+            color: var(--text);
+        }
+
+        .progress-count {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
         }
 
         .progress-bar {
             width: 100%;
             height: 6px;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 3px;
             overflow: hidden;
-            margin-bottom: 6px;
             position: relative;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #4CAF50, #8BC34A, #CDDC39);
+            background: linear-gradient(90deg, var(--success), #34d399);
             border-radius: 3px;
-            transition: width 0.6s ease;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
 
@@ -161,7 +217,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             animation: shimmer 2s infinite;
         }
 
@@ -170,119 +226,348 @@
             100% { left: 100%; }
         }
 
-        .progress-count {
-            font-size: 0.85em;
-            opacity: 0.9;
-        }
-
-        .current-task {
-            background: rgba(0,0,0,0.25);
-            border-radius: 20px;
-            padding: 20px;
+        /* Task Display */
+        .task-display {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
             text-align: center;
-            margin-bottom: 12px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .task-type {
-            font-size: 1.1em;
-            color: #FFD700;
-            margin-bottom: 12px;
+            font-size: 13px;
             font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .task-content {
-            font-size: clamp(2.2em, 8vw, 3.5em);
+            font-size: 48px;
             font-weight: 300;
-            margin-bottom: 15px;
+            color: var(--text);
+            margin-bottom: 16px;
+            font-family: 'Times New Roman', serif;
+            line-height: 1;
             min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,0.08);
+        }
+
+        .task-instruction {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+            font-weight: 400;
+        }
+
+        /* Controls */
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .control-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            border: none;
             border-radius: 12px;
-            padding: 15px;
-            word-wrap: break-word;
-            line-height: 1.1;
-            font-family: 'Georgia', serif;
-            letter-spacing: 0.02em;
-            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+
+        .control-btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: var(--success);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--warning);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-tertiary {
+            background: var(--primary);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-danger {
+            background: var(--secondary);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Canvas Area */
+        .canvas-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-height: 0;
+        }
+
+        .canvas-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .canvas-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        .canvas-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .canvas-container {
             flex: 1;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            background: #ffffff;
             border-radius: 20px;
-            margin-bottom: 12px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            border: 2px solid rgba(255,255,255,0.2);
-            min-height: 200px;
+            box-shadow: 
+                0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .canvas {
+        .drawing-canvas {
             width: 100%;
             height: 100%;
             cursor: crosshair;
             display: block;
             background: 
-                linear-gradient(to right, rgba(200,220,255,0.15) 0px, transparent 1px),
-                linear-gradient(to bottom, rgba(200,220,255,0.15) 0px, transparent 1px),
+                radial-gradient(circle at 20px 20px, rgba(99, 102, 241, 0.1) 1px, transparent 1px),
                 linear-gradient(to bottom, 
                     transparent 0%, 
-                    transparent calc(50% - 1px), 
-                    rgba(100,150,255,0.25) calc(50% - 1px), 
-                    rgba(100,150,255,0.25) calc(50% + 1px), 
-                    transparent calc(50% + 1px), 
+                    transparent calc(50% - 0.5px), 
+                    rgba(99, 102, 241, 0.15) calc(50% - 0.5px), 
+                    rgba(99, 102, 241, 0.15) calc(50% + 0.5px), 
+                    transparent calc(50% + 0.5px), 
                     transparent 100%);
-            background-size: 20px 20px, 20px 20px, 100% 100%;
+            background-size: 20px 20px, 100% 100%;
         }
 
         .canvas-overlay {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.6);
+            top: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.8);
             color: white;
             padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 0.8em;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 500;
             backdrop-filter: blur(10px);
-            pointer-events: none;
         }
 
-        .controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+        /* Session Stats */
+        .session-stats {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 11px;
+            color: var(--text);
+            min-width: 140px;
+            z-index: 100;
         }
 
-        .control-row {
+        .session-stats .stat {
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            margin-bottom: 4px;
         }
 
-        .control-btn {
-            flex: 1;
-            padding: 16px 20px;
-            border: none;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(15px);
+        .session-stats .stat:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
             color: white;
-            min-height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            border: 1px solid rgba(255,255,255,0.2);
-            position: relative;
-            overflow: hidden;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: notification-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes notification-in {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: celebrate 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes celebrate {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2) rotate(180deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 1024px) {
+            .app-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+            
+            .sidebar {
+                padding: 16px;
+                gap: 16px;
+                max-height: 40vh;
+                overflow-y: auto;
+            }
+            
+            .mode-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 6px;
+            }
+            
+            .mode-btn {
+                padding: 12px 8px;
+                flex-direction: column;
+                gap: 4px;
+                font-size: 11px;
+            }
+            
+            .mode-icon {
+                font-size: 16px;
+            }
+            
+            .progress-section {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            
+            .task-display {
+                padding: 16px;
+            }
+            
+            .task-content {
+                font-size: 36px;
+                min-height: 50px;
+            }
+            
+            .main-content {
+                padding: 16px;
+            }
+            
+            .canvas-title {
+                font-size: 16px;
+            }
+            
+            .session-stats {
+                top: 16px;
+                right: 16px;
+                padding: 12px;
+                font-size: 10px;
+            }
+        }
+
+        @media (orientation: landscape) and (max-width: 1024px) {
+            .app-container {
+                grid-template-columns: 280px 1fr;
+                grid-template-rows: 1fr;
+            }
+            
+            .sidebar {
+                max-height: 100vh;
+            }
+            
+            .mode-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .mode-btn {
+                flex-direction: row;
+                padding: 12px;
+                font-size: 12px;
+            }
+        }
+
+        /* Micro-interactions */
+        .mode-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .mode-btn:active::before {
+            width: 200px;
+            height: 200px;
         }
 
         .control-btn::before {
@@ -292,317 +577,192 @@
             left: 50%;
             width: 0;
             height: 0;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
             transition: all 0.3s ease;
             border-radius: 50%;
             transform: translate(-50%, -50%);
         }
 
         .control-btn:active::before {
-            width: 300px;
-            height: 300px;
+            width: 200px;
+            height: 200px;
         }
 
-        .next-btn {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-        }
-
-        .clear-btn {
-            background: linear-gradient(45deg, #ff9800, #f57c00);
-            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
-        }
-
-        .skip-btn {
-            background: linear-gradient(45deg, #2196F3, #1976D2);
-            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
-        }
-
-        .export-btn {
-            background: linear-gradient(45deg, #9C27B0, #7B1FA2);
-            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
-        }
-
-        .control-btn:active {
-            transform: scale(0.95);
-        }
-
-        .stats {
-            position: fixed;
-            top: max(15px, env(safe-area-inset-top));
-            right: max(15px, env(safe-area-inset-right));
-            background: rgba(0,0,0,0.7);
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 11px;
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.1);
-            min-width: 120px;
-        }
-
-        .connection-preview {
-            margin-top: 10px;
-            font-size: 0.85em;
-            color: #B0BEC5;
-            font-style: italic;
-            line-height: 1.3;
-        }
-
+        /* Word breakdown styles */
         .word-breakdown {
             margin-top: 12px;
             padding: 12px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 10px;
-            font-size: 0.85em;
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            font-size: 11px;
         }
 
         .word-breakdown .letter {
             display: inline-block;
-            padding: 4px 8px;
+            padding: 4px 6px;
             margin: 2px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 10px;
+            transition: all 0.2s ease;
         }
 
         .letter.collected {
-            background: rgba(76, 175, 80, 0.4);
-            color: #E8F5E8;
-            transform: scale(1.05);
-        }
-
-        .celebration {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 4em;
-            pointer-events: none;
-            z-index: 1000;
-            animation: celebrate 1.2s ease-out;
-        }
-
-        @keyframes celebrate {
-            0% { 
-                transform: translate(-50%, -50%) scale(0) rotate(0deg); 
-                opacity: 0; 
-            }
-            50% { 
-                transform: translate(-50%, -50%) scale(1.3) rotate(180deg); 
-                opacity: 1; 
-            }
-            100% { 
-                transform: translate(-50%, -50%) scale(1) rotate(360deg); 
-                opacity: 0; 
-            }
-        }
-
-        .message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255,193,7,0.95);
-            color: #333;
-            padding: 16px 24px;
-            border-radius: 16px;
-            font-weight: 600;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.3);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            animation: messageSlide 0.3s ease-out;
-        }
-
-        @keyframes messageSlide {
-            0% {
-                transform: translate(-50%, -50%) scale(0.8);
-                opacity: 0;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-        }
-
-        .stroke-counter {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(0,0,0,0.6);
+            background: var(--success);
             color: white;
-            padding: 6px 10px;
-            border-radius: 8px;
-            font-size: 0.75em;
-            backdrop-filter: blur(10px);
-        }
-
-        .quality-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-left: 8px;
-            animation: pulse 2s infinite;
-        }
-
-        .quality-good { background: #4CAF50; }
-        .quality-medium { background: #FF9800; }
-        .quality-poor { background: #F44336; }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Touch feedback */
-        .control-btn:active {
-            background-size: 100%;
-            transition: background-size 0.1s;
-        }
-
-        /* iPad specific optimizations */
-        @media (min-width: 768px) and (max-width: 1024px) {
-            .container {
-                padding: 20px;
-            }
-            
-            .title {
-                font-size: 2em;
-            }
-            
-            .controls {
-                grid-template-columns: 1fr 1fr 1fr 1fr;
-                gap: 15px;
-            }
-            
-            .control-btn {
-                padding: 18px 24px;
-                font-size: 16px;
-                min-height: 64px;
-            }
-            
-            .task-content {
-                font-size: 4em;
-                min-height: 80px;
-            }
-        }
-
-        /* Landscape orientation */
-        @media (orientation: landscape) {
-            .container {
-                flex-direction: row;
-                gap: 15px;
-            }
-            
-            .left-panel {
-                flex: 0 0 300px;
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .canvas-container {
-                flex: 1;
-                margin-bottom: 0;
-            }
-            
-            .controls {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-            
-            .control-btn {
-                padding: 12px 16px;
-                min-height: 48px;
-                font-size: 14px;
-            }
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="left-panel">
+    <div class="app-container">
+        <div class="sidebar">
             <div class="header">
-                <div class="title">🎨 Neural Handwriting Collector</div>
-                <div class="subtitle">Advanced Training Data System</div>
+                <div class="app-title">HandwriteAI</div>
+                <div class="app-subtitle">Professional Data Collection System</div>
             </div>
 
-            <div class="mode-selector">
-                <button class="mode-btn active" data-mode="connections">🔗 Connections</button>
-                <button class="mode-btn" data-mode="words">📝 Words</button>
-                <button class="mode-btn" data-mode="pairs">👫 Pairs</button>
-                <button class="mode-btn" data-mode="variations">🎯 Variations</button>
-                <button class="mode-btn" data-mode="sentences">📖 Sentences</button>
+            <div class="mode-section">
+                <div class="section-title">Collection Mode</div>
+                <div class="mode-grid">
+                    <button class="mode-btn active" data-mode="connections">
+                        <span class="mode-icon">🔗</span>
+                        <span>Connections</span>
+                    </button>
+                    <button class="mode-btn" data-mode="words">
+                        <span class="mode-icon">📝</span>
+                        <span>Words</span>
+                    </button>
+                    <button class="mode-btn" data-mode="pairs">
+                        <span class="mode-icon">👫</span>
+                        <span>Pairs</span>
+                    </button>
+                    <button class="mode-btn" data-mode="variations">
+                        <span class="mode-icon">🎯</span>
+                        <span>Variations</span>
+                    </button>
+                    <button class="mode-btn" data-mode="sentences">
+                        <span class="mode-icon">📖</span>
+                        <span>Sentences</span>
+                    </button>
+                </div>
             </div>
 
             <div class="progress-section">
-                <div class="progress-grid">
-                    <div class="progress-item">
-                        <h3>Connections <span class="quality-indicator quality-good" id="connectionsQuality"></span></h3>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="connectionsProgress" style="width: 0%"></div>
-                        </div>
-                        <div class="progress-count" id="connectionsCount">0 / 200</div>
+                <div class="section-title">Progress</div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-title">Connections</span>
+                        <span class="progress-count" id="connectionsCount">0 / 250</span>
                     </div>
-                    <div class="progress-item">
-                        <h3>Words <span class="quality-indicator quality-medium" id="wordsQuality"></span></h3>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="wordsProgress" style="width: 0%"></div>
-                        </div>
-                        <div class="progress-count" id="wordsCount">0 / 150</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="connectionsProgress" style="width: 0%"></div>
                     </div>
-                    <div class="progress-item">
-                        <h3>Variations <span class="quality-indicator quality-poor" id="variationsQuality"></span></h3>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="variationsProgress" style="width: 0%"></div>
-                        </div>
-                        <div class="progress-count" id="variationsCount">0 / 300</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-title">Words</span>
+                        <span class="progress-count" id="wordsCount">0 / 200</span>
                     </div>
-                    <div class="progress-item">
-                        <h3>Quality Score</h3>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="qualityProgress" style="width: 0%"></div>
-                        </div>
-                        <div class="progress-count" id="qualityScore">0%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="wordsProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-title">Variations</span>
+                        <span class="progress-count" id="variationsCount">0 / 400</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="variationsProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-title">Overall Quality</span>
+                        <span class="progress-count" id="qualityScore">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="qualityProgress" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="current-task">
-                <div class="task-type" id="taskType">🔗 Neural Connection Training</div>
+            <div class="task-display">
+                <div class="task-type" id="taskType">Letter Connection Training</div>
                 <div class="task-content" id="taskContent">th</div>
-                <div class="connection-preview" id="connectionPreview">Practice natural connection between 't' and 'h'</div>
+                <div class="task-instruction" id="taskInstruction">Write 'th' with natural connection flow between letters</div>
                 <div class="word-breakdown" id="wordBreakdown" style="display: none;"></div>
             </div>
 
             <div class="controls">
-                <button class="control-btn next-btn" id="nextBtn">✨ Collect</button>
-                <button class="control-btn clear-btn" id="clearBtn">🗑️ Clear</button>
-                <button class="control-btn skip-btn" id="skipBtn">⏭️ Skip</button>
-                <button class="control-btn export-btn" id="exportBtn">📦 Export</button>
+                <button class="control-btn btn-primary" id="collectBtn">
+                    <span>✨</span>
+                    <span>Collect</span>
+                </button>
+                <button class="control-btn btn-secondary" id="clearBtn">
+                    <span>🗑️</span>
+                    <span>Clear</span>
+                </button>
+                <button class="control-btn btn-tertiary" id="skipBtn">
+                    <span>⏭️</span>
+                    <span>Skip</span>
+                </button>
+                <button class="control-btn btn-danger" id="exportBtn">
+                    <span>📦</span>
+                    <span>Export</span>
+                </button>
             </div>
         </div>
 
-        <div class="canvas-container">
-            <canvas id="drawingCanvas" class="canvas"></canvas>
-            <div class="canvas-overlay">
-                <div id="canvasInfo">Ready to write</div>
+        <div class="main-content">
+            <div class="canvas-area">
+                <div class="canvas-header">
+                    <div class="canvas-title">Writing Canvas</div>
+                    <div class="canvas-stats">
+                        <div class="stat-item">
+                            <span>📊</span>
+                            <span id="strokeCount">0 strokes</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>⚡</span>
+                            <span id="quality">Ready</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="canvas-container">
+                    <canvas id="drawingCanvas" class="drawing-canvas"></canvas>
+                    <div class="canvas-overlay" id="canvasOverlay">
+                        Ready to write
+                    </div>
+                </div>
             </div>
-            <div class="stroke-counter" id="strokeCounter">Strokes: 0</div>
         </div>
     </div>
 
-    <div class="stats" id="stats">
-        Session: 0 samples<br>
-        Speed: 0.0 spm<br>
-        Streak: 0
+    <div class="session-stats" id="sessionStats">
+        <div class="stat">
+            <span>Samples:</span>
+            <span id="totalSamples">0</span>
+        </div>
+        <div class="stat">
+            <span>Speed:</span>
+            <span id="samplesPerMin">0.0/min</span>
+        </div>
+        <div class="stat">
+            <span>Streak:</span>
+            <span id="currentStreak">0 🔥</span>
+        </div>
+        <div class="stat">
+            <span>Session:</span>
+            <span id="sessionTime">0:00</span>
+        </div>
     </div>
 
     <script>
-        class NeuralHandwritingCollector {
+        class ProfessionalHandwritingCollector {
             constructor() {
                 this.canvas = document.getElementById('drawingCanvas');
                 this.ctx = this.canvas.getContext('2d');
@@ -612,7 +772,7 @@
                 this.lastPoint = null;
                 this.pressure = 1.0;
                 
-                // Enhanced collection data with metadata
+                // Enhanced collection data
                 this.collectedData = {
                     connections: [],
                     words: [],
@@ -621,88 +781,75 @@
                     sentences: []
                 };
                 
-                // Advanced session stats
+                // Session statistics
                 this.sessionStats = {
                     totalSamples: 0,
                     startTime: Date.now(),
                     streak: 0,
                     lastSampleTime: Date.now(),
-                    avgStrokesPerSample: 0,
                     qualityScore: 0,
-                    timePerSample: []
+                    averageStrokeCount: 0
                 };
                 
-                // Current mode and task
+                // Current state
                 this.currentMode = 'connections';
                 this.currentTaskIndex = 0;
                 this.taskStartTime = Date.now();
                 
-                // Enhanced training data for better neural network training
+                // Premium training datasets
                 this.trainingData = {
                     connections: [
-                        // Most frequent English letter combinations
                         'th', 'he', 'in', 'er', 'an', 're', 'ed', 'nd', 'st', 'en',
                         'ti', 'es', 'or', 'te', 'of', 'be', 'to', 'at', 'se', 'ha',
                         'ng', 'me', 'it', 'is', 'ar', 'ou', 'io', 'le', 've', 'co',
                         'll', 'de', 'hi', 'ri', 'ro', 'ic', 'ne', 'ea', 'ra', 'ce',
-                        // Challenging connections for variety
-                        'qu', 'ck', 'sh', 'ch', 'wh', 'ph', 'gh', 'wr', 'kn', 'mb',
-                        // Mixed case for realism
-                        'Th', 'He', 'In', 'An', 'Re', 'Wh', 'Ch', 'Sh', 'Pr', 'Tr'
+                        'ly', 'al', 'nt', 'as', 'on', 'ch', 'la', 'ty', 'om', 'ag',
+                        'Th', 'He', 'In', 'An', 'Re', 'Wh', 'Ch', 'Sh', 'Pr', 'Tr',
+                        'qu', 'ph', 'gh', 'ck', 'wh', 'wr', 'kn', 'mb', 'sc', 'sw'
                     ],
                     
                     words: [
-                        // High-frequency English words with natural connections
                         'the', 'and', 'you', 'that', 'was', 'for', 'are', 'with', 'his', 'they',
                         'have', 'this', 'will', 'been', 'from', 'were', 'said', 'each', 'which', 'their',
                         'time', 'into', 'only', 'over', 'think', 'also', 'your', 'work', 'life', 'years',
                         'after', 'being', 'where', 'through', 'during', 'follow', 'around', 'every', 'little', 'world',
-                        // Natural writing words
                         'hello', 'thank', 'please', 'write', 'letter', 'paper', 'school', 'friend', 'family', 'house',
                         'water', 'light', 'right', 'great', 'small', 'large', 'place', 'sound', 'again', 'still',
-                        // Challenging letter combinations
-                        'writing', 'between', 'through', 'another', 'because', 'without', 'nothing', 'something', 'everything', 'anything',
-                        // Mixed case words
-                        'John', 'Mary', 'David', 'Sarah', 'Michael', 'Jennifer', 'Robert', 'Lisa', 'William', 'Karen'
+                        'today', 'happy', 'beautiful', 'important', 'different', 'special', 'morning', 'evening', 'question', 'answer',
+                        'writing', 'between', 'through', 'another', 'because', 'without', 'nothing', 'something', 'everything', 'anything'
                     ],
                     
                     pairs: [
-                        // Systematic letter pair coverage
                         'ab', 'ac', 'ad', 'ae', 'af', 'ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'an', 'ao', 'ap', 'ar', 'as', 'at', 'au', 'av', 'aw', 'ax', 'ay', 'az',
                         'ba', 'bc', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bk', 'bl', 'bm', 'bn', 'bo', 'bp', 'br', 'bs', 'bt', 'bu', 'bv', 'bw', 'bx', 'by', 'bz',
-                        'ca', 'cb', 'cd', 'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'ck', 'cl', 'cm', 'cn', 'co', 'cp', 'cr', 'cs', 'ct', 'cu', 'cv', 'cw', 'cx', 'cy', 'cz',
-                        'da', 'db', 'dc', 'de', 'df', 'dg', 'dh', 'di', 'dj', 'dk', 'dl', 'dm', 'dn', 'do', 'dp', 'dr', 'ds', 'dt', 'du', 'dv', 'dw', 'dx', 'dy', 'dz'
+                        'ca', 'cb', 'cd', 'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'ck', 'cl', 'cm', 'cn', 'co', 'cp', 'cr', 'cs', 'ct', 'cu', 'cv', 'cw', 'cx', 'cy', 'cz'
                     ],
                     
                     variations: [
-                        // Complete character set with emphasis on variation
                         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
                         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
                         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                        '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '+', '=', '[', ']', '{', '}', '|', '\\', ':', ';', '"', "'", '<', '>', ',', '.', '?', '/'
+                        '.', ',', '!', '?', ';', ':', '-', '_', '(', ')', '[', ']', '{', '}', '"', "'", '@', '#', '%', '&', '*', '+', '=', '/', '\\'
                     ],
                     
                     sentences: [
-                        // Pangrams and natural sentences
                         'The quick brown fox jumps over the lazy dog.',
                         'Pack my box with five dozen liquor jugs.',
                         'How vexingly quick daft zebras jump!',
                         'Bright vixens jump; dozy fowl quack.',
                         'Quick zephyrs blow, vexing daft Jim.',
-                        // Natural handwriting sentences
-                        'I love writing with my own personal style.',
-                        'This handwriting looks completely natural and fluid.',
-                        'The pen flows smoothly across the paper today.',
-                        'Each letter connects beautifully to the next one.',
-                        'My handwriting has improved significantly over time.',
-                        'Natural connections make all the difference in legibility.',
-                        // Longer flowing sentences
-                        'The morning sun cast long shadows through the window as she wrote her letter.',
-                        'Handwriting is an art form that expresses personality through every single stroke.',
-                        'When letters flow together naturally, the writing becomes truly beautiful and elegant.',
-                        'Practice makes perfect, especially when collecting comprehensive handwriting data for training.',
-                        'Neural networks learn best from diverse, natural handwriting samples with good coverage.',
-                        'The iPad provides an excellent platform for collecting high-quality handwriting data.'
+                        'I enjoy writing with my personal style.',
+                        'This handwriting flows naturally across the page.',
+                        'The pen glides smoothly with each letter.',
+                        'Beautiful connections between letters make writing elegant.',
+                        'Practice improves handwriting quality significantly.',
+                        'Neural networks learn from diverse writing samples.',
+                        'The morning sunlight streamed through the window as she wrote her letter carefully.',
+                        'Handwriting is a personal art form that expresses individual character and style.',
+                        'When letters connect naturally, the writing becomes fluid and easily readable.',
+                        'Professional data collection requires systematic sampling of various writing patterns.',
+                        'Advanced machine learning models benefit from high-quality handwriting datasets.',
+                        'The iPad provides an excellent platform for collecting precise handwriting data.'
                     ]
                 };
                 
@@ -715,6 +862,7 @@
                 this.updateTask();
                 this.updateStats();
                 this.loadProgress();
+                this.startSessionTimer();
                 this.startAutoSave();
             }
 
@@ -725,23 +873,22 @@
                 
                 this.canvas.width = rect.width * dpr;
                 this.canvas.height = rect.height * dpr;
+                
                 this.canvas.style.width = rect.width + 'px';
                 this.canvas.style.height = rect.height + 'px';
                 
                 this.ctx.scale(dpr, dpr);
+                
                 this.ctx.lineWidth = 2.5;
                 this.ctx.lineCap = 'round';
                 this.ctx.lineJoin = 'round';
-                this.ctx.strokeStyle = '#2c3e50';
-                this.ctx.fillStyle = '#2c3e50';
-                
-                // Enable better line rendering
+                this.ctx.strokeStyle = '#1f2937';
+                this.ctx.fillStyle = '#1f2937';
                 this.ctx.imageSmoothingEnabled = true;
                 this.ctx.imageSmoothingQuality = 'high';
             }
 
             setupEventListeners() {
-                // Mode selector
                 document.querySelectorAll('.mode-btn').forEach(btn => {
                     btn.addEventListener('click', () => {
                         document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
@@ -749,28 +896,26 @@
                         this.currentMode = btn.dataset.mode;
                         this.currentTaskIndex = 0;
                         this.updateTask();
-                        this.updateProgress();
+                        this.showNotification(`Switched to ${btn.textContent.trim()} mode`);
                     });
                 });
 
-                // Control buttons with enhanced feedback
-                document.getElementById('nextBtn').addEventListener('click', () => this.nextTask());
+                document.getElementById('collectBtn').addEventListener('click', () => this.collectSample());
                 document.getElementById('clearBtn').addEventListener('click', () => this.clearCanvas());
                 document.getElementById('skipBtn').addEventListener('click', () => this.skipTask());
                 document.getElementById('exportBtn').addEventListener('click', () => this.exportData());
 
-                // Enhanced touch events for iPad
                 this.canvas.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     const touch = e.touches[0];
-                    this.pressure = touch.force || 1.0;
+                    this.pressure = touch.force !== undefined ? Math.max(0.1, touch.force) : 1.0;
                     this.startDrawing(touch);
                 }, { passive: false });
 
                 this.canvas.addEventListener('touchmove', (e) => {
                     e.preventDefault();
                     const touch = e.touches[0];
-                    this.pressure = touch.force || 1.0;
+                    this.pressure = touch.force !== undefined ? Math.max(0.1, touch.force) : 1.0;
                     this.draw(touch);
                 }, { passive: false });
 
@@ -779,44 +924,37 @@
                     this.stopDrawing();
                 }, { passive: false });
 
-                // Mouse events for desktop testing
                 this.canvas.addEventListener('mousedown', (e) => this.startDrawing(e));
                 this.canvas.addEventListener('mousemove', (e) => this.draw(e));
                 this.canvas.addEventListener('mouseup', () => this.stopDrawing());
                 this.canvas.addEventListener('mouseleave', () => this.stopDrawing());
 
-                // Orientation change handler
                 window.addEventListener('orientationchange', () => {
-                    setTimeout(() => this.setupCanvas(), 100);
+                    setTimeout(() => this.setupCanvas(), 200);
                 });
 
-                // Resize handler
                 window.addEventListener('resize', () => {
                     setTimeout(() => this.setupCanvas(), 100);
                 });
 
-                // Prevent scrolling and zooming
+                document.addEventListener('gesturestart', (e) => e.preventDefault());
+                document.addEventListener('gesturechange', (e) => e.preventDefault());
+                document.addEventListener('gestureend', (e) => e.preventDefault());
+                
                 document.addEventListener('touchmove', (e) => {
                     if (e.target === this.canvas) {
                         e.preventDefault();
                     }
                 }, { passive: false });
-
-                document.addEventListener('gesturestart', (e) => e.preventDefault());
-                document.addEventListener('gesturechange', (e) => e.preventDefault());
-                document.addEventListener('gestureend', (e) => e.preventDefault());
             }
 
             getCoordinates(e) {
                 const rect = this.canvas.getBoundingClientRect();
-                const scaleX = this.canvas.width / (rect.width * (window.devicePixelRatio || 1));
-                const scaleY = this.canvas.height / (rect.height * (window.devicePixelRatio || 1));
-                
                 return {
-                    x: (e.clientX - rect.left) / (window.devicePixelRatio || 1),
-                    y: (e.clientY - rect.top) / (window.devicePixelRatio || 1),
+                    x: e.clientX - rect.left,
+                    y: e.clientY - rect.top,
                     pressure: this.pressure,
-                    timestamp: Date.now()
+                    timestamp: performance.now()
                 };
             }
 
@@ -826,17 +964,17 @@
                 this.currentStroke = [coords];
                 this.lastPoint = coords;
                 
-                // Adaptive line width based on pressure
-                const lineWidth = 2 + (coords.pressure * 2);
+                const lineWidth = 1.5 + (coords.pressure * 2);
                 this.ctx.lineWidth = lineWidth;
                 
                 this.ctx.beginPath();
                 this.ctx.moveTo(coords.x, coords.y);
                 
-                // Draw a small dot for the start
                 this.ctx.beginPath();
                 this.ctx.arc(coords.x, coords.y, lineWidth / 2, 0, 2 * Math.PI);
                 this.ctx.fill();
+                
+                this.updateCanvasStats();
             }
 
             draw(e) {
@@ -845,115 +983,107 @@
                 const coords = this.getCoordinates(e);
                 
                 if (this.lastPoint) {
-                    // Calculate smooth curve using quadratic bezier
-                    const midX = (this.lastPoint.x + coords.x) / 2;
-                    const midY = (this.lastPoint.y + coords.y) / 2;
-                    
-                    // Adaptive line width based on pressure and speed
                     const distance = Math.sqrt(
                         Math.pow(coords.x - this.lastPoint.x, 2) + 
                         Math.pow(coords.y - this.lastPoint.y, 2)
                     );
-                    const speed = distance / (coords.timestamp - this.lastPoint.timestamp + 1);
-                    const lineWidth = Math.max(1, 3 - speed * 0.1) * coords.pressure;
+                    const timeDiff = coords.timestamp - this.lastPoint.timestamp;
+                    const velocity = distance / (timeDiff + 1);
+                    
+                    const baseWidth = 1.5 + (coords.pressure * 1.5);
+                    const velocityFactor = Math.max(0.5, 1 - (velocity * 0.01));
+                    const lineWidth = baseWidth * velocityFactor;
                     
                     this.ctx.lineWidth = lineWidth;
+                    
                     this.ctx.beginPath();
                     this.ctx.moveTo(this.lastPoint.x, this.lastPoint.y);
-                    this.ctx.quadraticCurveTo(this.lastPoint.x, this.lastPoint.y, midX, midY);
+                    this.ctx.quadraticCurveTo(
+                        this.lastPoint.x, 
+                        this.lastPoint.y, 
+                        (this.lastPoint.x + coords.x) / 2, 
+                        (this.lastPoint.y + coords.y) / 2
+                    );
                     this.ctx.stroke();
                 }
                 
                 this.currentStroke.push(coords);
                 this.lastPoint = coords;
-                
-                // Update stroke counter
-                document.getElementById('strokeCounter').textContent = `Strokes: ${this.currentStrokes.length + 1}`;
+                this.updateCanvasStats();
             }
 
             stopDrawing() {
                 if (!this.isDrawing) return;
+                
                 this.isDrawing = false;
                 
-                if (this.currentStroke.length > 1) {
+                if (this.currentStroke.length > 2) {
                     this.currentStrokes.push([...this.currentStroke]);
-                    this.updateCanvasInfo();
                 }
+                
                 this.currentStroke = [];
                 this.lastPoint = null;
+                this.updateCanvasStats();
             }
 
-            updateCanvasInfo() {
-                const info = document.getElementById('canvasInfo');
-                const strokeCount = this.currentStrokes.length;
-                const quality = this.assessDrawingQuality();
+            updateCanvasStats() {
+                const strokeCount = this.currentStrokes.length + (this.isDrawing ? 1 : 0);
+                const quality = this.assessCurrentQuality();
                 
-                let status = 'Ready to write';
-                if (strokeCount > 0) {
-                    status = `${strokeCount} stroke${strokeCount > 1 ? 's' : ''} • ${quality}`;
-                }
-                
-                info.textContent = status;
+                document.getElementById('strokeCount').textContent = `${strokeCount} stroke${strokeCount !== 1 ? 's' : ''}`;
+                document.getElementById('quality').textContent = quality;
+                document.getElementById('canvasOverlay').textContent = 
+                    strokeCount > 0 ? `${strokeCount} strokes • ${quality}` : 'Ready to write';
             }
 
-            assessDrawingQuality() {
-                if (this.currentStrokes.length === 0) return 'Empty';
+            assessCurrentQuality() {
+                if (this.currentStrokes.length === 0) return 'Ready';
                 
                 const totalPoints = this.currentStrokes.reduce((sum, stroke) => sum + stroke.length, 0);
                 const avgPointsPerStroke = totalPoints / this.currentStrokes.length;
+                const strokeCount = this.currentStrokes.length;
                 
-                if (avgPointsPerStroke > 15) return 'Detailed';
-                if (avgPointsPerStroke > 8) return 'Good';
-                if (avgPointsPerStroke > 3) return 'Basic';
-                return 'Minimal';
+                if (strokeCount >= 3 && avgPointsPerStroke > 15) return 'Excellent';
+                if (strokeCount >= 2 && avgPointsPerStroke > 10) return 'Good';
+                if (strokeCount >= 1 && avgPointsPerStroke > 5) return 'Fair';
+                return 'Basic';
             }
 
             clearCanvas() {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this.currentStrokes = [];
                 this.currentStroke = [];
-                this.updateCanvasInfo();
-                document.getElementById('strokeCounter').textContent = 'Strokes: 0';
+                this.updateCanvasStats();
+                this.showNotification('Canvas cleared');
             }
 
             updateTask() {
                 const tasks = this.trainingData[this.currentMode];
                 const currentTask = tasks[this.currentTaskIndex % tasks.length];
-                this.taskStartTime = Date.now();
+                this.taskStartTime = performance.now();
                 
                 document.getElementById('taskContent').textContent = currentTask;
                 
-                // Update task type and preview
                 const taskTypes = {
-                    connections: '🔗 Neural Connection Training',
-                    words: '📝 Natural Word Flow',
-                    pairs: '👫 Letter Pair Practice',
-                    variations: '🎯 Character Variation',
-                    sentences: '📖 Flowing Sentence'
+                    connections: 'Letter Connection Training',
+                    words: 'Natural Word Flow',
+                    pairs: 'Letter Pair Practice',
+                    variations: 'Character Variation',
+                    sentences: 'Flowing Sentence'
                 };
-                
                 document.getElementById('taskType').textContent = taskTypes[this.currentMode];
                 
-                // Update connection preview with more detailed instructions
-                const preview = this.getTaskPreview(currentTask);
-                document.getElementById('connectionPreview').textContent = preview;
-                
-                // Update word breakdown for words and sentences
-                this.updateWordBreakdown(currentTask);
-                
-                this.clearCanvas();
-            }
-
-            getTaskPreview(task) {
-                const previews = {
-                    connections: `Write '${task}' with natural connection flow between letters`,
-                    words: `Write "${task}" naturally with smooth letter connections`,
-                    pairs: `Practice fluid transition from '${task[0]}' to '${task[1]}'`,
-                    variations: `Write '${task}' with your natural style variation`,
+                const instructions = {
+                    connections: `Write '${currentTask}' with natural connection flow between letters`,
+                    words: `Write "${currentTask}" naturally with smooth letter connections`,
+                    pairs: `Practice fluid transition from '${currentTask[0]}' to '${currentTask[1]}'`,
+                    variations: `Write '${currentTask}' with your natural style variation`,
                     sentences: `Write with natural rhythm, speed, and letter flow`
                 };
+                document.getElementById('taskInstruction').textContent = instructions[this.currentMode];
                 
-                return previews[this.currentMode];
+                this.updateWordBreakdown(currentTask);
+                this.clearCanvas();
             }
 
             updateWordBreakdown(task) {
@@ -962,8 +1092,8 @@
                 if (this.currentMode === 'words' || this.currentMode === 'sentences') {
                     breakdown.style.display = 'block';
                     
-                    const letters = task.split('').filter(char => char !== ' ');
-                    breakdown.innerHTML = 'Coverage: ' + letters.map(letter => {
+                    const letters = [...new Set(task.toLowerCase().split('').filter(char => /[a-z]/.test(char)))];
+                    breakdown.innerHTML = 'Character coverage: ' + letters.map(letter => {
                         const collected = this.hasCollectedLetter(letter);
                         return `<span class="letter ${collected ? 'collected' : ''}">${letter}</span>`;
                     }).join('');
@@ -978,62 +1108,46 @@
                 );
             }
 
-            nextTask() {
+            collectSample() {
                 if (this.currentStrokes.length === 0) {
-                    this.showMessage('⚠️ Please write something first!', 'warning');
+                    this.showNotification('⚠️ Please write something first!', 'warning');
                     return;
                 }
 
-                // Enhanced sample saving with more metadata
                 this.saveSample();
                 
-                // Move to next task
-                this.currentTaskIndex++;
-                this.updateTask();
-                
-                // Update stats with quality assessment
                 this.sessionStats.totalSamples++;
                 this.sessionStats.streak++;
                 this.sessionStats.lastSampleTime = Date.now();
                 
-                const sampleTime = Date.now() - this.taskStartTime;
-                this.sessionStats.timePerSample.push(sampleTime);
-                
-                // Calculate average strokes per sample
                 const totalStrokes = Object.values(this.collectedData)
                     .flat()
                     .reduce((sum, sample) => sum + sample.strokes.length, 0);
-                this.sessionStats.avgStrokesPerSample = totalStrokes / this.sessionStats.totalSamples;
+                this.sessionStats.averageStrokeCount = totalStrokes / this.sessionStats.totalSamples;
+                
+                this.currentTaskIndex++;
+                this.updateTask();
                 
                 this.updateStats();
                 this.updateProgress();
                 this.saveProgress();
                 
-                // Enhanced celebration with quality feedback
                 this.showCelebration();
-                this.showMessage('✨ Sample collected successfully!', 'success');
-            }
-
-            skipTask() {
-                this.currentTaskIndex++;
-                this.updateTask();
-                this.sessionStats.streak = Math.max(0, this.sessionStats.streak - 1);
-                this.updateStats();
-                this.showMessage('⏭️ Task skipped', 'info');
+                this.showNotification('✨ Sample collected successfully!', 'success');
             }
 
             saveSample() {
                 const tasks = this.trainingData[this.currentMode];
                 const currentTask = tasks[this.currentTaskIndex % tasks.length];
                 
-                // Enhanced sample with comprehensive metadata
                 const sample = {
+                    id: `${this.currentMode}_${this.currentTaskIndex}_${Date.now()}`,
                     text: currentTask,
                     strokes: this.currentStrokes.map(stroke => 
                         stroke.map(point => ({
-                            x: point.x,
-                            y: point.y,
-                            pressure: point.pressure || 1.0,
+                            x: Math.round(point.x * 100) / 100,
+                            y: Math.round(point.y * 100) / 100,
+                            pressure: Math.round(point.pressure * 1000) / 1000,
                             timestamp: point.timestamp
                         }))
                     ),
@@ -1042,12 +1156,14 @@
                         mode: this.currentMode,
                         category: this.getCategoryForTask(currentTask),
                         taskIndex: this.currentTaskIndex,
-                        sessionSample: this.sessionStats.totalSamples,
+                        sessionIndex: this.sessionStats.totalSamples,
                         streak: this.sessionStats.streak,
-                        timeToComplete: Date.now() - this.taskStartTime,
+                        timeToComplete: performance.now() - this.taskStartTime,
                         strokeCount: this.currentStrokes.length,
-                        quality: this.assessDrawingQuality(),
-                        canvasSize: {
+                        quality: this.assessCurrentQuality(),
+                        boundingBox: this.calculateBoundingBox(this.currentStrokes),
+                        features: this.extractFeatures(this.currentStrokes),
+                        canvas: {
                             width: this.canvas.width,
                             height: this.canvas.height,
                             displayWidth: this.canvas.clientWidth,
@@ -1058,7 +1174,11 @@
                             userAgent: navigator.userAgent,
                             platform: navigator.platform,
                             maxTouchPoints: navigator.maxTouchPoints,
-                            orientation: screen.orientation ? screen.orientation.angle : 0
+                            screen: {
+                                width: screen.width,
+                                height: screen.height,
+                                orientation: screen.orientation ? screen.orientation.angle : 0
+                            }
                         }
                     }
                 };
@@ -1068,251 +1188,17 @@
 
             getCategoryForTask(task) {
                 if (task.length === 1) {
-                    if (task >= 'A' && task <= 'Z') return 'uppercase';
-                    if (task >= 'a' && task <= 'z') return 'lowercase';
-                    if (task >= '0' && task <= '9') return 'digit';
+                    if (/[A-Z]/.test(task)) return 'uppercase';
+                    if (/[a-z]/.test(task)) return 'lowercase';
+                    if (/[0-9]/.test(task)) return 'digit';
                     return 'symbol';
                 } else if (task.length === 2) {
                     return 'pair';
-                } else if (task.includes(' ')) {
+                } else if (task.includes(' ') || task.includes('.')) {
                     return 'sentence';
                 } else {
                     return 'word';
                 }
-            }
-
-            updateStats() {
-                const elapsed = (Date.now() - this.sessionStats.startTime) / 1000 / 60;
-                const spm = elapsed > 0 ? (this.sessionStats.totalSamples / elapsed).toFixed(1) : '0.0';
-                
-                let streakIcon = '';
-                if (this.sessionStats.streak > 10) streakIcon = '🔥🔥';
-                else if (this.sessionStats.streak > 5) streakIcon = '🔥';
-                else if (this.sessionStats.streak > 0) streakIcon = '⚡';
-                
-                document.getElementById('stats').innerHTML = `
-                    Session: ${this.sessionStats.totalSamples} samples<br>
-                    Speed: ${spm} spm<br>
-                    Streak: ${this.sessionStats.streak} ${streakIcon}<br>
-                    Avg: ${this.sessionStats.avgStrokesPerSample.toFixed(1)} strokes
-                `;
-            }
-
-            updateProgress() {
-                const totals = {
-                    connections: 200,
-                    words: 150,
-                    variations: 300,
-                    pairs: 100,
-                    sentences: 50
-                };
-                
-                // Update individual progress with quality indicators
-                Object.keys(this.collectedData).forEach(mode => {
-                    const count = this.collectedData[mode].length;
-                    const total = totals[mode] || 100;
-                    const percentage = Math.min((count / total) * 100, 100);
-                    
-                    const progressBar = document.getElementById(mode + 'Progress');
-                    const countDisplay = document.getElementById(mode + 'Count');
-                    const qualityIndicator = document.getElementById(mode + 'Quality');
-                    
-                    if (progressBar) {
-                        progressBar.style.width = percentage + '%';
-                    }
-                    if (countDisplay) {
-                        countDisplay.textContent = `${count} / ${total}`;
-                    }
-                    
-                    // Update quality indicator
-                    if (qualityIndicator) {
-                        qualityIndicator.className = 'quality-indicator ' + 
-                            (percentage > 80 ? 'quality-good' : 
-                             percentage > 40 ? 'quality-medium' : 'quality-poor');
-                    }
-                });
-                
-                // Calculate overall quality score
-                const totalCollected = Object.values(this.collectedData).reduce((sum, arr) => sum + arr.length, 0);
-                const totalTarget = Object.values(totals).reduce((sum, val) => sum + val, 0);
-                const qualityScore = Math.min((totalCollected / totalTarget) * 100, 100);
-                
-                document.getElementById('qualityProgress').style.width = qualityScore + '%';
-                document.getElementById('qualityScore').textContent = qualityScore.toFixed(1) + '%';
-                
-                this.sessionStats.qualityScore = qualityScore;
-            }
-
-            showCelebration() {
-                const celebrations = ['🎉', '✨', '🌟', '🎊', '🔥', '💫', '⭐', '🎈', '🚀', '💎'];
-                const celebration = document.createElement('div');
-                celebration.className = 'celebration';
-                celebration.textContent = celebrations[Math.floor(Math.random() * celebrations.length)];
-                document.body.appendChild(celebration);
-                
-                setTimeout(() => {
-                    if (document.body.contains(celebration)) {
-                        document.body.removeChild(celebration);
-                    }
-                }, 1200);
-            }
-
-            showMessage(message, type = 'info') {
-                const msgDiv = document.createElement('div');
-                msgDiv.className = 'message';
-                
-                const colors = {
-                    success: 'rgba(76, 175, 80, 0.95)',
-                    warning: 'rgba(255, 193, 7, 0.95)',
-                    error: 'rgba(244, 67, 54, 0.95)',
-                    info: 'rgba(33, 150, 243, 0.95)'
-                };
-                
-                msgDiv.style.background = colors[type] || colors.info;
-                msgDiv.textContent = message;
-                document.body.appendChild(msgDiv);
-                
-                setTimeout(() => {
-                    if (document.body.contains(msgDiv)) {
-                        document.body.removeChild(msgDiv);
-                    }
-                }, 3000);
-            }
-
-            saveProgress() {
-                try {
-                    const progressData = {
-                        collectedData: this.collectedData,
-                        sessionStats: this.sessionStats,
-                        currentMode: this.currentMode,
-                        currentTaskIndex: this.currentTaskIndex,
-                        version: '4.0',
-                        lastSaved: Date.now()
-                    };
-                    
-                    localStorage.setItem('neuralHandwritingProgress', JSON.stringify(progressData));
-                } catch (e) {
-                    console.warn('Could not save progress:', e);
-                    this.showMessage('⚠️ Progress save failed', 'warning');
-                }
-            }
-
-            loadProgress() {
-                try {
-                    const saved = localStorage.getItem('neuralHandwritingProgress');
-                    if (saved) {
-                        const data = JSON.parse(saved);
-                        
-                        // Validate data version compatibility
-                        if (data.version && parseFloat(data.version) >= 3.0) {
-                            this.collectedData = data.collectedData || this.collectedData;
-                            this.sessionStats = { ...this.sessionStats, ...data.sessionStats };
-                            this.currentMode = data.currentMode || this.currentMode;
-                            this.currentTaskIndex = data.currentTaskIndex || 0;
-                            
-                            // Update UI to reflect loaded state
-                            document.querySelectorAll('.mode-btn').forEach(btn => {
-                                btn.classList.toggle('active', btn.dataset.mode === this.currentMode);
-                            });
-                            
-                            this.updateTask();
-                            this.updateStats();
-                            this.updateProgress();
-                            
-                            this.showMessage('📂 Progress loaded successfully', 'success');
-                        }
-                    }
-                } catch (e) {
-                    console.warn('Could not load progress:', e);
-                }
-            }
-
-            exportData() {
-                const totalSamples = Object.values(this.collectedData).reduce((sum, arr) => sum + arr.length, 0);
-                
-                if (totalSamples === 0) {
-                    this.showMessage('⚠️ No data to export yet!', 'warning');
-                    return;
-                }
-
-                // Comprehensive export data optimized for neural network training
-                const exportData = {
-                    metadata: {
-                        version: '4.0-neural',
-                        totalSamples: totalSamples,
-                        collectionDate: new Date().toISOString(),
-                        sessionDuration: Date.now() - this.sessionStats.startTime,
-                        qualityScore: this.sessionStats.qualityScore,
-                        avgStrokesPerSample: this.sessionStats.avgStrokesPerSample,
-                        avgTimePerSample: this.sessionStats.timePerSample.length > 0 
-                            ? this.sessionStats.timePerSample.reduce((a, b) => a + b) / this.sessionStats.timePerSample.length 
-                            : 0,
-                        coverage: {
-                            connections: this.collectedData.connections.length,
-                            words: this.collectedData.words.length,
-                            variations: this.collectedData.variations.length,
-                            pairs: this.collectedData.pairs.length,
-                            sentences: this.collectedData.sentences.length
-                        },
-                        device: {
-                            platform: navigator.platform,
-                            userAgent: navigator.userAgent,
-                            maxTouchPoints: navigator.maxTouchPoints,
-                            screenSize: {
-                                width: screen.width,
-                                height: screen.height,
-                                pixelRatio: window.devicePixelRatio || 1
-                            }
-                        }
-                    },
-                    trainingData: []
-                };
-                
-                // Process and enhance all samples for neural network training
-                Object.keys(this.collectedData).forEach(mode => {
-                    this.collectedData[mode].forEach((sample, index) => {
-                        const enhancedSample = {
-                            id: `${mode}_${index}_${Date.now()}`,
-                            text: sample.text,
-                            strokes: sample.strokes,
-                            features: {
-                                strokeCount: sample.strokes.length,
-                                totalPoints: sample.strokes.reduce((sum, stroke) => sum + stroke.length, 0),
-                                boundingBox: this.calculateBoundingBox(sample.strokes),
-                                avgStrokeLength: sample.strokes.reduce((sum, stroke) => sum + stroke.length, 0) / sample.strokes.length,
-                                writingSpeed: sample.metadata ? (sample.metadata.timeToComplete / sample.strokes.length) : null,
-                                pressureVariation: this.calculatePressureVariation(sample.strokes)
-                            },
-                            labels: {
-                                text: sample.text,
-                                category: sample.metadata ? sample.metadata.category : this.getCategoryForTask(sample.text),
-                                mode: mode,
-                                complexity: this.calculateComplexity(sample),
-                                quality: sample.metadata ? sample.metadata.quality : 'unknown'
-                            },
-                            metadata: sample.metadata || {}
-                        };
-                        
-                        exportData.trainingData.push(enhancedSample);
-                    });
-                });
-                
-                // Create and download enhanced dataset
-                const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-                    type: 'application/json'
-                });
-                
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `neural_handwriting_dataset_${Date.now()}.json`;
-                
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-                
-                this.showMessage(`📦 Exported ${totalSamples} samples for neural training!`, 'success');
             }
 
             calculateBoundingBox(strokes) {
@@ -1330,97 +1216,275 @@
                 });
                 
                 return {
-                    x: minX,
-                    y: minY,
-                    width: maxX - minX,
-                    height: maxY - minY
+                    x: Math.round(minX),
+                    y: Math.round(minY),
+                    width: Math.round(maxX - minX),
+                    height: Math.round(maxY - minY)
                 };
             }
 
-            calculatePressureVariation(strokes) {
+            extractFeatures(strokes) {
+                const totalPoints = strokes.reduce((sum, stroke) => sum + stroke.length, 0);
                 const pressures = [];
+                let totalDistance = 0;
+                
                 strokes.forEach(stroke => {
-                    stroke.forEach(point => {
-                        if (point.pressure !== undefined) {
-                            pressures.push(point.pressure);
+                    stroke.forEach((point, i) => {
+                        pressures.push(point.pressure);
+                        if (i > 0) {
+                            const prev = stroke[i - 1];
+                            totalDistance += Math.sqrt(
+                                Math.pow(point.x - prev.x, 2) + 
+                                Math.pow(point.y - prev.y, 2)
+                            );
                         }
                     });
                 });
                 
-                if (pressures.length === 0) return 0;
-                
-                const avg = pressures.reduce((a, b) => a + b) / pressures.length;
-                const variance = pressures.reduce((sum, p) => sum + Math.pow(p - avg, 2), 0) / pressures.length;
-                return Math.sqrt(variance);
-            }
-
-            calculateComplexity(sample) {
-                const strokeComplexity = sample.strokes.length;
-                const pointComplexity = sample.strokes.reduce((sum, stroke) => sum + stroke.length, 0);
-                const textComplexity = sample.text.length;
+                const avgPressure = pressures.reduce((a, b) => a + b, 0) / pressures.length;
+                const pressureVariance = pressures.reduce((sum, p) => sum + Math.pow(p - avgPressure, 2), 0) / pressures.length;
                 
                 return {
-                    strokeCount: strokeComplexity,
-                    pointCount: pointComplexity,
-                    textLength: textComplexity,
-                    totalScore: strokeComplexity + (pointComplexity / 10) + textComplexity
+                    strokeCount: strokes.length,
+                    totalPoints: totalPoints,
+                    avgPointsPerStroke: totalPoints / strokes.length,
+                    totalDistance: Math.round(totalDistance),
+                    avgPressure: Math.round(avgPressure * 1000) / 1000,
+                    pressureVariance: Math.round(pressureVariance * 1000) / 1000,
+                    aspectRatio: this.calculateAspectRatio(strokes)
                 };
             }
 
-            startAutoSave() {
-                // Auto-save every 30 seconds
-                setInterval(() => {
-                    this.saveProgress();
-                }, 30000);
+            calculateAspectRatio(strokes) {
+                const bbox = this.calculateBoundingBox(strokes);
+                return bbox.height > 0 ? Math.round((bbox.width / bbox.height) * 100) / 100 : 1;
+            }
+
+            skipTask() {
+                this.currentTaskIndex++;
+                this.updateTask();
+                this.sessionStats.streak = Math.max(0, this.sessionStats.streak - 1);
+                this.updateStats();
+                this.showNotification('⏭️ Task skipped');
+            }
+
+            updateStats() {
+                const elapsed = (Date.now() - this.sessionStats.startTime) / 1000 / 60;
+                const samplesPerMin = elapsed > 0 ? (this.sessionStats.totalSamples / elapsed).toFixed(1) : '0.0';
                 
-                // Save on page unload
-                window.addEventListener('beforeunload', () => {
-                    this.saveProgress();
+                document.getElementById('totalSamples').textContent = this.sessionStats.totalSamples;
+                document.getElementById('samplesPerMin').textContent = `${samplesPerMin}/min`;
+                
+                let streakIcon = this.sessionStats.streak > 10 ? '🔥🔥' : 
+                                this.sessionStats.streak > 5 ? '🔥' : 
+                                this.sessionStats.streak > 0 ? '⚡' : '';
+                                
+                document.getElementById('currentStreak').textContent = `${this.sessionStats.streak} ${streakIcon}`;
+            }
+
+            updateProgress() {
+                const targets = {
+                    connections: 250,
+                    words: 200,
+                    variations: 400,
+                    pairs: 150,
+                    sentences: 60
+                };
+                
+                let totalCollected = 0;
+                let totalTarget = 0;
+                
+                Object.keys(this.collectedData).forEach(mode => {
+                    const count = this.collectedData[mode].length;
+                    const target = targets[mode] || 100;
+                    const percentage = Math.min((count / target) * 100, 100);
+                    
+                    totalCollected += count;
+                    totalTarget += target;
+                    
+                    const progressBar = document.getElementById(mode + 'Progress');
+                    const countDisplay = document.getElementById(mode + 'Count');
+                    
+                    if (progressBar) progressBar.style.width = percentage + '%';
+                    if (countDisplay) countDisplay.textContent = `${count} / ${target}`;
                 });
                 
-                // Save on visibility change (app backgrounding)
-                document.addEventListener('visibilitychange', () => {
-                    if (document.hidden) {
-                        this.saveProgress();
+                const overallProgress = Math.min((totalCollected / totalTarget) * 100, 100);
+                this.sessionStats.qualityScore = overallProgress;
+                
+                document.getElementById('qualityProgress').style.width = overallProgress + '%';
+                document.getElementById('qualityScore').textContent = overallProgress.toFixed(1) + '%';
+            }
+
+            startSessionTimer() {
+                setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - this.sessionStats.startTime) / 1000);
+                    const minutes = Math.floor(elapsed / 60);
+                    const seconds = elapsed % 60;
+                    document.getElementById('sessionTime').textContent = 
+                        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+
+            showCelebration() {
+                const celebrations = ['🎉', '✨', '🌟', '🎊', '🔥', '💫', '⭐', '🚀'];
+                const celebration = document.createElement('div');
+                celebration.className = 'celebration';
+                celebration.textContent = celebrations[Math.floor(Math.random() * celebrations.length)];
+                document.body.appendChild(celebration);
+                
+                setTimeout(() => {
+                    if (document.body.contains(celebration)) {
+                        document.body.removeChild(celebration);
                     }
+                }, 1000);
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.textContent = message;
+                
+                const colors = {
+                    success: 'rgba(16, 185, 129, 0.9)',
+                    warning: 'rgba(245, 158, 11, 0.9)',
+                    error: 'rgba(239, 68, 68, 0.9)',
+                    info: 'rgba(99, 102, 241, 0.9)'
+                };
+                
+                notification.style.background = colors[type] || colors.info;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 2500);
+            }
+
+            exportData() {
+                const totalSamples = Object.values(this.collectedData).reduce((sum, arr) => sum + arr.length, 0);
+                
+                if (totalSamples === 0) {
+                    this.showNotification('⚠️ No data to export yet!', 'warning');
+                    return;
+                }
+
+                const dataset = {
+                    metadata: {
+                        version: '5.0-professional',
+                        generated: new Date().toISOString(),
+                        totalSamples: totalSamples,
+                        sessionDuration: Date.now() - this.sessionStats.startTime,
+                        qualityScore: this.sessionStats.qualityScore,
+                        averageStrokeCount: this.sessionStats.averageStrokeCount,
+                        collection: {
+                            connections: this.collectedData.connections.length,
+                            words: this.collectedData.words.length,
+                            variations: this.collectedData.variations.length,
+                            pairs: this.collectedData.pairs.length,
+                            sentences: this.collectedData.sentences.length
+                        },
+                        device: {
+                            platform: navigator.platform,
+                            userAgent: navigator.userAgent,
+                            maxTouchPoints: navigator.maxTouchPoints,
+                            screen: {
+                                width: screen.width,
+                                height: screen.height,
+                                pixelRatio: window.devicePixelRatio || 1
+                            }
+                        }
+                    },
+                    samples: []
+                };
+                
+                Object.keys(this.collectedData).forEach(mode => {
+                    this.collectedData[mode].forEach(sample => {
+                        dataset.samples.push({
+                            ...sample,
+                            normalized: this.normalizeStrokes(sample.strokes, sample.metadata.boundingBox)
+                        });
+                    });
+                });
+                
+                const blob = new Blob([JSON.stringify(dataset, null, 2)], {
+                    type: 'application/json'
+                });
+                
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `handwriting_dataset_${Date.now()}.json`;
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                this.showNotification(`📦 Exported ${totalSamples} professional samples!`, 'success');
+            }
+
+            normalizeStrokes(strokes, boundingBox) {
+                if (!boundingBox || boundingBox.width === 0 || boundingBox.height === 0) {
+                    return strokes;
+                }
+                
+                return strokes.map(stroke => 
+                    stroke.map(point => ({
+                        x: (point.x - boundingBox.x) / boundingBox.width,
+                        y: (point.y - boundingBox.y) / boundingBox.height,
+                        pressure: point.pressure,
+                        timestamp: point.timestamp
+                    }))
+                );
+            }
+
+            saveProgress() {
+                // Using in-memory storage since localStorage isn't supported in artifacts
+                this.progressData = {
+                    version: '5.0',
+                    collectedData: this.collectedData,
+                    sessionStats: this.sessionStats,
+                    currentMode: this.currentMode,
+                    currentTaskIndex: this.currentTaskIndex,
+                    lastSaved: Date.now()
+                };
+            }
+
+            loadProgress() {
+                if (this.progressData && this.progressData.version && this.progressData.version.startsWith('5.')) {
+                    this.collectedData = this.progressData.collectedData || this.collectedData;
+                    this.sessionStats = { ...this.sessionStats, ...this.progressData.sessionStats };
+                    this.currentMode = this.progressData.currentMode || this.currentMode;
+                    this.currentTaskIndex = this.progressData.currentTaskIndex || 0;
+                    
+                    document.querySelectorAll('.mode-btn').forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.mode === this.currentMode);
+                    });
+                    
+                    this.updateTask();
+                    this.updateStats();
+                    this.updateProgress();
+                    
+                    this.showNotification('📂 Progress restored successfully', 'success');
+                }
+            }
+
+            startAutoSave() {
+                setInterval(() => this.saveProgress(), 30000);
+                
+                window.addEventListener('beforeunload', () => this.saveProgress());
+                
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) this.saveProgress();
                 });
             }
         }
 
-        // Initialize when page loads
+        // Initialize the application
         document.addEventListener('DOMContentLoaded', () => {
-            const collector = new NeuralHandwritingCollector();
-            
-            // Add startup message
-            setTimeout(() => {
-                collector.showMessage('🎨 Neural Handwriting Collector ready!', 'info');
-            }, 500);
-            
-            console.log(`
-🎨 Neural Handwriting Data Collector v4.0
-==========================================
-iPad Optimized Features:
-✓ Pressure-sensitive drawing
-✓ Smooth touch interactions
-✓ Auto-save functionality
-✓ Enhanced data collection
-
-Collection Targets:
-• 200 letter connections (critical for flow)
-• 150 natural words (realistic patterns)
-• 300 character variations (maximum diversity)
-• 100 letter pairs (systematic coverage)
-• 50 flowing sentences (natural rhythm)
-
-Data Features:
-• Pressure sensitivity
-• Timing information
-• Stroke analysis
-• Quality assessment
-• Device metadata
-
-Perfect for training neural handwriting models! 🚀
-            `);
+            new ProfessionalHandwritingCollector();
         });
     </script>
 </body>
