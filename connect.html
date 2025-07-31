@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Ultimate Handwriting Data Collector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            position: fixed;
+            width: 100%;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 10px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background: rgba(0,0,0,0.2);
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+        }
+
+        .progress-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .progress-item {
+            text-align: center;
+        }
+
+        .progress-item h3 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .current-task {
+            background: rgba(0,0,0,0.4);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .task-type {
+            font-size: 1.2em;
+            color: #FFD700;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .task-content {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 20px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            word-wrap: break-word;
+            line-height: 1.2;
+        }
+
+        .canvas-container {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .canvas {
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            display: block;
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                transparent calc(50% - 1px), 
+                rgba(200,200,255,0.3) calc(50% - 1px), 
+                rgba(200,200,255,0.3) calc(50% + 1px), 
+                transparent calc(50% + 1px), 
+                transparent 100%);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            color: white;
+            min-width: 120px;
+        }
+
+        .next-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+        }
+
+        .clear-btn {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+        }
+
+        .skip-btn {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+        }
+
+        .export-btn {
+            background: linear-gradient(45deg, #9C27B0, #7B1FA2);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .control-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .stats {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .connection-preview {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #B0BEC5;
+            font-style: italic;
+        }
+
+        .streak-indicator {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.5em;
+            }
+            
+            .task-content {
+                font-size: 2em;
+                min-height: 60px;
+            }
+            
+            .mode-selector {
+                gap: 10px;
+            }
+            
+            .mode-btn {
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+        }
+
+        .word-breakdown {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            font-size: 0.9em;
+        }
+
+        .word-breakdown .letter {
+            display: inline-block;
+            padding: 5px 8px;
+            margin: 2px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            font-family: monospace;
+        }
+
+        .letter.collected {
+            background: rgba(76, 175, 80, 0.4);
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            pointer-events: none;
+            z-index: 1000;
+            animation: celebrate 1s ease-out;
+        }
+
+        @keyframes celebrate {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">🎨 Ultimate Handwriting Collector</div>
+            <div>Maximum Realism Training System</div>
+        </div>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="connections">🔗 Letter Connections</button>
+            <button class="mode-btn" data-mode="words">📝 Natural Words</button>
+            <button class="mode-btn" data-mode="pairs">👫 Letter Pairs</button>
+            <button class="mode-btn" data-mode="variations">🎯 Character Variations</button>
+            <button class="mode-btn" data-mode="sentences">📖 Flowing Sentences</button>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-grid">
+                <div class="progress-item">
+                    <h3>Letter Connections</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="connectionsProgress" style="width: 0%"></div>
+                    </div>
+                    <div id="connectionsCount">0 / 150</div>
+                </div>
+                <div class="progress-item">
+                    <h3>Natural Words</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="wordsProgress" style="width: 0%"></div>
+                    </div>
+                    <div id="wordsCount">0 / 100</div>
+                </div>
+                <div class="progress-item">
+                    <h3>Character Variations</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="variationsProgress" style="width: 0%"></div>
+                    </div>
+                    <div id="variationsCount">0 / 200</div>
+                </div>
+                <div class="progress-item">
+                    <h3>Total Quality Score</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="qualityProgress" style="width: 0%"></div>
+                    </div>
+                    <div id="qualityScore">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="current-task">
+            <div class="task-type" id="taskType">🔗 Letter Connection Training</div>
+            <div class="task-content" id="taskContent">th</div>
+            <div class="connection-preview" id="connectionPreview">Practice natural connection between 't' and 'h'</div>
+            <div class="word-breakdown" id="wordBreakdown" style="display: none;"></div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="drawingCanvas" class="canvas"></canvas>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn next-btn" id="nextBtn">Next ✨</button>
+            <button class="control-btn clear-btn" id="clearBtn">Clear 🗑️</button>
+            <button class="control-btn skip-btn" id="skipBtn">Skip ⏭️</button>
+            <button class="control-btn export-btn" id="exportBtn">Export 📦</button>
+        </div>
+    </div>
+
+    <div class="stats" id="stats">
+        Session: 0 samples<br>
+        Speed: 0.0 spm<br>
+        Streak: 0 🔥
+    </div>
+
+    <script>
+        class UltimateDataCollector {
+            constructor() {
+                this.canvas = document.getElementById('drawingCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.isDrawing = false;
+                this.currentStrokes = [];
+                this.currentStroke = [];
+                
+                // Collection data
+                this.collectedData = {
+                    connections: [],
+                    words: [],
+                    pairs: [],
+                    variations: [],
+                    sentences: []
+                };
+                
+                // Session stats
+                this.sessionStats = {
+                    totalSamples: 0,
+                    startTime: Date.now(),
+                    streak: 0,
+                    lastSampleTime: Date.now()
+                };
+                
+                // Current mode and task
+                this.currentMode = 'connections';
+                this.currentTaskIndex = 0;
+                
+                // Training data for maximum realism
+                this.trainingData = {
+                    connections: [
+                        // Critical letter connections for natural flow
+                        'th', 'he', 'er', 'an', 'in', 'on', 're', 'ed', 'nd', 'st',
+                        'en', 'ti', 'es', 'or', 'te', 'of', 'be', 'to', 'at', 'se',
+                        'ng', 'al', 'it', 'as', 'is', 'ar', 'ou', 'io', 'le', 've',
+                        // Advanced connections
+                        'll', 'ss', 'ee', 'oo', 'ff', 'tt', 'pp', 'nn', 'mm', 'rr',
+                        // Mixed case connections
+                        'Th', 'He', 'Wh', 'Ch', 'Sh', 'An', 'In', 'On', 'Ar', 'Or'
+                    ],
+                    
+                    words: [
+                        // Natural handwriting words with good connections
+                        'the', 'and', 'you', 'that', 'was', 'for', 'are', 'with', 'his', 'they',
+                        'have', 'this', 'will', 'been', 'from', 'were', 'said', 'each', 'which', 'their',
+                        'time', 'into', 'only', 'over', 'think', 'also', 'your', 'work', 'life', 'years',
+                        'after', 'being', 'where', 'through', 'during', 'follow', 'around', 'every', 'little', 'world',
+                        // Common handwriting words
+                        'hello', 'thank', 'please', 'write', 'letter', 'paper', 'school', 'friend', 'family', 'house',
+                        'water', 'light', 'right', 'great', 'small', 'large', 'place', 'sound', 'again', 'still',
+                        // Challenging connections
+                        'writing', 'between', 'through', 'another', 'because', 'without', 'nothing', 'something', 'everything', 'anything'
+                    ],
+                    
+                    pairs: [
+                        // Letter pairs for connection training
+                        'ab', 'ac', 'ad', 'ae', 'af', 'ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'an', 'ao', 'ap', 'aq', 'ar', 'as', 'at', 'au', 'av', 'aw', 'ax', 'ay', 'az',
+                        'ba', 'bc', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bk', 'bl', 'bm', 'bn', 'bo', 'bp', 'bq', 'br', 'bs', 'bt', 'bu', 'bv', 'bw', 'bx', 'by', 'bz',
+                        'ca', 'cb', 'cd', 'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'ck', 'cl', 'cm', 'cn', 'co', 'cp', 'cq', 'cr', 'cs', 'ct', 'cu', 'cv', 'cw', 'cx', 'cy', 'cz'
+                    ],
+                    
+                    variations: [
+                        // Single characters for variation training
+                        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                        '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '+', '=', '[', ']', '{', '}', '|', '\\', ':', ';', '"', "'", '<', '>', ',', '.', '?', '/'
+                    ],
+                    
+                    sentences: [
+                        // Flowing sentences for natural handwriting rhythm
+                        'The quick brown fox jumps over the lazy dog.',
+                        'Pack my box with five dozen liquor jugs.',
+                        'How vexingly quick daft zebras jump!',
+                        'Bright vixens jump; dozy fowl quack.',
+                        'Quick zephyrs blow, vexing daft Jim.',
+                        // Natural handwriting sentences
+                        'I love writing with my own personal style.',
+                        'This handwriting looks completely natural.',
+                        'The pen flows smoothly across the paper.',
+                        'Each letter connects beautifully to the next.',
+                        'My handwriting has improved significantly.',
+                        'Natural connections make all the difference.',
+                        // Longer flowing sentences
+                        'The morning sun cast long shadows through the window as she wrote her letter.',
+                        'Handwriting is an art form that expresses personality through every stroke.',
+                        'When letters flow together naturally, the writing becomes truly beautiful.',
+                        'Practice makes perfect, especially when collecting handwriting data.'
+                    ]
+                };
+                
+                this.init();
+            }
+
+            init() {
+                this.setupCanvas();
+                this.setupEventListeners();
+                this.updateTask();
+                this.updateStats();
+                this.loadProgress();
+            }
+
+            setupCanvas() {
+                // Set canvas size
+                const container = this.canvas.parentElement;
+                this.canvas.width = container.clientWidth;
+                this.canvas.height = container.clientHeight;
+                
+                // Set drawing style
+                this.ctx.lineWidth = 2;
+                this.ctx.lineCap = 'round';
+                this.ctx.lineJoin = 'round';
+                this.ctx.strokeStyle = '#2c3e50';
+                this.ctx.fillStyle = '#2c3e50';
+            }
+
+            setupEventListeners() {
+                // Mode selector
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.currentMode = btn.dataset.mode;
+                        this.currentTaskIndex = 0;
+                        this.updateTask();
+                    });
+                });
+
+                // Control buttons
+                document.getElementById('nextBtn').addEventListener('click', () => this.nextTask());
+                document.getElementById('clearBtn').addEventListener('click', () => this.clearCanvas());
+                document.getElementById('skipBtn').addEventListener('click', () => this.skipTask());
+                document.getElementById('exportBtn').addEventListener('click', () => this.exportData());
+
+                // Canvas events
+                this.canvas.addEventListener('mousedown', (e) => this.startDrawing(e));
+                this.canvas.addEventListener('mousemove', (e) => this.draw(e));
+                this.canvas.addEventListener('mouseup', () => this.stopDrawing());
+                this.canvas.addEventListener('mouseout', () => this.stopDrawing());
+
+                // Touch events
+                this.canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.startDrawing(e.touches[0]);
+                });
+                this.canvas.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    this.draw(e.touches[0]);
+                });
+                this.canvas.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    this.stopDrawing();
+                });
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space') {
+                        e.preventDefault();
+                        this.nextTask();
+                    } else if (e.code === 'KeyC') {
+                        this.clearCanvas();
+                    } else if (e.code === 'KeyS') {
+                        this.skipTask();
+                    }
+                });
+
+                // Window resize
+                window.addEventListener('resize', () => this.setupCanvas());
+            }
+
+            getCoordinates(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const scaleX = this.canvas.width / rect.width;
+                const scaleY = this.canvas.height / rect.height;
+                
+                return {
+                    x: (e.clientX - rect.left) * scaleX,
+                    y: (e.clientY - rect.top) * scaleY
+                };
+            }
+
+            startDrawing(e) {
+                this.isDrawing = true;
+                const coords = this.getCoordinates(e);
+                this.currentStroke = [coords];
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(coords.x, coords.y);
+            }
+
+            draw(e) {
+                if (!this.isDrawing) return;
+                
+                const coords = this.getCoordinates(e);
+                this.currentStroke.push(coords);
+                
+                this.ctx.lineTo(coords.x, coords.y);
+                this.ctx.stroke();
+            }
+
+            stopDrawing() {
+                if (!this.isDrawing) return;
+                this.isDrawing = false;
+                
+                if (this.currentStroke.length > 1) {
+                    this.currentStrokes.push([...this.currentStroke]);
+                }
+                this.currentStroke = [];
+            }
+
+            clearCanvas() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.currentStrokes = [];
+                this.currentStroke = [];
+            }
+
+            updateTask() {
+                const tasks = this.trainingData[this.currentMode];
+                const currentTask = tasks[this.currentTaskIndex % tasks.length];
+                
+                document.getElementById('taskContent').textContent = currentTask;
+                
+                // Update task type and preview
+                const taskTypes = {
+                    connections: '🔗 Letter Connection Training',
+                    words: '📝 Natural Word Flow',
+                    pairs: '👫 Letter Pair Practice',
+                    variations: '🎯 Character Variation',
+                    sentences: '📖 Flowing Sentence'
+                };
+                
+                document.getElementById('taskType').textContent = taskTypes[this.currentMode];
+                
+                // Update connection preview
+                const preview = this.getTaskPreview(currentTask);
+                document.getElementById('connectionPreview').textContent = preview;
+                
+                // Update word breakdown for words and sentences
+                this.updateWordBreakdown(currentTask);
+                
+                this.clearCanvas();
+            }
+
+            getTaskPreview(task) {
+                const previews = {
+                    connections: `Practice natural connection between '${task[0]}' and '${task[1]}'`,
+                    words: `Write the word naturally with flowing connections`,
+                    pairs: `Focus on smooth transition from '${task[0]}' to '${task[1]}'`,
+                    variations: `Write multiple natural variations of '${task}'`,
+                    sentences: `Write with natural rhythm and letter connections`
+                };
+                
+                return previews[this.currentMode];
+            }
+
+            updateWordBreakdown(task) {
+                const breakdown = document.getElementById('wordBreakdown');
+                
+                if (this.currentMode === 'words' || this.currentMode === 'sentences') {
+                    breakdown.style.display = 'block';
+                    
+                    const letters = task.split('');
+                    breakdown.innerHTML = 'Letters: ' + letters.map(letter => {
+                        const collected = this.hasCollectedLetter(letter);
+                        return `<span class="letter ${collected ? 'collected' : ''}">${letter}</span>`;
+                    }).join('');
+                } else {
+                    breakdown.style.display = 'none';
+                }
+            }
+
+            hasCollectedLetter(letter) {
+                // Check if we have collected this letter in variations mode
+                return this.collectedData.variations.some(sample => sample.text === letter);
+            }
+
+            nextTask() {
+                if (this.currentStrokes.length === 0) {
+                    this.showMessage('⚠️ Please write something first!');
+                    return;
+                }
+
+                // Save current sample
+                this.saveSample();
+                
+                // Move to next task
+                this.currentTaskIndex++;
+                this.updateTask();
+                
+                // Update stats
+                this.sessionStats.totalSamples++;
+                this.sessionStats.streak++;
+                this.sessionStats.lastSampleTime = Date.now();
+                
+                this.updateStats();
+                this.updateProgress();
+                this.saveProgress();
+                
+                // Celebration effect
+                this.showCelebration();
+            }
+
+            skipTask() {
+                this.currentTaskIndex++;
+                this.updateTask();
+                this.sessionStats.streak = 0; // Reset streak on skip
+                this.updateStats();
+            }
+
+            saveSample() {
+                const tasks = this.trainingData[this.currentMode];
+                const currentTask = tasks[this.currentTaskIndex % tasks.length];
+                
+                const sample = {
+                    text: currentTask,
+                    strokes: this.currentStrokes.map(stroke => stroke.map(point => [point.x, point.y])),
+                    timestamp: Date.now(),
+                    mode: this.currentMode,
+                    category: this.getCategoryForTask(currentTask),
+                    canvasSize: {
+                        width: this.canvas.width,
+                        height: this.canvas.height
+                    },
+                    sessionInfo: {
+                        sampleIndex: this.sessionStats.totalSamples,
+                        streak: this.sessionStats.streak
+                    }
+                };
+                
+                this.collectedData[this.currentMode].push(sample);
+            }
+
+            getCategoryForTask(task) {
+                if (task.length === 1) {
+                    if (task >= 'A' && task <= 'Z') return 'uppercase';
+                    if (task >= 'a' && task <= 'z') return 'lowercase';
+                    if (task >= '0' && task <= '9') return 'digit';
+                    return 'symbol';
+                } else if (task.length === 2) {
+                    return 'pair';
+                } else if (task.includes(' ')) {
+                    return 'sentence';
+                } else {
+                    return 'word';
+                }
+            }
+
+            updateStats() {
+                const elapsed = (Date.now() - this.sessionStats.startTime) / 1000 / 60; // minutes
+                const spm = elapsed > 0 ? (this.sessionStats.totalSamples / elapsed).toFixed(1) : '0.0';
+                
+                document.getElementById('stats').innerHTML = `
+                    Session: ${this.sessionStats.totalSamples} samples<br>
+                    Speed: ${spm} spm<br>
+                    Streak: ${this.sessionStats.streak} ${this.sessionStats.streak > 5 ? '🔥' : ''}
+                `;
+            }
+
+            updateProgress() {
+                const totals = {
+                    connections: 150,
+                    words: 100,
+                    variations: 200,
+                    pairs: 100,
+                    sentences: 50
+                };
+                
+                // Update individual progress
+                Object.keys(this.collectedData).forEach(mode => {
+                    const count = this.collectedData[mode].length;
+                    const total = totals[mode] || 100;
+                    const percentage = Math.min((count / total) * 100, 100);
+                    
+                    const progressBar = document.getElementById(mode + 'Progress');
+                    const countDisplay = document.getElementById(mode + 'Count');
+                    
+                    if (progressBar) {
+                        progressBar.style.width = percentage + '%';
+                    }
+                    if (countDisplay) {
+                        countDisplay.textContent = `${count} / ${total}`;
+                    }
+                });
+                
+                // Calculate overall quality score
+                const totalCollected = Object.values(this.collectedData).reduce((sum, arr) => sum + arr.length, 0);
+                const totalTarget = Object.values(totals).reduce((sum, val) => sum + val, 0);
+                const qualityScore = Math.min((totalCollected / totalTarget) * 100, 100);
+                
+                document.getElementById('qualityProgress').style.width = qualityScore + '%';
+                document.getElementById('qualityScore').textContent = qualityScore.toFixed(1) + '%';
+            }
+
+            showCelebration() {
+                const celebrations = ['🎉', '✨', '🌟', '🎊', '🔥', '💫', '⭐', '🎈'];
+                const celebration = document.createElement('div');
+                celebration.className = 'celebration';
+                celebration.textContent = celebrations[Math.floor(Math.random() * celebrations.length)];
+                document.body.appendChild(celebration);
+                
+                setTimeout(() => {
+                    document.body.removeChild(celebration);
+                }, 1000);
+            }
+
+            showMessage(message) {
+                // Create temporary message display
+                const msgDiv = document.createElement('div');
+                msgDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: rgba(255,193,7,0.9);
+                    color: #333;
+                    padding: 10px 20px;
+                    border-radius: 20px;
+                    font-weight: 600;
+                    z-index: 1000;
+                    backdrop-filter: blur(10px);
+                `;
+                msgDiv.textContent = message;
+                document.body.appendChild(msgDiv);
+                
+                setTimeout(() => {
+                    if (document.body.contains(msgDiv)) {
+                        document.body.removeChild(msgDiv);
+                    }
+                }, 2000);
+            }
+
+            saveProgress() {
+                try {
+                    localStorage.setItem('ultimateHandwritingProgress', JSON.stringify({
+                        collectedData: this.collectedData,
+                        sessionStats: this.sessionStats,
+                        currentMode: this.currentMode,
+                        currentTaskIndex: this.currentTaskIndex
+                    }));
+                } catch (e) {
+                    console.warn('Could not save progress to localStorage:', e);
+                }
+            }
+
+            loadProgress() {
+                try {
+                    const saved = localStorage.getItem('ultimateHandwritingProgress');
+                    if (saved) {
+                        const data = JSON.parse(saved);
+                        this.collectedData = data.collectedData || this.collectedData;
+                        this.sessionStats = { ...this.sessionStats, ...data.sessionStats };
+                        this.currentMode = data.currentMode || this.currentMode;
+                        this.currentTaskIndex = data.currentTaskIndex || 0;
+                        
+                        // Update UI to reflect loaded state
+                        document.querySelectorAll('.mode-btn').forEach(btn => {
+                            btn.classList.toggle('active', btn.dataset.mode === this.currentMode);
+                        });
+                        
+                        this.updateTask();
+                        this.updateStats();
+                        this.updateProgress();
+                    }
+                } catch (e) {
+                    console.warn('Could not load progress from localStorage:', e);
+                }
+            }
+
+            exportData() {
+                // Prepare comprehensive export data
+                const exportData = {
+                    metadata: {
+                        totalSamples: Object.values(this.collectedData).reduce((sum, arr) => sum + arr.length, 0),
+                        collectionDate: new Date().toISOString(),
+                        sessionDuration: Date.now() - this.sessionStats.startTime,
+                        version: '3.0-ultimate',
+                        device: this.getDeviceInfo(),
+                        modes: Object.keys(this.collectedData).filter(mode => this.collectedData[mode].length > 0),
+                        quality: {
+                            connectionsCount: this.collectedData.connections.length,
+                            wordsCount: this.collectedData.words.length,
+                            variationsCount: this.collectedData.variations.length,
+                            pairsCount: this.collectedData.pairs.length,
+                            sentencesCount: this.collectedData.sentences.length
+                        }
+                    },
+                    samples: []
+                };
+                
+                // Combine all samples with enhanced metadata
+                Object.keys(this.collectedData).forEach(mode => {
+                    this.collectedData[mode].forEach((sample, index) => {
+                        exportData.samples.push({
+                            ...sample,
+                            sampleId: `${mode}_${index}_${Date.now()}`,
+                            collectionMode: mode,
+                            complexity: this.calculateComplexity(sample),
+                            connectionType: this.analyzeConnections(sample)
+                        });
+                    });
+                });
+                
+                // Create and download file
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+                    type: 'application/json'
+                });
+                
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `ultimate_handwriting_data_${Date.now()}.json`;
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                this.showMessage(`📦 Exported ${exportData.samples.length} samples for maximum realism training!`);
+            }
+
+            calculateComplexity(sample) {
+                // Calculate complexity score based on strokes and text
+                const strokeComplexity = sample.strokes.length;
+                const textComplexity = sample.text.length;
+                const connectionComplexity = sample.text.length > 1 ? sample.text.length - 1 : 0;
+                
+                return {
+                    strokeCount: strokeComplexity,
+                    textLength: textComplexity,
+                    connectionCount: connectionComplexity,
+                    totalScore: strokeComplexity + textComplexity + connectionComplexity
+                };
+            }
+
+            analyzeConnections(sample) {
+                // Analyze the type of connections in the sample
+                if (sample.text.length === 1) {
+                    return 'single_character';
+                } else if (sample.text.length === 2) {
+                    return 'letter_pair';
+                } else if (sample.text.includes(' ')) {
+                    return 'multi_word';
+                } else {
+                    return 'single_word';
+                }
+            }
+
+            getDeviceInfo() {
+                return {
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language,
+                    screenSize: {
+                        width: screen.width,
+                        height: screen.height
+                    },
+                    canvasSize: {
+                        width: this.canvas.width,
+                        height: this.canvas.height
+                    }
+                };
+            }
+
+            // Auto-save functionality
+            startAutoSave() {
+                setInterval(() => {
+                    this.saveProgress();
+                }, 30000); // Save every 30 seconds
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const collector = new UltimateDataCollector();
+            collector.startAutoSave();
+            
+            // Add some helpful tips
+            console.log(`
+🎨 Ultimate Handwriting Data Collector
+=====================================
+Keyboard shortcuts:
+- SPACE: Next task
+- C: Clear canvas
+- S: Skip task
+
+Tips for maximum realism:
+- Write naturally and fluidly
+- Focus on smooth connections between letters
+- Vary your writing speed naturally
+- Don't worry about perfect letters - natural variation is good!
+- The system learns from your natural writing style
+
+Collection targets:
+- 150 letter connections (most important for realism)
+- 100 natural words (for realistic flow)
+- 200 character variations (for diversity)
+- 50 flowing sentences (for rhythm)
+
+Happy collecting! 🖋️
+            `);
+        });
+    </script>
+</body>
+</html>
