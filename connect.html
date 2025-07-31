@@ -11,91 +11,118 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
             -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
             -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             color: white;
             overflow: hidden;
             height: 100vh;
             position: fixed;
             width: 100%;
+            touch-action: none;
         }
 
         .container {
             display: flex;
             flex-direction: column;
             height: 100vh;
-            padding: 10px;
+            padding: max(10px, env(safe-area-inset-top)) max(15px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(15px, env(safe-area-inset-left));
         }
 
         .header {
             text-align: center;
-            padding: 20px 0;
-            background: rgba(0,0,0,0.2);
-            border-radius: 15px;
-            margin-bottom: 15px;
+            padding: 15px 0;
+            background: rgba(0,0,0,0.15);
+            border-radius: 20px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .title {
-            font-size: 1.8em;
-            font-weight: 700;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #FFD700, #FFA500);
+            font-size: 1.6em;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FF6B35);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            opacity: 0.9;
+            color: #E8F4FD;
         }
 
         .mode-selector {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .mode-btn {
-            padding: 12px 20px;
+            padding: 12px 16px;
             border: none;
-            border-radius: 25px;
+            border-radius: 16px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.3s ease;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
             color: white;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mode-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .mode-btn:hover::before {
+            left: 100%;
         }
 
         .mode-btn.active {
             background: linear-gradient(45deg, #4CAF50, #45a049);
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
-        }
-
-        .mode-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
         .progress-section {
-            background: rgba(0,0,0,0.3);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .progress-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 12px;
         }
 
         .progress-item {
@@ -103,66 +130,96 @@
         }
 
         .progress-item h3 {
-            font-size: 1.1em;
-            margin-bottom: 10px;
+            font-size: 1em;
+            margin-bottom: 8px;
             color: #FFD700;
+            font-weight: 600;
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 4px;
+            height: 6px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 3px;
             overflow: hidden;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            position: relative;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #4CAF50, #8BC34A);
-            border-radius: 4px;
-            transition: width 0.5s ease;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A, #CDDC39);
+            border-radius: 3px;
+            transition: width 0.6s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .progress-count {
+            font-size: 0.85em;
+            opacity: 0.9;
         }
 
         .current-task {
-            background: rgba(0,0,0,0.4);
-            border-radius: 15px;
-            padding: 25px;
+            background: rgba(0,0,0,0.25);
+            border-radius: 20px;
+            padding: 20px;
             text-align: center;
-            margin-bottom: 15px;
-            backdrop-filter: blur(10px);
+            margin-bottom: 12px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .task-type {
-            font-size: 1.2em;
+            font-size: 1.1em;
             color: #FFD700;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             font-weight: 600;
         }
 
         .task-content {
-            font-size: 2.5em;
+            font-size: clamp(2.2em, 8vw, 3.5em);
             font-weight: 300;
-            margin-bottom: 20px;
-            min-height: 80px;
+            margin-bottom: 15px;
+            min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 20px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 15px;
             word-wrap: break-word;
-            line-height: 1.2;
+            line-height: 1.1;
+            font-family: 'Georgia', serif;
+            letter-spacing: 0.02em;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .canvas-container {
             flex: 1;
-            background: white;
-            border-radius: 15px;
-            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            margin-bottom: 12px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.2);
+            min-height: 200px;
         }
 
         .canvas {
@@ -170,123 +227,151 @@
             height: 100%;
             cursor: crosshair;
             display: block;
-            background: linear-gradient(to bottom, 
-                transparent 0%, 
-                transparent calc(50% - 1px), 
-                rgba(200,200,255,0.3) calc(50% - 1px), 
-                rgba(200,200,255,0.3) calc(50% + 1px), 
-                transparent calc(50% + 1px), 
-                transparent 100%);
+            background: 
+                linear-gradient(to right, rgba(200,220,255,0.15) 0px, transparent 1px),
+                linear-gradient(to bottom, rgba(200,220,255,0.15) 0px, transparent 1px),
+                linear-gradient(to bottom, 
+                    transparent 0%, 
+                    transparent calc(50% - 1px), 
+                    rgba(100,150,255,0.25) calc(50% - 1px), 
+                    rgba(100,150,255,0.25) calc(50% + 1px), 
+                    transparent calc(50% + 1px), 
+                    transparent 100%);
+            background-size: 20px 20px, 20px 20px, 100% 100%;
+        }
+
+        .canvas-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            backdrop-filter: blur(10px);
+            pointer-events: none;
         }
 
         .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .control-row {
             display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .control-btn {
-            padding: 15px 25px;
+            flex: 1;
+            padding: 16px 20px;
             border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             color: white;
-            min-width: 120px;
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .control-btn:active::before {
+            width: 300px;
+            height: 300px;
         }
 
         .next-btn {
             background: linear-gradient(45deg, #4CAF50, #45a049);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
         }
 
         .clear-btn {
             background: linear-gradient(45deg, #ff9800, #f57c00);
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
         }
 
         .skip-btn {
             background: linear-gradient(45deg, #2196F3, #1976D2);
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
         }
 
         .export-btn {
             background: linear-gradient(45deg, #9C27B0, #7B1FA2);
-        }
-
-        .control-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
         }
 
         .control-btn:active {
-            transform: translateY(-1px);
+            transform: scale(0.95);
         }
 
         .stats {
             position: fixed;
-            top: 10px;
-            right: 10px;
+            top: max(15px, env(safe-area-inset-top));
+            right: max(15px, env(safe-area-inset-right));
             background: rgba(0,0,0,0.7);
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-size: 12px;
-            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 11px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            min-width: 120px;
         }
 
         .connection-preview {
             margin-top: 10px;
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: #B0BEC5;
             font-style: italic;
-        }
-
-        .streak-indicator {
-            display: inline-block;
-            margin-left: 10px;
-            font-size: 1.2em;
-        }
-
-        @media (max-width: 768px) {
-            .title {
-                font-size: 1.5em;
-            }
-            
-            .task-content {
-                font-size: 2em;
-                min-height: 60px;
-            }
-            
-            .mode-selector {
-                gap: 10px;
-            }
-            
-            .mode-btn {
-                padding: 10px 15px;
-                font-size: 12px;
-            }
+            line-height: 1.3;
         }
 
         .word-breakdown {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(255,255,255,0.1);
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.08);
             border-radius: 10px;
-            font-size: 0.9em;
+            font-size: 0.85em;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .word-breakdown .letter {
             display: inline-block;
-            padding: 5px 8px;
+            padding: 4px 8px;
             margin: 2px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 5px;
-            font-family: monospace;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
         .letter.collected {
             background: rgba(76, 175, 80, 0.4);
+            color: #E8F5E8;
+            transform: scale(1.05);
         }
 
         .celebration {
@@ -294,102 +379,240 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 3em;
+            font-size: 4em;
             pointer-events: none;
             z-index: 1000;
-            animation: celebrate 1s ease-out;
+            animation: celebrate 1.2s ease-out;
         }
 
         @keyframes celebrate {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+            0% { 
+                transform: translate(-50%, -50%) scale(0) rotate(0deg); 
+                opacity: 0; 
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.3) rotate(180deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translate(-50%, -50%) scale(1) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+
+        .message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,193,7,0.95);
+            color: #333;
+            padding: 16px 24px;
+            border-radius: 16px;
+            font-weight: 600;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .stroke-counter {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            backdrop-filter: blur(10px);
+        }
+
+        .quality-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-left: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .quality-good { background: #4CAF50; }
+        .quality-medium { background: #FF9800; }
+        .quality-poor { background: #F44336; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Touch feedback */
+        .control-btn:active {
+            background-size: 100%;
+            transition: background-size 0.1s;
+        }
+
+        /* iPad specific optimizations */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .title {
+                font-size: 2em;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+                gap: 15px;
+            }
+            
+            .control-btn {
+                padding: 18px 24px;
+                font-size: 16px;
+                min-height: 64px;
+            }
+            
+            .task-content {
+                font-size: 4em;
+                min-height: 80px;
+            }
+        }
+
+        /* Landscape orientation */
+        @media (orientation: landscape) {
+            .container {
+                flex-direction: row;
+                gap: 15px;
+            }
+            
+            .left-panel {
+                flex: 0 0 300px;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .canvas-container {
+                flex: 1;
+                margin-bottom: 0;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .control-btn {
+                padding: 12px 16px;
+                min-height: 48px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="title">🎨 Ultimate Handwriting Collector</div>
-            <div>Maximum Realism Training System</div>
-        </div>
+        <div class="left-panel">
+            <div class="header">
+                <div class="title">🎨 Neural Handwriting Collector</div>
+                <div class="subtitle">Advanced Training Data System</div>
+            </div>
 
-        <div class="mode-selector">
-            <button class="mode-btn active" data-mode="connections">🔗 Letter Connections</button>
-            <button class="mode-btn" data-mode="words">📝 Natural Words</button>
-            <button class="mode-btn" data-mode="pairs">👫 Letter Pairs</button>
-            <button class="mode-btn" data-mode="variations">🎯 Character Variations</button>
-            <button class="mode-btn" data-mode="sentences">📖 Flowing Sentences</button>
-        </div>
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="connections">🔗 Connections</button>
+                <button class="mode-btn" data-mode="words">📝 Words</button>
+                <button class="mode-btn" data-mode="pairs">👫 Pairs</button>
+                <button class="mode-btn" data-mode="variations">🎯 Variations</button>
+                <button class="mode-btn" data-mode="sentences">📖 Sentences</button>
+            </div>
 
-        <div class="progress-section">
-            <div class="progress-grid">
-                <div class="progress-item">
-                    <h3>Letter Connections</h3>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="connectionsProgress" style="width: 0%"></div>
+            <div class="progress-section">
+                <div class="progress-grid">
+                    <div class="progress-item">
+                        <h3>Connections <span class="quality-indicator quality-good" id="connectionsQuality"></span></h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="connectionsProgress" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-count" id="connectionsCount">0 / 200</div>
                     </div>
-                    <div id="connectionsCount">0 / 150</div>
-                </div>
-                <div class="progress-item">
-                    <h3>Natural Words</h3>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="wordsProgress" style="width: 0%"></div>
+                    <div class="progress-item">
+                        <h3>Words <span class="quality-indicator quality-medium" id="wordsQuality"></span></h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="wordsProgress" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-count" id="wordsCount">0 / 150</div>
                     </div>
-                    <div id="wordsCount">0 / 100</div>
-                </div>
-                <div class="progress-item">
-                    <h3>Character Variations</h3>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="variationsProgress" style="width: 0%"></div>
+                    <div class="progress-item">
+                        <h3>Variations <span class="quality-indicator quality-poor" id="variationsQuality"></span></h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="variationsProgress" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-count" id="variationsCount">0 / 300</div>
                     </div>
-                    <div id="variationsCount">0 / 200</div>
-                </div>
-                <div class="progress-item">
-                    <h3>Total Quality Score</h3>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="qualityProgress" style="width: 0%"></div>
+                    <div class="progress-item">
+                        <h3>Quality Score</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="qualityProgress" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-count" id="qualityScore">0%</div>
                     </div>
-                    <div id="qualityScore">0%</div>
                 </div>
             </div>
-        </div>
 
-        <div class="current-task">
-            <div class="task-type" id="taskType">🔗 Letter Connection Training</div>
-            <div class="task-content" id="taskContent">th</div>
-            <div class="connection-preview" id="connectionPreview">Practice natural connection between 't' and 'h'</div>
-            <div class="word-breakdown" id="wordBreakdown" style="display: none;"></div>
+            <div class="current-task">
+                <div class="task-type" id="taskType">🔗 Neural Connection Training</div>
+                <div class="task-content" id="taskContent">th</div>
+                <div class="connection-preview" id="connectionPreview">Practice natural connection between 't' and 'h'</div>
+                <div class="word-breakdown" id="wordBreakdown" style="display: none;"></div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn next-btn" id="nextBtn">✨ Collect</button>
+                <button class="control-btn clear-btn" id="clearBtn">🗑️ Clear</button>
+                <button class="control-btn skip-btn" id="skipBtn">⏭️ Skip</button>
+                <button class="control-btn export-btn" id="exportBtn">📦 Export</button>
+            </div>
         </div>
 
         <div class="canvas-container">
             <canvas id="drawingCanvas" class="canvas"></canvas>
-        </div>
-
-        <div class="controls">
-            <button class="control-btn next-btn" id="nextBtn">Next ✨</button>
-            <button class="control-btn clear-btn" id="clearBtn">Clear 🗑️</button>
-            <button class="control-btn skip-btn" id="skipBtn">Skip ⏭️</button>
-            <button class="control-btn export-btn" id="exportBtn">Export 📦</button>
+            <div class="canvas-overlay">
+                <div id="canvasInfo">Ready to write</div>
+            </div>
+            <div class="stroke-counter" id="strokeCounter">Strokes: 0</div>
         </div>
     </div>
 
     <div class="stats" id="stats">
         Session: 0 samples<br>
         Speed: 0.0 spm<br>
-        Streak: 0 🔥
+        Streak: 0
     </div>
 
     <script>
-        class UltimateDataCollector {
+        class NeuralHandwritingCollector {
             constructor() {
                 this.canvas = document.getElementById('drawingCanvas');
                 this.ctx = this.canvas.getContext('2d');
                 this.isDrawing = false;
                 this.currentStrokes = [];
                 this.currentStroke = [];
+                this.lastPoint = null;
+                this.pressure = 1.0;
                 
-                // Collection data
+                // Enhanced collection data with metadata
                 this.collectedData = {
                     connections: [],
                     words: [],
@@ -398,53 +621,61 @@
                     sentences: []
                 };
                 
-                // Session stats
+                // Advanced session stats
                 this.sessionStats = {
                     totalSamples: 0,
                     startTime: Date.now(),
                     streak: 0,
-                    lastSampleTime: Date.now()
+                    lastSampleTime: Date.now(),
+                    avgStrokesPerSample: 0,
+                    qualityScore: 0,
+                    timePerSample: []
                 };
                 
                 // Current mode and task
                 this.currentMode = 'connections';
                 this.currentTaskIndex = 0;
+                this.taskStartTime = Date.now();
                 
-                // Training data for maximum realism
+                // Enhanced training data for better neural network training
                 this.trainingData = {
                     connections: [
-                        // Critical letter connections for natural flow
-                        'th', 'he', 'er', 'an', 'in', 'on', 're', 'ed', 'nd', 'st',
-                        'en', 'ti', 'es', 'or', 'te', 'of', 'be', 'to', 'at', 'se',
-                        'ng', 'al', 'it', 'as', 'is', 'ar', 'ou', 'io', 'le', 've',
-                        // Advanced connections
-                        'll', 'ss', 'ee', 'oo', 'ff', 'tt', 'pp', 'nn', 'mm', 'rr',
-                        // Mixed case connections
-                        'Th', 'He', 'Wh', 'Ch', 'Sh', 'An', 'In', 'On', 'Ar', 'Or'
+                        // Most frequent English letter combinations
+                        'th', 'he', 'in', 'er', 'an', 're', 'ed', 'nd', 'st', 'en',
+                        'ti', 'es', 'or', 'te', 'of', 'be', 'to', 'at', 'se', 'ha',
+                        'ng', 'me', 'it', 'is', 'ar', 'ou', 'io', 'le', 've', 'co',
+                        'll', 'de', 'hi', 'ri', 'ro', 'ic', 'ne', 'ea', 'ra', 'ce',
+                        // Challenging connections for variety
+                        'qu', 'ck', 'sh', 'ch', 'wh', 'ph', 'gh', 'wr', 'kn', 'mb',
+                        // Mixed case for realism
+                        'Th', 'He', 'In', 'An', 'Re', 'Wh', 'Ch', 'Sh', 'Pr', 'Tr'
                     ],
                     
                     words: [
-                        // Natural handwriting words with good connections
+                        // High-frequency English words with natural connections
                         'the', 'and', 'you', 'that', 'was', 'for', 'are', 'with', 'his', 'they',
                         'have', 'this', 'will', 'been', 'from', 'were', 'said', 'each', 'which', 'their',
                         'time', 'into', 'only', 'over', 'think', 'also', 'your', 'work', 'life', 'years',
                         'after', 'being', 'where', 'through', 'during', 'follow', 'around', 'every', 'little', 'world',
-                        // Common handwriting words
+                        // Natural writing words
                         'hello', 'thank', 'please', 'write', 'letter', 'paper', 'school', 'friend', 'family', 'house',
                         'water', 'light', 'right', 'great', 'small', 'large', 'place', 'sound', 'again', 'still',
-                        // Challenging connections
-                        'writing', 'between', 'through', 'another', 'because', 'without', 'nothing', 'something', 'everything', 'anything'
+                        // Challenging letter combinations
+                        'writing', 'between', 'through', 'another', 'because', 'without', 'nothing', 'something', 'everything', 'anything',
+                        // Mixed case words
+                        'John', 'Mary', 'David', 'Sarah', 'Michael', 'Jennifer', 'Robert', 'Lisa', 'William', 'Karen'
                     ],
                     
                     pairs: [
-                        // Letter pairs for connection training
-                        'ab', 'ac', 'ad', 'ae', 'af', 'ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'an', 'ao', 'ap', 'aq', 'ar', 'as', 'at', 'au', 'av', 'aw', 'ax', 'ay', 'az',
-                        'ba', 'bc', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bk', 'bl', 'bm', 'bn', 'bo', 'bp', 'bq', 'br', 'bs', 'bt', 'bu', 'bv', 'bw', 'bx', 'by', 'bz',
-                        'ca', 'cb', 'cd', 'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'ck', 'cl', 'cm', 'cn', 'co', 'cp', 'cq', 'cr', 'cs', 'ct', 'cu', 'cv', 'cw', 'cx', 'cy', 'cz'
+                        // Systematic letter pair coverage
+                        'ab', 'ac', 'ad', 'ae', 'af', 'ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'an', 'ao', 'ap', 'ar', 'as', 'at', 'au', 'av', 'aw', 'ax', 'ay', 'az',
+                        'ba', 'bc', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bk', 'bl', 'bm', 'bn', 'bo', 'bp', 'br', 'bs', 'bt', 'bu', 'bv', 'bw', 'bx', 'by', 'bz',
+                        'ca', 'cb', 'cd', 'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'ck', 'cl', 'cm', 'cn', 'co', 'cp', 'cr', 'cs', 'ct', 'cu', 'cv', 'cw', 'cx', 'cy', 'cz',
+                        'da', 'db', 'dc', 'de', 'df', 'dg', 'dh', 'di', 'dj', 'dk', 'dl', 'dm', 'dn', 'do', 'dp', 'dr', 'ds', 'dt', 'du', 'dv', 'dw', 'dx', 'dy', 'dz'
                     ],
                     
                     variations: [
-                        // Single characters for variation training
+                        // Complete character set with emphasis on variation
                         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
                         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
                         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -452,7 +683,7 @@
                     ],
                     
                     sentences: [
-                        // Flowing sentences for natural handwriting rhythm
+                        // Pangrams and natural sentences
                         'The quick brown fox jumps over the lazy dog.',
                         'Pack my box with five dozen liquor jugs.',
                         'How vexingly quick daft zebras jump!',
@@ -460,16 +691,18 @@
                         'Quick zephyrs blow, vexing daft Jim.',
                         // Natural handwriting sentences
                         'I love writing with my own personal style.',
-                        'This handwriting looks completely natural.',
-                        'The pen flows smoothly across the paper.',
-                        'Each letter connects beautifully to the next.',
-                        'My handwriting has improved significantly.',
-                        'Natural connections make all the difference.',
+                        'This handwriting looks completely natural and fluid.',
+                        'The pen flows smoothly across the paper today.',
+                        'Each letter connects beautifully to the next one.',
+                        'My handwriting has improved significantly over time.',
+                        'Natural connections make all the difference in legibility.',
                         // Longer flowing sentences
                         'The morning sun cast long shadows through the window as she wrote her letter.',
-                        'Handwriting is an art form that expresses personality through every stroke.',
-                        'When letters flow together naturally, the writing becomes truly beautiful.',
-                        'Practice makes perfect, especially when collecting handwriting data.'
+                        'Handwriting is an art form that expresses personality through every single stroke.',
+                        'When letters flow together naturally, the writing becomes truly beautiful and elegant.',
+                        'Practice makes perfect, especially when collecting comprehensive handwriting data for training.',
+                        'Neural networks learn best from diverse, natural handwriting samples with good coverage.',
+                        'The iPad provides an excellent platform for collecting high-quality handwriting data.'
                     ]
                 };
                 
@@ -482,20 +715,29 @@
                 this.updateTask();
                 this.updateStats();
                 this.loadProgress();
+                this.startAutoSave();
             }
 
             setupCanvas() {
-                // Set canvas size
                 const container = this.canvas.parentElement;
-                this.canvas.width = container.clientWidth;
-                this.canvas.height = container.clientHeight;
+                const rect = container.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
                 
-                // Set drawing style
-                this.ctx.lineWidth = 2;
+                this.canvas.width = rect.width * dpr;
+                this.canvas.height = rect.height * dpr;
+                this.canvas.style.width = rect.width + 'px';
+                this.canvas.style.height = rect.height + 'px';
+                
+                this.ctx.scale(dpr, dpr);
+                this.ctx.lineWidth = 2.5;
                 this.ctx.lineCap = 'round';
                 this.ctx.lineJoin = 'round';
                 this.ctx.strokeStyle = '#2c3e50';
                 this.ctx.fillStyle = '#2c3e50';
+                
+                // Enable better line rendering
+                this.ctx.imageSmoothingEnabled = true;
+                this.ctx.imageSmoothingQuality = 'high';
             }
 
             setupEventListeners() {
@@ -507,59 +749,74 @@
                         this.currentMode = btn.dataset.mode;
                         this.currentTaskIndex = 0;
                         this.updateTask();
+                        this.updateProgress();
                     });
                 });
 
-                // Control buttons
+                // Control buttons with enhanced feedback
                 document.getElementById('nextBtn').addEventListener('click', () => this.nextTask());
                 document.getElementById('clearBtn').addEventListener('click', () => this.clearCanvas());
                 document.getElementById('skipBtn').addEventListener('click', () => this.skipTask());
                 document.getElementById('exportBtn').addEventListener('click', () => this.exportData());
 
-                // Canvas events
-                this.canvas.addEventListener('mousedown', (e) => this.startDrawing(e));
-                this.canvas.addEventListener('mousemove', (e) => this.draw(e));
-                this.canvas.addEventListener('mouseup', () => this.stopDrawing());
-                this.canvas.addEventListener('mouseout', () => this.stopDrawing());
-
-                // Touch events
+                // Enhanced touch events for iPad
                 this.canvas.addEventListener('touchstart', (e) => {
                     e.preventDefault();
-                    this.startDrawing(e.touches[0]);
-                });
+                    const touch = e.touches[0];
+                    this.pressure = touch.force || 1.0;
+                    this.startDrawing(touch);
+                }, { passive: false });
+
                 this.canvas.addEventListener('touchmove', (e) => {
                     e.preventDefault();
-                    this.draw(e.touches[0]);
-                });
+                    const touch = e.touches[0];
+                    this.pressure = touch.force || 1.0;
+                    this.draw(touch);
+                }, { passive: false });
+
                 this.canvas.addEventListener('touchend', (e) => {
                     e.preventDefault();
                     this.stopDrawing();
+                }, { passive: false });
+
+                // Mouse events for desktop testing
+                this.canvas.addEventListener('mousedown', (e) => this.startDrawing(e));
+                this.canvas.addEventListener('mousemove', (e) => this.draw(e));
+                this.canvas.addEventListener('mouseup', () => this.stopDrawing());
+                this.canvas.addEventListener('mouseleave', () => this.stopDrawing());
+
+                // Orientation change handler
+                window.addEventListener('orientationchange', () => {
+                    setTimeout(() => this.setupCanvas(), 100);
                 });
 
-                // Keyboard shortcuts
-                document.addEventListener('keydown', (e) => {
-                    if (e.code === 'Space') {
+                // Resize handler
+                window.addEventListener('resize', () => {
+                    setTimeout(() => this.setupCanvas(), 100);
+                });
+
+                // Prevent scrolling and zooming
+                document.addEventListener('touchmove', (e) => {
+                    if (e.target === this.canvas) {
                         e.preventDefault();
-                        this.nextTask();
-                    } else if (e.code === 'KeyC') {
-                        this.clearCanvas();
-                    } else if (e.code === 'KeyS') {
-                        this.skipTask();
                     }
-                });
+                }, { passive: false });
 
-                // Window resize
-                window.addEventListener('resize', () => this.setupCanvas());
+                document.addEventListener('gesturestart', (e) => e.preventDefault());
+                document.addEventListener('gesturechange', (e) => e.preventDefault());
+                document.addEventListener('gestureend', (e) => e.preventDefault());
             }
 
             getCoordinates(e) {
                 const rect = this.canvas.getBoundingClientRect();
-                const scaleX = this.canvas.width / rect.width;
-                const scaleY = this.canvas.height / rect.height;
+                const scaleX = this.canvas.width / (rect.width * (window.devicePixelRatio || 1));
+                const scaleY = this.canvas.height / (rect.height * (window.devicePixelRatio || 1));
                 
                 return {
-                    x: (e.clientX - rect.left) * scaleX,
-                    y: (e.clientY - rect.top) * scaleY
+                    x: (e.clientX - rect.left) / (window.devicePixelRatio || 1),
+                    y: (e.clientY - rect.top) / (window.devicePixelRatio || 1),
+                    pressure: this.pressure,
+                    timestamp: Date.now()
                 };
             }
 
@@ -567,19 +824,51 @@
                 this.isDrawing = true;
                 const coords = this.getCoordinates(e);
                 this.currentStroke = [coords];
+                this.lastPoint = coords;
+                
+                // Adaptive line width based on pressure
+                const lineWidth = 2 + (coords.pressure * 2);
+                this.ctx.lineWidth = lineWidth;
                 
                 this.ctx.beginPath();
                 this.ctx.moveTo(coords.x, coords.y);
+                
+                // Draw a small dot for the start
+                this.ctx.beginPath();
+                this.ctx.arc(coords.x, coords.y, lineWidth / 2, 0, 2 * Math.PI);
+                this.ctx.fill();
             }
 
             draw(e) {
                 if (!this.isDrawing) return;
                 
                 const coords = this.getCoordinates(e);
-                this.currentStroke.push(coords);
                 
-                this.ctx.lineTo(coords.x, coords.y);
-                this.ctx.stroke();
+                if (this.lastPoint) {
+                    // Calculate smooth curve using quadratic bezier
+                    const midX = (this.lastPoint.x + coords.x) / 2;
+                    const midY = (this.lastPoint.y + coords.y) / 2;
+                    
+                    // Adaptive line width based on pressure and speed
+                    const distance = Math.sqrt(
+                        Math.pow(coords.x - this.lastPoint.x, 2) + 
+                        Math.pow(coords.y - this.lastPoint.y, 2)
+                    );
+                    const speed = distance / (coords.timestamp - this.lastPoint.timestamp + 1);
+                    const lineWidth = Math.max(1, 3 - speed * 0.1) * coords.pressure;
+                    
+                    this.ctx.lineWidth = lineWidth;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.lastPoint.x, this.lastPoint.y);
+                    this.ctx.quadraticCurveTo(this.lastPoint.x, this.lastPoint.y, midX, midY);
+                    this.ctx.stroke();
+                }
+                
+                this.currentStroke.push(coords);
+                this.lastPoint = coords;
+                
+                // Update stroke counter
+                document.getElementById('strokeCounter').textContent = `Strokes: ${this.currentStrokes.length + 1}`;
             }
 
             stopDrawing() {
@@ -588,25 +877,55 @@
                 
                 if (this.currentStroke.length > 1) {
                     this.currentStrokes.push([...this.currentStroke]);
+                    this.updateCanvasInfo();
                 }
                 this.currentStroke = [];
+                this.lastPoint = null;
+            }
+
+            updateCanvasInfo() {
+                const info = document.getElementById('canvasInfo');
+                const strokeCount = this.currentStrokes.length;
+                const quality = this.assessDrawingQuality();
+                
+                let status = 'Ready to write';
+                if (strokeCount > 0) {
+                    status = `${strokeCount} stroke${strokeCount > 1 ? 's' : ''} • ${quality}`;
+                }
+                
+                info.textContent = status;
+            }
+
+            assessDrawingQuality() {
+                if (this.currentStrokes.length === 0) return 'Empty';
+                
+                const totalPoints = this.currentStrokes.reduce((sum, stroke) => sum + stroke.length, 0);
+                const avgPointsPerStroke = totalPoints / this.currentStrokes.length;
+                
+                if (avgPointsPerStroke > 15) return 'Detailed';
+                if (avgPointsPerStroke > 8) return 'Good';
+                if (avgPointsPerStroke > 3) return 'Basic';
+                return 'Minimal';
             }
 
             clearCanvas() {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this.currentStrokes = [];
                 this.currentStroke = [];
+                this.updateCanvasInfo();
+                document.getElementById('strokeCounter').textContent = 'Strokes: 0';
             }
 
             updateTask() {
                 const tasks = this.trainingData[this.currentMode];
                 const currentTask = tasks[this.currentTaskIndex % tasks.length];
+                this.taskStartTime = Date.now();
                 
                 document.getElementById('taskContent').textContent = currentTask;
                 
                 // Update task type and preview
                 const taskTypes = {
-                    connections: '🔗 Letter Connection Training',
+                    connections: '🔗 Neural Connection Training',
                     words: '📝 Natural Word Flow',
                     pairs: '👫 Letter Pair Practice',
                     variations: '🎯 Character Variation',
@@ -615,7 +934,7 @@
                 
                 document.getElementById('taskType').textContent = taskTypes[this.currentMode];
                 
-                // Update connection preview
+                // Update connection preview with more detailed instructions
                 const preview = this.getTaskPreview(currentTask);
                 document.getElementById('connectionPreview').textContent = preview;
                 
@@ -627,11 +946,11 @@
 
             getTaskPreview(task) {
                 const previews = {
-                    connections: `Practice natural connection between '${task[0]}' and '${task[1]}'`,
-                    words: `Write the word naturally with flowing connections`,
-                    pairs: `Focus on smooth transition from '${task[0]}' to '${task[1]}'`,
-                    variations: `Write multiple natural variations of '${task}'`,
-                    sentences: `Write with natural rhythm and letter connections`
+                    connections: `Write '${task}' with natural connection flow between letters`,
+                    words: `Write "${task}" naturally with smooth letter connections`,
+                    pairs: `Practice fluid transition from '${task[0]}' to '${task[1]}'`,
+                    variations: `Write '${task}' with your natural style variation`,
+                    sentences: `Write with natural rhythm, speed, and letter flow`
                 };
                 
                 return previews[this.currentMode];
@@ -643,8 +962,8 @@
                 if (this.currentMode === 'words' || this.currentMode === 'sentences') {
                     breakdown.style.display = 'block';
                     
-                    const letters = task.split('');
-                    breakdown.innerHTML = 'Letters: ' + letters.map(letter => {
+                    const letters = task.split('').filter(char => char !== ' ');
+                    breakdown.innerHTML = 'Coverage: ' + letters.map(letter => {
                         const collected = this.hasCollectedLetter(letter);
                         return `<span class="letter ${collected ? 'collected' : ''}">${letter}</span>`;
                     }).join('');
@@ -654,60 +973,93 @@
             }
 
             hasCollectedLetter(letter) {
-                // Check if we have collected this letter in variations mode
-                return this.collectedData.variations.some(sample => sample.text === letter);
+                return this.collectedData.variations.some(sample => 
+                    sample.text.toLowerCase() === letter.toLowerCase()
+                );
             }
 
             nextTask() {
                 if (this.currentStrokes.length === 0) {
-                    this.showMessage('⚠️ Please write something first!');
+                    this.showMessage('⚠️ Please write something first!', 'warning');
                     return;
                 }
 
-                // Save current sample
+                // Enhanced sample saving with more metadata
                 this.saveSample();
                 
                 // Move to next task
                 this.currentTaskIndex++;
                 this.updateTask();
                 
-                // Update stats
+                // Update stats with quality assessment
                 this.sessionStats.totalSamples++;
                 this.sessionStats.streak++;
                 this.sessionStats.lastSampleTime = Date.now();
+                
+                const sampleTime = Date.now() - this.taskStartTime;
+                this.sessionStats.timePerSample.push(sampleTime);
+                
+                // Calculate average strokes per sample
+                const totalStrokes = Object.values(this.collectedData)
+                    .flat()
+                    .reduce((sum, sample) => sum + sample.strokes.length, 0);
+                this.sessionStats.avgStrokesPerSample = totalStrokes / this.sessionStats.totalSamples;
                 
                 this.updateStats();
                 this.updateProgress();
                 this.saveProgress();
                 
-                // Celebration effect
+                // Enhanced celebration with quality feedback
                 this.showCelebration();
+                this.showMessage('✨ Sample collected successfully!', 'success');
             }
 
             skipTask() {
                 this.currentTaskIndex++;
                 this.updateTask();
-                this.sessionStats.streak = 0; // Reset streak on skip
+                this.sessionStats.streak = Math.max(0, this.sessionStats.streak - 1);
                 this.updateStats();
+                this.showMessage('⏭️ Task skipped', 'info');
             }
 
             saveSample() {
                 const tasks = this.trainingData[this.currentMode];
                 const currentTask = tasks[this.currentTaskIndex % tasks.length];
                 
+                // Enhanced sample with comprehensive metadata
                 const sample = {
                     text: currentTask,
-                    strokes: this.currentStrokes.map(stroke => stroke.map(point => [point.x, point.y])),
-                    timestamp: Date.now(),
-                    mode: this.currentMode,
-                    category: this.getCategoryForTask(currentTask),
-                    canvasSize: {
-                        width: this.canvas.width,
-                        height: this.canvas.height
-                    },
-                    sessionInfo: {
-                        sampleIndex: this.sessionStats.totalSamples,
-                        streak: this.sessionStats.streak
+                    strokes: this.currentStrokes.map(stroke => 
+                        stroke.map(point => ({
+                            x: point.x,
+                            y: point.y,
+                            pressure: point.pressure || 1.0,
+                            timestamp: point.timestamp
+                        }))
+                    ),
+                    metadata: {
+                        timestamp: Date.now(),
+                        mode: this.currentMode,
+                        category: this.getCategoryForTask(currentTask),
+                        taskIndex: this.currentTaskIndex,
+                        sessionSample: this.sessionStats.totalSamples,
+                        streak: this.sessionStats.streak,
+                        timeToComplete: Date.now() - this.taskStartTime,
+                        strokeCount: this.currentStrokes.length,
+                        quality: this.assessDrawingQuality(),
+                        canvasSize: {
+                            width: this.canvas.width,
+                            height: this.canvas.height,
+                            displayWidth: this.canvas.clientWidth,
+                            displayHeight: this.canvas.clientHeight,
+                            devicePixelRatio: window.devicePixelRatio || 1
+                        },
+                        device: {
+                            userAgent: navigator.userAgent,
+                            platform: navigator.platform,
+                            maxTouchPoints: navigator.maxTouchPoints,
+                            orientation: screen.orientation ? screen.orientation.angle : 0
+                        }
                     }
                 };
                 
@@ -730,26 +1082,32 @@
             }
 
             updateStats() {
-                const elapsed = (Date.now() - this.sessionStats.startTime) / 1000 / 60; // minutes
+                const elapsed = (Date.now() - this.sessionStats.startTime) / 1000 / 60;
                 const spm = elapsed > 0 ? (this.sessionStats.totalSamples / elapsed).toFixed(1) : '0.0';
+                
+                let streakIcon = '';
+                if (this.sessionStats.streak > 10) streakIcon = '🔥🔥';
+                else if (this.sessionStats.streak > 5) streakIcon = '🔥';
+                else if (this.sessionStats.streak > 0) streakIcon = '⚡';
                 
                 document.getElementById('stats').innerHTML = `
                     Session: ${this.sessionStats.totalSamples} samples<br>
                     Speed: ${spm} spm<br>
-                    Streak: ${this.sessionStats.streak} ${this.sessionStats.streak > 5 ? '🔥' : ''}
+                    Streak: ${this.sessionStats.streak} ${streakIcon}<br>
+                    Avg: ${this.sessionStats.avgStrokesPerSample.toFixed(1)} strokes
                 `;
             }
 
             updateProgress() {
                 const totals = {
-                    connections: 150,
-                    words: 100,
-                    variations: 200,
+                    connections: 200,
+                    words: 150,
+                    variations: 300,
                     pairs: 100,
                     sentences: 50
                 };
                 
-                // Update individual progress
+                // Update individual progress with quality indicators
                 Object.keys(this.collectedData).forEach(mode => {
                     const count = this.collectedData[mode].length;
                     const total = totals[mode] || 100;
@@ -757,12 +1115,20 @@
                     
                     const progressBar = document.getElementById(mode + 'Progress');
                     const countDisplay = document.getElementById(mode + 'Count');
+                    const qualityIndicator = document.getElementById(mode + 'Quality');
                     
                     if (progressBar) {
                         progressBar.style.width = percentage + '%';
                     }
                     if (countDisplay) {
                         countDisplay.textContent = `${count} / ${total}`;
+                    }
+                    
+                    // Update quality indicator
+                    if (qualityIndicator) {
+                        qualityIndicator.className = 'quality-indicator ' + 
+                            (percentage > 80 ? 'quality-good' : 
+                             percentage > 40 ? 'quality-medium' : 'quality-poor');
                     }
                 });
                 
@@ -773,36 +1139,36 @@
                 
                 document.getElementById('qualityProgress').style.width = qualityScore + '%';
                 document.getElementById('qualityScore').textContent = qualityScore.toFixed(1) + '%';
+                
+                this.sessionStats.qualityScore = qualityScore;
             }
 
             showCelebration() {
-                const celebrations = ['🎉', '✨', '🌟', '🎊', '🔥', '💫', '⭐', '🎈'];
+                const celebrations = ['🎉', '✨', '🌟', '🎊', '🔥', '💫', '⭐', '🎈', '🚀', '💎'];
                 const celebration = document.createElement('div');
                 celebration.className = 'celebration';
                 celebration.textContent = celebrations[Math.floor(Math.random() * celebrations.length)];
                 document.body.appendChild(celebration);
                 
                 setTimeout(() => {
-                    document.body.removeChild(celebration);
-                }, 1000);
+                    if (document.body.contains(celebration)) {
+                        document.body.removeChild(celebration);
+                    }
+                }, 1200);
             }
 
-            showMessage(message) {
-                // Create temporary message display
+            showMessage(message, type = 'info') {
                 const msgDiv = document.createElement('div');
-                msgDiv.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background: rgba(255,193,7,0.9);
-                    color: #333;
-                    padding: 10px 20px;
-                    border-radius: 20px;
-                    font-weight: 600;
-                    z-index: 1000;
-                    backdrop-filter: blur(10px);
-                `;
+                msgDiv.className = 'message';
+                
+                const colors = {
+                    success: 'rgba(76, 175, 80, 0.95)',
+                    warning: 'rgba(255, 193, 7, 0.95)',
+                    error: 'rgba(244, 67, 54, 0.95)',
+                    info: 'rgba(33, 150, 243, 0.95)'
+                };
+                
+                msgDiv.style.background = colors[type] || colors.info;
                 msgDiv.textContent = message;
                 document.body.appendChild(msgDiv);
                 
@@ -810,81 +1176,128 @@
                     if (document.body.contains(msgDiv)) {
                         document.body.removeChild(msgDiv);
                     }
-                }, 2000);
+                }, 3000);
             }
 
             saveProgress() {
                 try {
-                    localStorage.setItem('ultimateHandwritingProgress', JSON.stringify({
+                    const progressData = {
                         collectedData: this.collectedData,
                         sessionStats: this.sessionStats,
                         currentMode: this.currentMode,
-                        currentTaskIndex: this.currentTaskIndex
-                    }));
+                        currentTaskIndex: this.currentTaskIndex,
+                        version: '4.0',
+                        lastSaved: Date.now()
+                    };
+                    
+                    localStorage.setItem('neuralHandwritingProgress', JSON.stringify(progressData));
                 } catch (e) {
-                    console.warn('Could not save progress to localStorage:', e);
+                    console.warn('Could not save progress:', e);
+                    this.showMessage('⚠️ Progress save failed', 'warning');
                 }
             }
 
             loadProgress() {
                 try {
-                    const saved = localStorage.getItem('ultimateHandwritingProgress');
+                    const saved = localStorage.getItem('neuralHandwritingProgress');
                     if (saved) {
                         const data = JSON.parse(saved);
-                        this.collectedData = data.collectedData || this.collectedData;
-                        this.sessionStats = { ...this.sessionStats, ...data.sessionStats };
-                        this.currentMode = data.currentMode || this.currentMode;
-                        this.currentTaskIndex = data.currentTaskIndex || 0;
                         
-                        // Update UI to reflect loaded state
-                        document.querySelectorAll('.mode-btn').forEach(btn => {
-                            btn.classList.toggle('active', btn.dataset.mode === this.currentMode);
-                        });
-                        
-                        this.updateTask();
-                        this.updateStats();
-                        this.updateProgress();
+                        // Validate data version compatibility
+                        if (data.version && parseFloat(data.version) >= 3.0) {
+                            this.collectedData = data.collectedData || this.collectedData;
+                            this.sessionStats = { ...this.sessionStats, ...data.sessionStats };
+                            this.currentMode = data.currentMode || this.currentMode;
+                            this.currentTaskIndex = data.currentTaskIndex || 0;
+                            
+                            // Update UI to reflect loaded state
+                            document.querySelectorAll('.mode-btn').forEach(btn => {
+                                btn.classList.toggle('active', btn.dataset.mode === this.currentMode);
+                            });
+                            
+                            this.updateTask();
+                            this.updateStats();
+                            this.updateProgress();
+                            
+                            this.showMessage('📂 Progress loaded successfully', 'success');
+                        }
                     }
                 } catch (e) {
-                    console.warn('Could not load progress from localStorage:', e);
+                    console.warn('Could not load progress:', e);
                 }
             }
 
             exportData() {
-                // Prepare comprehensive export data
+                const totalSamples = Object.values(this.collectedData).reduce((sum, arr) => sum + arr.length, 0);
+                
+                if (totalSamples === 0) {
+                    this.showMessage('⚠️ No data to export yet!', 'warning');
+                    return;
+                }
+
+                // Comprehensive export data optimized for neural network training
                 const exportData = {
                     metadata: {
-                        totalSamples: Object.values(this.collectedData).reduce((sum, arr) => sum + arr.length, 0),
+                        version: '4.0-neural',
+                        totalSamples: totalSamples,
                         collectionDate: new Date().toISOString(),
                         sessionDuration: Date.now() - this.sessionStats.startTime,
-                        version: '3.0-ultimate',
-                        device: this.getDeviceInfo(),
-                        modes: Object.keys(this.collectedData).filter(mode => this.collectedData[mode].length > 0),
-                        quality: {
-                            connectionsCount: this.collectedData.connections.length,
-                            wordsCount: this.collectedData.words.length,
-                            variationsCount: this.collectedData.variations.length,
-                            pairsCount: this.collectedData.pairs.length,
-                            sentencesCount: this.collectedData.sentences.length
+                        qualityScore: this.sessionStats.qualityScore,
+                        avgStrokesPerSample: this.sessionStats.avgStrokesPerSample,
+                        avgTimePerSample: this.sessionStats.timePerSample.length > 0 
+                            ? this.sessionStats.timePerSample.reduce((a, b) => a + b) / this.sessionStats.timePerSample.length 
+                            : 0,
+                        coverage: {
+                            connections: this.collectedData.connections.length,
+                            words: this.collectedData.words.length,
+                            variations: this.collectedData.variations.length,
+                            pairs: this.collectedData.pairs.length,
+                            sentences: this.collectedData.sentences.length
+                        },
+                        device: {
+                            platform: navigator.platform,
+                            userAgent: navigator.userAgent,
+                            maxTouchPoints: navigator.maxTouchPoints,
+                            screenSize: {
+                                width: screen.width,
+                                height: screen.height,
+                                pixelRatio: window.devicePixelRatio || 1
+                            }
                         }
                     },
-                    samples: []
+                    trainingData: []
                 };
                 
-                // Combine all samples with enhanced metadata
+                // Process and enhance all samples for neural network training
                 Object.keys(this.collectedData).forEach(mode => {
                     this.collectedData[mode].forEach((sample, index) => {
-                        exportData.samples.push({
-                            ...sample,
-                            sampleId: `${mode}_${index}_${Date.now()}`,
-                            collectionMode: mode,
-                            complexity: this.calculateComplexity(sample),
-                            connectionType: this.analyzeConnections(sample)
-                        });
+                        const enhancedSample = {
+                            id: `${mode}_${index}_${Date.now()}`,
+                            text: sample.text,
+                            strokes: sample.strokes,
+                            features: {
+                                strokeCount: sample.strokes.length,
+                                totalPoints: sample.strokes.reduce((sum, stroke) => sum + stroke.length, 0),
+                                boundingBox: this.calculateBoundingBox(sample.strokes),
+                                avgStrokeLength: sample.strokes.reduce((sum, stroke) => sum + stroke.length, 0) / sample.strokes.length,
+                                writingSpeed: sample.metadata ? (sample.metadata.timeToComplete / sample.strokes.length) : null,
+                                pressureVariation: this.calculatePressureVariation(sample.strokes)
+                            },
+                            labels: {
+                                text: sample.text,
+                                category: sample.metadata ? sample.metadata.category : this.getCategoryForTask(sample.text),
+                                mode: mode,
+                                complexity: this.calculateComplexity(sample),
+                                quality: sample.metadata ? sample.metadata.quality : 'unknown'
+                            },
+                            metadata: sample.metadata || {}
+                        };
+                        
+                        exportData.trainingData.push(enhancedSample);
                     });
                 });
                 
-                // Create and download file
+                // Create and download enhanced dataset
                 const blob = new Blob([JSON.stringify(exportData, null, 2)], {
                     type: 'application/json'
                 });
@@ -892,95 +1305,121 @@
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `ultimate_handwriting_data_${Date.now()}.json`;
+                link.download = `neural_handwriting_dataset_${Date.now()}.json`;
                 
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
                 
-                this.showMessage(`📦 Exported ${exportData.samples.length} samples for maximum realism training!`);
+                this.showMessage(`📦 Exported ${totalSamples} samples for neural training!`, 'success');
+            }
+
+            calculateBoundingBox(strokes) {
+                if (strokes.length === 0) return { x: 0, y: 0, width: 0, height: 0 };
+                
+                let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+                
+                strokes.forEach(stroke => {
+                    stroke.forEach(point => {
+                        minX = Math.min(minX, point.x);
+                        minY = Math.min(minY, point.y);
+                        maxX = Math.max(maxX, point.x);
+                        maxY = Math.max(maxY, point.y);
+                    });
+                });
+                
+                return {
+                    x: minX,
+                    y: minY,
+                    width: maxX - minX,
+                    height: maxY - minY
+                };
+            }
+
+            calculatePressureVariation(strokes) {
+                const pressures = [];
+                strokes.forEach(stroke => {
+                    stroke.forEach(point => {
+                        if (point.pressure !== undefined) {
+                            pressures.push(point.pressure);
+                        }
+                    });
+                });
+                
+                if (pressures.length === 0) return 0;
+                
+                const avg = pressures.reduce((a, b) => a + b) / pressures.length;
+                const variance = pressures.reduce((sum, p) => sum + Math.pow(p - avg, 2), 0) / pressures.length;
+                return Math.sqrt(variance);
             }
 
             calculateComplexity(sample) {
-                // Calculate complexity score based on strokes and text
                 const strokeComplexity = sample.strokes.length;
+                const pointComplexity = sample.strokes.reduce((sum, stroke) => sum + stroke.length, 0);
                 const textComplexity = sample.text.length;
-                const connectionComplexity = sample.text.length > 1 ? sample.text.length - 1 : 0;
                 
                 return {
                     strokeCount: strokeComplexity,
+                    pointCount: pointComplexity,
                     textLength: textComplexity,
-                    connectionCount: connectionComplexity,
-                    totalScore: strokeComplexity + textComplexity + connectionComplexity
+                    totalScore: strokeComplexity + (pointComplexity / 10) + textComplexity
                 };
             }
 
-            analyzeConnections(sample) {
-                // Analyze the type of connections in the sample
-                if (sample.text.length === 1) {
-                    return 'single_character';
-                } else if (sample.text.length === 2) {
-                    return 'letter_pair';
-                } else if (sample.text.includes(' ')) {
-                    return 'multi_word';
-                } else {
-                    return 'single_word';
-                }
-            }
-
-            getDeviceInfo() {
-                return {
-                    userAgent: navigator.userAgent,
-                    platform: navigator.platform,
-                    language: navigator.language,
-                    screenSize: {
-                        width: screen.width,
-                        height: screen.height
-                    },
-                    canvasSize: {
-                        width: this.canvas.width,
-                        height: this.canvas.height
-                    }
-                };
-            }
-
-            // Auto-save functionality
             startAutoSave() {
+                // Auto-save every 30 seconds
                 setInterval(() => {
                     this.saveProgress();
-                }, 30000); // Save every 30 seconds
+                }, 30000);
+                
+                // Save on page unload
+                window.addEventListener('beforeunload', () => {
+                    this.saveProgress();
+                });
+                
+                // Save on visibility change (app backgrounding)
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        this.saveProgress();
+                    }
+                });
             }
         }
 
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', () => {
-            const collector = new UltimateDataCollector();
-            collector.startAutoSave();
+            const collector = new NeuralHandwritingCollector();
             
-            // Add some helpful tips
+            // Add startup message
+            setTimeout(() => {
+                collector.showMessage('🎨 Neural Handwriting Collector ready!', 'info');
+            }, 500);
+            
             console.log(`
-🎨 Ultimate Handwriting Data Collector
-=====================================
-Keyboard shortcuts:
-- SPACE: Next task
-- C: Clear canvas
-- S: Skip task
+🎨 Neural Handwriting Data Collector v4.0
+==========================================
+iPad Optimized Features:
+✓ Pressure-sensitive drawing
+✓ Smooth touch interactions
+✓ Auto-save functionality
+✓ Enhanced data collection
 
-Tips for maximum realism:
-- Write naturally and fluidly
-- Focus on smooth connections between letters
-- Vary your writing speed naturally
-- Don't worry about perfect letters - natural variation is good!
-- The system learns from your natural writing style
+Collection Targets:
+• 200 letter connections (critical for flow)
+• 150 natural words (realistic patterns)
+• 300 character variations (maximum diversity)
+• 100 letter pairs (systematic coverage)
+• 50 flowing sentences (natural rhythm)
 
-Collection targets:
-- 150 letter connections (most important for realism)
-- 100 natural words (for realistic flow)
-- 200 character variations (for diversity)
-- 50 flowing sentences (for rhythm)
+Data Features:
+• Pressure sensitivity
+• Timing information
+• Stroke analysis
+• Quality assessment
+• Device metadata
 
-Happy collecting! 🖋️
+Perfect for training neural handwriting models! 🚀
             `);
         });
     </script>
