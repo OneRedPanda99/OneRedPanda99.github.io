@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Pressure Point - Professional Pressure Washing Services" />
+    <meta property="og:description" content="Premium exterior cleaning by Columbia SC's youngest professional. Honor Roll student delivering professional results." />
+    <meta property="og:type" content="website" />
+    <title>Pressure Point | Professional Pressure Washing - Columbia SC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --navy: #0F1629;
+            --bright-blue: #1E90FF;
+            --black: #050505;
+            --white: #e3e3e3;
+            --gold: #f5d216;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--navy);
+            color: var(--white);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--bright-blue), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(180deg, var(--navy) 0%, #1a1f3a 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            border-color: var(--bright-blue);
+            box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
+        }
+        
+        .btn-primary {
+            background: var(--bright-blue);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .btn-primary:hover {
+            background: #1876d2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(30, 144, 255, 0.4);
+        }
+        
+        .before-after-container {
+            position: relative;
+            overflow: hidden;
+            cursor: ew-resize;
+        }
+        
+        .before-after-slider {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            overflow: hidden;
+        }
+        
+        .slider-handle {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: var(--bright-blue);
+            border: 3px solid white;
+            border-radius: 50%;
+            cursor: ew-resize;
+            z-index: 10;
+        }
+        
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .honor-badge {
+            background: linear-gradient(135deg, var(--gold), #ffea00);
+            color: var(--navy);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu {
+                background: rgba(15, 22, 41, 0.98);
+                backdrop-filter: blur(10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-opacity-95 backdrop-blur-md" style="background-color: rgba(15, 22, 41, 0.95);">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold">
+                        <span style="color: var(--bright-blue);">Pressure</span>
+                        <span style="color: var(--white);">Point</span>
+                    </h1>
+                    <span class="honor-badge ml-3 hidden sm:inline-block">Honor Roll Owner</span>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="#services" class="hover:text-blue-400 transition">Services</a>
+                    <a href="#gallery" class="hover:text-blue-400 transition">Our Work</a>
+                    <a href="#pricing" class="hover:text-blue-400 transition">Pricing</a>
+                    <a href="#about" class="hover:text-blue-400 transition">About</a>
+                    <a href="#contact" class="btn-primary">Get Quote</a>
+                </div>
+                
+                <button class="md:hidden text-white" id="mobile-menu-btn">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mobile-menu pb-4">
+                <a href="#services" class="block py-2 hover:text-blue-400">Services</a>
+                <a href="#gallery" class="block py-2 hover:text-blue-400">Our Work</a>
+                <a href="#pricing" class="block py-2 hover:text-blue-400">Pricing</a>
+                <a href="#about" class="block py-2 hover:text-blue-400">About</a>
+                <a href="#contact" class="block mt-3 btn-primary text-center">Get Quote</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient min-h-screen flex items-center pt-20">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="mb-6">
+                        <span class="text-sm uppercase tracking-wider" style="color: var(--gold);">Columbia's Premium Pressure Washing</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+                        Professional Results,
+                        <span class="gradient-text">Personal Service</span>
+                    </h2>
+                    <p class="text-xl mb-8 text-gray-300">
+                        Hey, I'm a local Honor Roll student building something special. I combine professional-grade equipment with genuine care for your property. No fancy corporate talk - just great results at fair prices.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                        <a href="#contact" class="btn-primary text-center">Get Free Quote</a>
+                        <a href="#gallery" class="border-2 border-white px-6 py-3 rounded-lg hover:bg-white hover:text-navy transition text-center">View Our Work</a>
+                    </div>
+                    <div class="flex items-center gap-6 text-sm">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle" style="color: var(--bright-blue);"></i>
+                            <span>Insured Service</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle" style="color: var(--bright-blue);"></i>
+                            <span>Free Estimates</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="before-after-container rounded-xl overflow-hidden shadow-2xl" style="height: 400px;">
+                        <img src="https://via.placeholder.com/600x400/1a1f3a/e3e3e3?text=After+Cleaning" alt="After" class="w-full h-full object-cover">
+                        <div class="before-after-slider" style="left: 50%;">
+                            <img src="https://via.placeholder.com/600x400/333/999?text=Before+Cleaning" alt="Before" class="w-full h-full object-cover">
+                        </div>
+                        <div class="slider-handle" style="left: 50%;">
+                            <i class="fas fa-arrows-alt-h text-white"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center text-sm text-gray-400">
+                        Drag to see the difference we make
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20" style="background-color: #1a1f3a;">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Services</h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    From homes to businesses, I've got the right equipment and know-how for any job
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <!-- Residential Card -->
+                <div class="card-hover bg-navy rounded-xl p-8">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-home text-3xl mr-4" style="color: var(--bright-blue);"></i>
+                        <h3 class="text-2xl font-bold">Residential Services</h3>
+                    </div>
+                    <p class="text-gray-300 mb-6">
+                        Making your home look amazing is what I do best. Professional equipment, careful attention to detail, and respect for your property.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check mt-1 mr-3" style="color: var(--gold);"></i>
+                            <div>
+                                <strong>House Washing</strong> - Gentle soft wash for siding, brick, and stucco
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check mt-1 mr-3" style="color: var(--gold);"></i>
+                            <div>
+                                <strong>Driveway & Sidewalks</strong> - High-pressure concrete cleaning
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check mt-1 mr-3" style="color: var(--gold);"></i>
+                            <div>
+                                <strong>Deck & Fence</strong> - Safe wood and composite cleaning
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check mt-1 mr-3" style="color: var(--gold);"></i>
+                            <div>
+                                <strong>Roof Cleaning</strong> - Low-pressure moss and algae removal
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Commercial Card -->
+                <div class="card-hover bg-navy rounded-xl p-8">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-building text-3xl mr-4" style="color: var(--bright-blue);"></i>
+                        <h3 class="text-2xl font-bold">Commercial Services</h3>
+                    </div>
+                    <p class="text-gray-300 mb-6">
+                        I understand that your business image matters. Flexible scheduling, professional results, and competitive rates for regular maintenance.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check mt-1 mr-3" style="color: var(--gold);"></i>
+                            <div>
+                                <strong>Storefronts</strong> - Windows, awnings, and entrance areas
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check mt-1 mr-3" style="color: var(--gold);"></i>
+                            <div>
+                                <strong>Parking Lots</strong> - Oil stain removal and line brightening
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check mt-1 mr-3" style="color: var(--gold);"></i>
+                            <div>
+                                <strong>Building Exteriors</strong> - Complete facade cleaning
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check mt-1 mr-3" style="color: var(--gold);"></i>
+                            <div>
+                                <strong>Monthly Contracts</strong> - Scheduled maintenance programs
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <a href="#contact" class="btn-primary">Schedule Your Service</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="py-20" style="background-color: var(--navy);">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">What Sets Us Apart</h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Sure, I'm young - but that means I work harder to prove myself with every job
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: rgba(30, 144, 255, 0.2);">
+                        <i class="fas fa-graduation-cap text-2xl" style="color: var(--gold);"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Honor Roll Work Ethic</h3>
+                    <p class="text-gray-300">
+                        The same dedication that gets me A's goes into every job. I don't cut corners - period.
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: rgba(30, 144, 255, 0.2);">
+                        <i class="fas fa-tools text-2xl" style="color: var(--bright-blue);"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Professional Equipment</h3>
+                    <p class="text-gray-300">
+                        Commercial-grade pressure washers and soft wash systems. The right tool for every surface.
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: rgba(30, 144, 255, 0.2);">
+                        <i class="fas fa-dollar-sign text-2xl" style="color: var(--gold);"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Student-Friendly Pricing</h3>
+                    <p class="text-gray-300">
+                        No huge overhead means better prices for you. Professional results without the corporate markup.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20" style="background-color: #1a1f3a;">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Work Speaks For Itself</h2>
+                <p class="text-xl text-gray-300">Real results from real jobs around Columbia</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Gallery items with placeholder images -->
+                <div class="card-hover rounded-lg overflow-hidden">
+                    <img src="https://via.placeholder.com/400x300/1a1f3a/e3e3e3?text=Driveway+Transformation" alt="Driveway" class="w-full h-48 object-cover">
+                    <div class="p-4 bg-navy">
+                        <h4 class="font-bold mb-2">Driveway Restoration</h4>
+                        <p class="text-sm text-gray-300">Removed years of oil stains and grime</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-lg overflow-hidden">
+                    <img src="https://via.placeholder.com/400x300/1a1f3a/e3e3e3?text=House+Washing" alt="House" class="w-full h-48 object-cover">
+                    <div class="p-4 bg-navy">
+                        <h4 class="font-bold mb-2">Complete House Wash</h4>
+                        <p class="text-sm text-gray-300">Gentle soft wash for vinyl siding</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-lg overflow-hidden">
+                    <img src="https://via.placeholder.com/400x300/1a1f3a/e3e3e3?text=Deck+Cleaning" alt="Deck" class="w-full h-48 object-cover">
+                    <div class="p-4 bg-navy">
+                        <h4 class="font-bold mb-2">Deck Revival</h4>
+                        <p class="text-sm text-gray-300">Restored natural wood beauty</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20" style="background-color: var(--navy);">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Transparent Pricing</h2>
+                <p class="text-xl text-gray-300">No hidden fees, no surprises - just honest pricing</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="testimonial-card rounded-xl p-8">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <i class="fas fa-home mr-3" style="color: var(--bright-blue);"></i>
+                            Residential
+                        </h3>
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex justify-between">
+                                <span>House Washing</span>
+                                <span class="font-bold">$0.15-0.25/sq ft</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>Driveway Cleaning</span>
+                                <span class="font-bold">$0.20-0.30/sq ft</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>Deck/Fence</span>
+                                <span class="font-bold">$1.50-2.50/linear ft</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>Minimum Service</span>
+                                <span class="font-bold">$100</span>
+                            </li>
+                        </ul>
+                        <p class="text-sm text-gray-400">*Prices vary based on surface condition</p>
+                    </div>
+                    
+                    <div class="testimonial-card rounded-xl p-8">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <i class="fas fa-building mr-3" style="color: var(--bright-blue);"></i>
+                            Commercial
+                        </h3>
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex justify-between">
+                                <span>Storefronts</span>
+                                <span class="font-bold">Starting at $150</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>Parking Lots</span>
+                                <span class="font-bold">$0.10-0.15/sq ft</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>Building Exterior</span>
+                                <span class="font-bold">Custom Quote</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>Monthly Contracts</span>
+                                <span class="font-bold">10% Discount</span>
+                            </li>
+                        </ul>
+                        <p class="text-sm text-gray-400">*Volume discounts available</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <div class="inline-block testimonial-card rounded-xl p-6">
+                        <p class="text-lg mb-4">
+                            <i class="fas fa-tag mr-2" style="color: var(--gold);"></i>
+                            <strong>Student Special:</strong> Mention you're a student or teacher for 10% off!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20" style="background-color: #1a1f3a;">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">What Customers Say</h2>
+                <p class="text-xl text-gray-300">Building trust one clean property at a time</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div class="testimonial-card rounded-xl p-6">
+                    <div class="flex mb-4">
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                    </div>
+                    <p class="mb-4 text-gray-300">
+                        "Honestly wasn't sure about hiring a student, but WOW! More professional than the 'big guys' and half the price. My driveway looks brand new!"
+                    </p>
+                    <p class="font-bold">- Sarah M.</p>
+                    <p class="text-sm text-gray-400">Homeowner</p>
+                </div>
+                
+                <div class="testimonial-card rounded-xl p-6">
+                    <div class="flex mb-4">
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                    </div>
+                    <p class="mb-4 text-gray-300">
+                        "This kid knows his stuff! Showed up on time, worked hard, and my store front has never looked better. Already booked monthly service."
+                    </p>
+                    <p class="font-bold">- Mike T.</p>
+                    <p class="text-sm text-gray-400">Business Owner</p>
+                </div>
+                
+                <div class="testimonial-card rounded-xl p-6">
+                    <div class="flex mb-4">
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                        <i class="fas fa-star" style="color: var(--gold);"></i>
+                    </div>
+                    <p class="mb-4 text-gray-300">
+                        "Super respectful, careful with my plants, and the results speak for themselves. Love supporting young entrepreneurs!"
+                    </p>
+                    <p class="font-bold">- Jennifer R.</p>
+                    <p class="text-sm text-gray-400">Homeowner</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20" style="background-color: var(--navy);">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6">About Pressure Point</h2>
+                        <p class="text-lg text-gray-300 mb-4">
+                            Hey! I'm a 16-year-old Honor Roll student at Dreher High School, and I started Pressure Point because I believe in doing things right.
+                        </p>
+                        <p class="text-gray-300 mb-4">
+                            While my friends are playing video games, I'm out here building a real business. I've invested in professional equipment, gotten proper insurance, and studied everything about safe pressure washing techniques.
+                        </p>
+                        <p class="text-gray-300 mb-6">
+                            Every job is a chance to prove that age doesn't determine quality. I treat every property like it's my own family's home.
+                        </p>
+                        <div class="flex items-center gap-4">
+                            <span class="honor-badge">Honor Roll Student</span>
+                            <span class="text-sm text-gray-400">Dreher High School</span>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card rounded-xl p-8">
+                        <h3 class="text-xl font-bold mb-6">Why Trust a Student?</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle mt-1 mr-3" style="color: var(--bright-blue);"></i>
+                                <div>
+                                    <strong>Hungry to Succeed</strong> - Every job builds my reputation
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle mt-1 mr-3" style="color: var(--bright-blue);"></i>
+                                <div>
+                                    <strong>Lower Overhead</strong> - No office rent = better prices for you
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle mt-1 mr-3" style="color: var(--bright-blue);"></i>
+                                <div>
+                                    <strong>Tech-Savvy</strong> - Easy scheduling, digital invoices, quick responses
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle mt-1 mr-3" style="color: var(--bright-blue);"></i>
+                                <div>
+                                    <strong>Fully Insured</strong> - Professional coverage for your peace of mind
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20" style="background-color: #1a1f3a;">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Get Your Free Quote</h2>
+                    <p class="text-xl text-gray-300">I usually respond within an hour (unless I'm in class!)</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="testimonial-card rounded-xl p-8">
+                        <form id="quote-form">
+                            <div class="mb-4">
+                                <label class="block mb-2">Name</label>
+                                <input type="text" name="name" required class="w-full px-4 py-2 rounded-lg bg-navy border border-gray-600 focus:border-blue-400 focus:outline-none">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block mb-2">Email</label>
+                                <input type="email" name="email" required class="w-full px-4 py-2 rounded-lg bg-navy border border-gray-600 focus:border-blue-400 focus:outline-none">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block mb-2">Phone</label>
+                                <input type="tel" name="phone" required class="w-full px-4 py-2 rounded-lg bg-navy border border-gray-600 focus:border-blue-400 focus:outline-none">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block mb-2">Service Type</label>
+                                <select name="service" required class="w-full px-4 py-2 rounded-lg bg-navy border border-gray-600 focus:border-blue-400 focus:outline-none">
+                                    <option value="">Select a service</option>
+                                    <option value="House Washing">House Washing</option>
+                                    <option value="Driveway Cleaning">Driveway Cleaning</option>
+                                    <option value="Deck/Fence">Deck/Fence Cleaning</option>
+                                    <option value="Commercial">Commercial Service</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block mb-2">Property Address</label>
+                                <input type="text" name="address" required class="w-full px-4 py-2 rounded-lg bg-navy border border-gray-600 focus:border-blue-400 focus:outline-none">
+                            </div>
+                            <div class="mb-6">
+                                <label class="block mb-2">Message (Optional)</label>
+                                <textarea name="message" rows="3" class="w-full px-4 py-2 rounded-lg bg-navy border border-gray-600 focus:border-blue-400 focus:outline-none"></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary w-full">Get Free Quote</button>
+                        </form>
