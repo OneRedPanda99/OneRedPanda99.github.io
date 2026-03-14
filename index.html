@@ -174,6 +174,19 @@ section{padding:96px 48px;max-width:1100px;margin:0 auto;}
 #achievements .section-label{color:#81c784;}
 #achievements .section-title{color:#fff;}
 #achievements {margin-left:auto;margin-right:auto;max-width:1100px;}
+#achievements{
+  background:var(--foreground);
+  color:var(--primary-foreground);
+  border-radius:24px;
+  padding:72px 60px;
+  max-width:1100px;
+  margin:72px 0;              /* vertical margin only */
+  position:relative;
+  overflow:hidden;
+
+  left:50%;
+  transform:translateX(-50%); /* hard-center horizontally */
+}
 .achievements-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;margin-top:44px;}
 .achievement-item{border-left:3px solid var(--primary);padding-left:20px;}
 .achievement-num{font-family:var(--font-serif);font-size:2.4rem;font-weight:900;color:#81c784;line-height:1;}
