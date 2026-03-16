@@ -60,6 +60,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:f
 .scroll-hint{position:absolute;bottom:32px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 0.6s 1.4s ease forwards;}
 .scroll-hint span{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted-foreground);}
 .scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--primary),transparent);animation:scrollPulse 2s infinite;}
+.btn-secondary.copied::after {content: "Copied!";margin-left: 8px;color: #4caf50;font-weight: 600;}
+
 
 /* ── 3D SCROLL CARD ── */
 #scroll-section{position:relative;height:670px;display:flex;align-items:flex-start;justify-content:center;padding:80px 24px;background:var(--background);overflow:hidden;}
@@ -240,17 +242,10 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
     <p class="hero-role no-select">Junior building servers, robots, and websites — and running a small business since 14.</p>
     <div class="hero-cta">
       <a href="https://github.com/OneRedPanda99" target="_blank" class="btn-primary no-select">
-        <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        GitHub
-      </a>
-      <a href="mailto:parkerbranham@icloud.com" class="btn-secondary no-select">
-        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Email
-      </a>
+        <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub</a>
+      <a href="#" class="btn-secondary no-select"onclick="navigator.clipboard.writeText('parkerbranham@gmail.com'); this.classList.add('copied');"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Email</a>
       <a href="https://instagram.com/branham.camera" target="_blank" class="btn-secondary no-select">
-        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-        @branham.camera
-      </a>
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>@branham.camera</a>
     </div>
   </div>
   <div class="scroll-hint no-select">
@@ -505,7 +500,7 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
     <div class="contact-info reveal">
       <p>If you have a project, want to hire me, or just want to connect, reach out directly.</p>
       <div class="contact-email-row">
-        <span class="contact-email-display" id="email-text">parkerbranham@icloud.com</span>
+        <span class="contact-email-display" id="email-text">parkerbranham@gmail.com</span>
         <button class="copy-btn" onclick="copyEmail()">
           <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           <span id="copy-label">Copy</span>
@@ -545,7 +540,8 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
     <a href="https://clarassoaps.github.io" target="_blank">Clara's Soaps</a>
     <a href="https://scpressurepoint.github.io" target="_blank">SC Pressure Point</a>
     <a href="https://instagram.com/branham.camera" target="_blank">@branham.camera</a>
-    <a href="mailto:parkerbranham@icloud.com">Email</a>
+    <a href="#" class="btn-secondary no-select"onclick="navigator.clipboard.writeText('parkerbranham@icloud.com'); this.classList.add('copied');"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Emai</a>
+
   </div>
   <div class="footer-copy no-select">&copy; 2025 Parker Branham &middot; Columbia, SC</div>
 </footer>
