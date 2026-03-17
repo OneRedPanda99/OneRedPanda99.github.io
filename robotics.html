@@ -78,25 +78,50 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:f
   height:100vh;
   position:relative;
   z-index:2;
+  /* removed overflow:hidden so model isn't clipped */
 }
 spline-viewer{
   width:100%;
   height:100%;
   display:block;
+  /* hidden until fully loaded — avoids the "photo loading in" flash */
+  opacity:0;
+  transition:opacity 0.9s ease;
 }
-/* Spline loading fallback */
-.spline-loading{
-  width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;
-  flex-direction:column;gap:14px;
+spline-viewer.loaded{
+  opacity:1;
+}
+
+/* Loading overlay — sits on top, fades out when Spline is ready */
+.spline-overlay{
+  position:absolute;
+  inset:0;
+  background:var(--dark);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:14px;
+  z-index:10;
+  pointer-events:none;
+  transition:opacity 0.9s ease;
+}
+.spline-overlay.hidden{
+  opacity:0;
 }
 .spline-loading-ring{
   width:42px;height:42px;border-radius:50%;
-  border:2px solid rgba(129,199,132,0.2);
+  border:2px solid rgba(129,199,132,0.15);
   border-top-color:var(--dark-accent);
   animation:spin 1s linear infinite;
 }
-.spline-loading-label{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.spline-loading-label{
+  font-family:var(--font-mono);
+  font-size:0.6rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.3);
+}
 
 /* ── CONTENT ── */
 .page-wrap{max-width:860px;margin:0 auto;}
@@ -204,10 +229,22 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
   </div>
 
   <div class="hero-right">
-    <!-- Spline 3D robot — interactive, no React needed -->
+    <!-- Loading overlay — fades out once Spline scene is ready -->
+    <div class="spline-overlay" id="splineOverlay">
+      <div class="spline-loading-ring"></div>
+      <div class="spline-loading-label">Loading scene…</div>
+    </div>
+
+    <!--
+      ┌─ SWAP YOUR 3D MODEL HERE ───────────────────────────────────┐
+      │  1. Browse free scenes at: spline.design/community          │
+      │  2. Or publish your own at spline.design, then copy the URL │
+      │  3. Replace the `url` attribute value below                 │
+      └─────────────────────────────────────────────────────────────┘
+    -->
     <spline-viewer
-      url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-      loading-anim-type="spinner-small-dark"
+      id="splineViewer"
+      url="https://prod.spline.design/zgZnX12lwyYPZtBZ/scene.splinecode"
     ></spline-viewer>
   </div>
 </section>
@@ -317,6 +354,28 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 </footer>
 
 <script>
+/* Spline load — fade in the viewer, fade out the overlay */
+(function(){
+  const viewer = document.getElementById('splineViewer');
+  const overlay = document.getElementById('splineOverlay');
+
+  function onLoaded(){
+    viewer.classList.add('loaded');
+    overlay.classList.add('hidden');
+    // remove overlay from DOM after transition so it can't block pointer events
+    overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
+  }
+
+  // spline-viewer fires a 'load' event when the scene is ready
+  viewer.addEventListener('load', onLoaded);
+
+  // Fallback: if load event never fires (some browser/ad-blocker combos),
+  // reveal after 6 seconds so the page doesn't stay blank
+  setTimeout(() => {
+    if (!viewer.classList.contains('loaded')) onLoaded();
+  }, 6000);
+})();
+
 /* Progress */
 window.addEventListener('scroll',()=>{
   const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);
