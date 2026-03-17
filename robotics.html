@@ -7,14 +7,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
-<!-- Spline 3D viewer web component — no React needed -->
-<script type="module" src="https://unpkg.com/@splinetool/viewer@1.0.76/build/spline-viewer.js"></script>
 <style>
 :root{
-  --bg:#f8f5f0;--card:#f8f5f0;--muted:#f0e9e0;--accent:#c8e6c9;
-  --border:#e0d6c9;--primary:#2e7d32;--secondary:#e8f5e9;
+  --bg:#f8f5f0;--muted:#f0e9e0;
+  --border:#e0d6c9;--primary:#2e7d32;
   --fg:#3e2723;--sub:#6d4c41;--dim:#1b5e20;
-  --dark:#3e2723;--dark-sub:rgba(255,255,255,0.65);--dark-accent:#81c784;
+  --dark:#8a6a54;
+  --dark-sub:rgba(255,255,255,0.72);--dark-accent:#a5d6a7;
   --font-mono:'Source Code Pro',monospace;
   --font-sans:'Montserrat',sans-serif;
   --font-serif:'Merriweather',serif;
@@ -26,162 +25,80 @@ body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);overflow-
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4;}
 
 /* PROGRESS */
-#prog{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--primary),#81c784);z-index:10000;box-shadow:0 0 8px rgba(46,125,50,0.5);}
+#prog{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--primary),#81c784);z-index:10000;box-shadow:0 0 8px rgba(46,125,50,0.4);}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(62,39,35,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);}
-.nav-logo{font-family:var(--font-serif);font-weight:700;font-size:1.1rem;color:var(--dark-accent);text-decoration:none;}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(138,106,84,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.1);}
+.nav-logo{font-family:var(--font-serif);font-weight:700;font-size:1.1rem;color:var(--dark-accent);text-decoration:none;transition:opacity 0.2s;}
+.nav-logo:hover{opacity:0.7;}
 .nav-back{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
 .nav-back:hover{color:var(--dark-accent);}
-.nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+.nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;transition:transform 0.22s;}
+.nav-back:hover svg{transform:translateX(-4px);}
 
-/* ── HERO: dark, split layout ── */
+/* ── HERO ── */
 #hero{
   background:var(--dark);
   min-height:100vh;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  align-items:center;
+  display:flex;align-items:center;
   padding-top:57px;
-  position:relative;
-  overflow:hidden;
+  position:relative;overflow:hidden;
 }
-/* Spotlight that follows mouse */
-#spotlight{
-  position:absolute;
-  width:480px;height:480px;
-  border-radius:50%;
-  background:radial-gradient(circle at center,rgba(46,125,50,0.22) 0%,transparent 70%);
-  pointer-events:none;
-  transform:translate(-50%,-50%);
-  left:25%;top:50%;
-  transition:left 0.06s,top 0.06s;
-  z-index:1;
+#grid-pattern{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;
+  -webkit-mask-image:radial-gradient(ellipse 110% 110% at 40% 50%, white 5%, transparent 60%);
+  mask-image:radial-gradient(ellipse 110% 110% at 40% 50%, white 5%, transparent 60%);
 }
-.hero-left{
-  padding:80px 60px 80px 80px;
-  position:relative;z-index:2;
-}
+.hero-inner{padding:80px 80px 100px;position:relative;z-index:2;max-width:700px;}
 .hero-eyebrow{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--dark-accent);margin-bottom:20px;display:block;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
-.hero-h1{font-family:var(--font-serif);font-size:clamp(2.4rem,5vw,4.2rem);font-weight:900;line-height:1.1;color:#fff;margin-bottom:24px;opacity:0;animation:fadeUp 0.7s 0.4s ease forwards;}
+.hero-h1{font-family:var(--font-serif);font-size:clamp(2.8rem,6vw,5rem);font-weight:900;line-height:1.05;color:#fff;margin-bottom:24px;opacity:0;animation:fadeUp 0.7s 0.4s ease forwards;}
 .hero-h1 em{color:var(--dark-accent);font-style:normal;}
-.hero-p{font-size:0.95rem;color:var(--dark-sub);line-height:1.75;font-weight:300;max-width:380px;opacity:0;animation:fadeUp 0.6s 0.6s ease forwards;}
-/* 4th badge */
-.badge{display:inline-flex;align-items:center;gap:12px;margin-top:36px;background:rgba(46,125,50,0.18);border:1px solid rgba(129,199,132,0.3);border-radius:12px;padding:16px 22px;opacity:0;animation:fadeUp 0.6s 0.8s ease forwards;}
-.badge-num{font-family:var(--font-serif);font-size:2.6rem;font-weight:900;color:var(--dark-accent);line-height:1;}
-.badge-text{}
-.badge-title{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--dark-accent);}
-.badge-desc{font-size:0.82rem;color:var(--dark-sub);margin-top:3px;line-height:1.4;}
+.hero-p{font-size:1rem;color:var(--dark-sub);line-height:1.7;font-weight:300;max-width:500px;margin-bottom:32px;opacity:0;animation:fadeUp 0.6s 0.6s ease forwards;}
+.hero-bullets{list-style:none;display:flex;flex-direction:column;gap:9px;opacity:0;animation:fadeUp 0.6s 0.8s ease forwards;}
+.hero-bullets li{font-family:var(--font-mono);font-size:0.75rem;color:rgba(255,255,255,0.42);letter-spacing:0.04em;transition:color 0.2s;cursor:default;}
+.hero-bullets li::before{content:'— ';color:var(--dark-accent);}
+.hero-bullets li:hover{color:rgba(255,255,255,0.85);}
 
-/* Spline right panel */
-.hero-right{
-  height:100vh;
-  position:relative;
-  z-index:2;
-  overflow:hidden;
-}
-/* Edge gradient masks — blends scene into hero bg + hides any Spline UI text at the borders */
-.hero-right::before,
-.hero-right::after{
-  content:'';
-  position:absolute;
-  z-index:5;
-  pointer-events:none;
-}
-/* Left edge: fade from dark hero color into the scene */
-.hero-right::before{
-  inset:0 auto 0 0;
-  width:120px;
-  background:linear-gradient(to right, var(--dark) 0%, transparent 100%);
-}
-/* Bottom edge: fade out bottom labels/watermarks */
-.hero-right::after{
-  inset:auto 0 0 0;
-  height:100px;
-  background:linear-gradient(to top, var(--dark) 0%, transparent 100%);
-}
-spline-viewer{
-  width:100%;
-  height:100%;
-  display:block;
-  opacity:0;
-  transition:opacity 0.9s ease;
-}
-spline-viewer.loaded{
-  opacity:1;
-}
-
-/* Loading overlay — sits on top, fades out when Spline is ready */
-.spline-overlay{
-  position:absolute;
-  inset:0;
-  background:var(--dark);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  gap:14px;
-  z-index:10;
-  pointer-events:none;
-  transition:opacity 0.9s ease;
-}
-.spline-overlay.hidden{
-  opacity:0;
-}
-.spline-loading-ring{
-  width:42px;height:42px;border-radius:50%;
-  border:2px solid rgba(129,199,132,0.15);
-  border-top-color:var(--dark-accent);
-  animation:spin 1s linear infinite;
-}
-.spline-loading-label{
-  font-family:var(--font-mono);
-  font-size:0.6rem;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,0.3);
-}
-
-/* ── CONTENT ── */
+/* ── PAGE ── */
 .page-wrap{max-width:860px;margin:0 auto;}
 .content-sec{padding:80px 48px;}
 .sec-label{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--primary);margin-bottom:12px;}
-.sec-h2{font-family:var(--font-serif);font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:700;color:var(--fg);line-height:1.2;margin-bottom:20px;}
+.sec-h2{font-family:var(--font-serif);font-size:clamp(1.6rem,3.5vw,2.3rem);font-weight:700;color:var(--fg);line-height:1.2;margin-bottom:18px;}
 .sec-h2 em{color:var(--primary);font-style:italic;}
-.prose{font-size:0.92rem;color:var(--sub);line-height:1.88;font-weight:400;max-width:600px;}
-.prose p{margin-bottom:15px;}
-.prose p:last-child{margin-bottom:0;}
+.prose{font-size:0.92rem;color:var(--sub);line-height:1.88;max-width:600px;}
 
-/* ROBOT MISSION BLOCK */
-.mission-block{background:var(--muted);border-radius:14px;padding:32px 36px;margin-top:32px;border-left:4px solid var(--primary);}
-.mission-label{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--primary);margin-bottom:10px;}
-.mission-text{font-size:0.92rem;color:var(--sub);line-height:1.75;}
+.content-bullets{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:8px;}
+.content-bullets li{font-size:0.88rem;color:var(--sub);padding-left:18px;position:relative;line-height:1.5;transition:color 0.2s,padding-left 0.22s;cursor:default;}
+.content-bullets li::before{content:'—';position:absolute;left:0;color:var(--primary);}
+.content-bullets li:hover{color:var(--fg);padding-left:24px;}
 
-/* ROLES — simple numbered list */
-.roles-list{margin-top:32px;display:flex;flex-direction:column;gap:0;}
-.role-row{display:flex;gap:24px;padding:22px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
-.role-row:last-child{border-bottom:none;}
-.role-n{font-family:var(--font-serif);font-size:1.5rem;font-weight:900;color:var(--accent);line-height:1;padding-top:3px;flex-shrink:0;width:28px;}
-.role-body{}
-.role-title{font-family:var(--font-serif);font-size:0.95rem;font-weight:700;color:var(--fg);margin-bottom:4px;}
-.role-desc{font-size:0.85rem;color:var(--sub);line-height:1.65;}
+/* PHOTO SLOT */
+.photo-slot{position:relative;overflow:hidden;border-radius:10px;background:var(--muted);border:1px solid var(--border);}
+.photo-slot img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease,filter 0.4s ease;filter:saturate(0.88);}
+.photo-slot:hover img{transform:scale(1.05);filter:saturate(1.1);}
+.photo-caption{position:absolute;bottom:0;left:0;right:0;padding:12px 16px;background:linear-gradient(to top,rgba(0,0,0,0.55),transparent);font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.85);opacity:0;transition:opacity 0.3s;}
+.photo-slot:hover .photo-caption{opacity:1;}
+/* placeholder when image is missing */
+.photo-ph{width:100%;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;}
+.photo-ph svg{width:28px;height:28px;stroke:var(--border);fill:none;stroke-width:1.5;}
+.photo-ph span{font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--border);text-align:center;}
 
-/* STORY — dark inverted card */
-.story-card{background:var(--dark);border-radius:16px;padding:42px 46px;position:relative;overflow:hidden;}
-.story-card::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;border-radius:50%;background:rgba(46,125,50,0.1);pointer-events:none;}
-.story-mono{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#81c784;margin-bottom:12px;}
-.story-h{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:15px;line-height:1.3;}
-.story-p{font-size:0.9rem;color:rgba(255,255,255,0.65);line-height:1.82;}
+.photo-full .photo-slot{height:340px;}
+.photo-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.photo-grid-wide{display:grid;grid-template-columns:2fr 1fr;gap:12px;}
+.photo-grid-2 .photo-slot,.photo-grid-wide .photo-slot{height:250px;}
+.mt{margin-top:28px;}
 
-/* CAPTAIN SPLIT */
-.captain-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;}
-.captain-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;}
-.captain-label{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--primary);margin-bottom:8px;}
-.captain-text{font-size:0.88rem;color:var(--sub);line-height:1.65;}
+/* PULL QUOTE */
+.pull-quote{padding:36px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:36px 0 0;}
+.pull-quote blockquote{font-family:var(--font-serif);font-size:clamp(1.1rem,2.4vw,1.55rem);font-style:italic;color:var(--fg);line-height:1.5;max-width:580px;}
+.pull-quote cite{display:block;margin-top:14px;font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--primary);font-style:normal;}
 
 /* TAGS */
-.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;}
-.tag{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.08em;padding:5px 12px;border-radius:100px;background:var(--muted);color:var(--dim);border:1px solid var(--border);}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.tag{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.08em;padding:5px 12px;border-radius:100px;background:var(--muted);color:var(--dim);border:1px solid var(--border);transition:background 0.2s,border-color 0.2s,color 0.2s,transform 0.2s;cursor:default;}
+.tag:hover{background:var(--primary);color:#fff;border-color:var(--primary);transform:translateY(-2px);}
 
 .hr-fancy{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 48px;}
 
@@ -190,12 +107,12 @@ spline-viewer.loaded{
 .btn-back{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:13px 30px;border-radius:4px;border:2px solid var(--border);color:var(--fg);transition:all 0.22s;}
 .btn-back:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);}
 .btn-back svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;transition:transform 0.2s;}
-.btn-back:hover svg{transform:translateX(-3px);}
+.btn-back:hover svg{transform:translateX(-4px);}
 
 /* REVEAL */
 .reveal{opacity:0;transform:translateY(22px);transition:opacity 0.62s ease,transform 0.62s ease;}
 .reveal.vis{opacity:1;transform:none;}
-.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}
+.d1{transition-delay:.12s;}.d2{transition-delay:.24s;}.d3{transition-delay:.36s;}
 
 /* FOOTER */
 footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;max-width:860px;margin:0 auto;}
@@ -203,17 +120,14 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 .fc{font-family:var(--font-mono);font-size:0.6rem;color:var(--sub);}
 
 @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
-@keyframes spin{to{transform:rotate(360deg);}}
 
-@media(max-width:860px){
-  #hero{grid-template-columns:1fr;grid-template-rows:auto 50vh;}
-  .hero-left{padding:100px 24px 40px;}
-  .hero-right{height:50vh;}
+@media(max-width:768px){
+  #hero{padding-top:70px;}
+  .hero-inner{padding:60px 24px 80px;}
   nav{padding:14px 20px;}
-  .content-sec{padding:60px 20px;}
+  .content-sec{padding:56px 20px;}
   .hr-fancy{margin:0 20px;}
-  .captain-split{grid-template-columns:1fr;}
-  .story-card{padding:28px 24px;}
+  .photo-grid-2,.photo-grid-wide{grid-template-columns:1fr;}
   .cta{padding:48px 20px;}
   footer{flex-direction:column;gap:10px;text-align:center;padding:24px 20px;}
 }
@@ -230,130 +144,154 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
   </a>
 </nav>
 
-<!-- HERO: dark + Spline -->
+<!-- HERO -->
 <section id="hero">
-  <div id="spotlight"></div>
-
-  <div class="hero-left">
-    <span class="hero-eyebrow">Robotics · Beta Club &amp; FTC</span>
+  <svg id="grid-pattern" aria-hidden="true"></svg>
+  <div class="hero-inner">
+    <span class="hero-eyebrow">Robotics · Cardinal Newman High School</span>
     <h1 class="hero-h1">Beta Club.<br>Then <em>FTC.</em></h1>
-    <p class="hero-p">A beach-cleaning robot, a 4th place finish, and then — same day I got the award — starting a whole new program from scratch.</p>
-    <div class="badge">
-      <div class="badge-num">4th</div>
-      <div class="badge-text">
-        <div class="badge-title">Beta Club Robotics</div>
-        <div class="badge-desc">First placement in 6 years for Cardinal Newman.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="hero-right">
-    <!-- Loading overlay — fades out once Spline scene is ready -->
-    <div class="spline-overlay" id="splineOverlay">
-      <div class="spline-loading-ring"></div>
-      <div class="spline-loading-label">Loading scene…</div>
-    </div>
-
-    <!--
-      ┌─ SWAP YOUR 3D MODEL HERE ───────────────────────────────────┐
-      │  1. Browse free scenes at: spline.design/community          │
-      │  2. Or publish your own at spline.design, then copy the URL │
-      │  3. Replace the `url` attribute value below                 │
-      └─────────────────────────────────────────────────────────────┘
-    -->
-    <spline-viewer
-      id="splineViewer"
-      url="https://prod.spline.design/Hy58OeTxgpLtQNfV/scene.splinecode"
-    ></spline-viewer>
+    <p class="hero-p">Placed 4th at Beta Club Robotics — first time Cardinal Newman had placed in six years. Heard about FTC while standing in line for the award. Started building the program that same week.</p>
+    <ul class="hero-bullets">
+      <li>Beach cleanup robot — sensors, gripper arm, autonomous nav</li>
+      <li>FTC: Java · Fusion 360 · full mechanical design</li>
+      <li>~6,000 FTC teams compete worldwide</li>
+      <li>Columbia, SC · Class of 2027</li>
+    </ul>
   </div>
 </section>
 
-<!-- CONTENT -->
 <div class="page-wrap">
 
+  <!-- SECTION 1: Beta Club robot — new info: what the robot actually did technically -->
   <section class="content-sec reveal">
-    <p class="sec-label">The Robot</p>
-    <h2 class="sec-h2">Designed to clean<br><em>a beach.</em></h2>
+    <p class="sec-label">Beta Club Robotics</p>
+    <h2 class="sec-h2">The beach cleanup robot</h2>
     <div class="prose">
-      <p>Our robot was designed to locate, pick up, and deliver trash to trash bins — specifically on the beach. The competition scenario was environmental cleanup, and we built something that could actually handle that task autonomously.</p>
-      <p>The design had to solve a real problem: find trash, grab it, move it somewhere. That meant working through sensors, grippers, and navigation. A lot of iteration before we got to something that worked under competition pressure.</p>
+      The competition scenario simulated environmental cleanup — a robot had to find trash on a beach-like surface, pick it up, and drop it in a bin. Scored on accuracy and speed across multiple autonomous runs. We went through several gripper designs before finding one that held up.
     </div>
-    <div class="mission-block">
-      <div class="mission-label">Mission Objective</div>
-      <div class="mission-text">Locate, pick up, and deliver trash to designated bins — simulating autonomous beach cleanup. Scored on accuracy, speed, and reliability across multiple runs.</div>
+    <ul class="content-bullets">
+      <li>IR and proximity sensors for object detection</li>
+      <li>Custom gripper arm — multiple design iterations</li>
+      <li>Fully autonomous during scored runs</li>
+      <li>Competed against regional teams</li>
+    </ul>
+
+    <!-- PHOTO: award moment with Beta Club team -->
+    <div class="photo-full mt reveal d1">
+      <div class="photo-slot">
+        <!--
+          DROP YOUR PHOTO HERE
+          Replace src with the real path, e.g. src="images/betaclub-award.jpg"
+          Recommended: landscape, at least 1200px wide
+        -->
+        <img src="images/betaclub-award.jpg" alt="Beta Club team — 4th place award"
+          onerror="this.style.display='none';this.parentElement.querySelector('.photo-ph').style.display='flex'">
+        <div class="photo-ph" style="display:none">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>betaclub-award.jpg<br>Team with 4th place award</span>
+        </div>
+        <div class="photo-caption">Beta Club Robotics — 4th place, Cardinal Newman</div>
+      </div>
+    </div>
+
+    <div class="pull-quote reveal d2">
+      <blockquote>"First placement Cardinal Newman had seen in six years. We didn't expect to place at all."</blockquote>
+      <cite>— Parker Branham</cite>
     </div>
   </section>
 
   <hr class="hr-fancy">
 
+  <!-- SECTION 2: FTC — new info: scale of FTC, what building from scratch actually meant -->
   <section class="content-sec reveal">
-    <p class="sec-label">My Role</p>
-    <h2 class="sec-h2">Keeping everyone<br><em>on the same page.</em></h2>
+    <p class="sec-label">FTC Robotics</p>
+    <h2 class="sec-h2">Building a program<br><em>from scratch</em></h2>
     <div class="prose">
-      <p>My job was coordination. When you have a group of people all with different ideas about how to build something, someone has to say "okay, here's what we're doing." That was me.</p>
+      FTC (FIRST Tech Challenge) is a global competition — full robot design, Java programming, and an engineering notebook judged alongside the robot. I started the Cardinal Newman team with no budget, no prior program, and no coach. Recruited teammates, found a faculty advisor, and figured out the rest as we went.
     </div>
-    <div class="roles-list">
-      <div class="role-row">
-        <div class="role-n">01</div>
-        <div class="role-body">
-          <div class="role-title">Ran Every Meeting</div>
-          <div class="role-desc">Coordinated every team meeting, set the agenda, and kept things moving instead of everyone just talking past each other.</div>
+    <ul class="content-bullets">
+      <li>Wrote Java for both autonomous and driver-controlled modes</li>
+      <li>CAD'd mechanical components in Fusion 360</li>
+      <li>Handled team logistics — scheduling, meetings, parts sourcing</li>
+      <li>Still active — next competition coming up</li>
+    </ul>
+
+    <!-- PHOTOS: robot build + CAD diagram -->
+    <div class="photo-grid-wide mt reveal d1">
+      <div class="photo-slot">
+        <!--
+          DROP YOUR PHOTO HERE
+          src="images/ftc-robot.jpg" — photo of the actual robot build
+        -->
+        <img src="images/ftc-robot.jpg" alt="FTC robot"
+          onerror="this.style.display='none';this.parentElement.querySelector('.photo-ph').style.display='flex'">
+        <div class="photo-ph" style="display:none">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>ftc-robot.jpg<br>Robot build photo</span>
         </div>
+        <div class="photo-caption">FTC robot — Cardinal Newman</div>
       </div>
-      <div class="role-row">
-        <div class="role-n">02</div>
-        <div class="role-body">
-          <div class="role-title">Unified the Direction</div>
-          <div class="role-desc">Made sure every team member agreed on what we were building and what the robot was doing. No conflicting builds, no wasted work.</div>
+      <div class="photo-slot">
+        <!--
+          DROP YOUR PHOTO HERE
+          src="images/ftc-cad.jpg" — screenshot of Fusion 360 / CAD diagram
+        -->
+        <img src="images/ftc-cad.jpg" alt="CAD in Fusion 360"
+          onerror="this.style.display='none';this.parentElement.querySelector('.photo-ph').style.display='flex'">
+        <div class="photo-ph" style="display:none">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>ftc-cad.jpg<br>Fusion 360 CAD design</span>
         </div>
+        <div class="photo-caption">Fusion 360 — mechanical design</div>
       </div>
-      <div class="role-row">
-        <div class="role-n">03</div>
-        <div class="role-body">
-          <div class="role-title">Competed Under Pressure</div>
-          <div class="role-desc">Showed up on competition day and applied everything the team built under real conditions. 4th place — first placement in 6 years.</div>
+    </div>
+
+    <!-- Second row of photos: competition / team -->
+    <div class="photo-grid-2 mt reveal d2">
+      <div class="photo-slot">
+        <!--
+          DROP YOUR PHOTO HERE
+          src="images/ftc-competition.jpg" — competition day photo
+        -->
+        <img src="images/ftc-competition.jpg" alt="Competition day"
+          onerror="this.style.display='none';this.parentElement.querySelector('.photo-ph').style.display='flex'">
+        <div class="photo-ph" style="display:none">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>ftc-competition.jpg<br>Competition day</span>
         </div>
+        <div class="photo-caption">Competition day</div>
       </div>
+      <div class="photo-slot">
+        <!--
+          DROP YOUR PHOTO HERE
+          src="images/ftc-team.jpg" — team photo
+        -->
+        <img src="images/ftc-team.jpg" alt="FTC team"
+          onerror="this.style.display='none';this.parentElement.querySelector('.photo-ph').style.display='flex'">
+        <div class="photo-ph" style="display:none">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>ftc-team.jpg<br>The team</span>
+        </div>
+        <div class="photo-caption">Cardinal Newman FTC</div>
+      </div>
+    </div>
+
+    <div class="pull-quote reveal d3">
+      <blockquote>"The technical problems are the fun part. Getting everyone to show up consistently — that's the actual job."</blockquote>
+      <cite>— On being Team Captain</cite>
     </div>
   </section>
 
-  <hr class="hr-fancy">
-
-  <section class="content-sec">
-    <div class="story-card reveal">
-      <p class="story-mono">How the FTC Program Started</p>
-      <h3 class="story-h">I was standing in line<br>to get my award.</h3>
-      <p class="story-p">I got the information for FTC while standing in line to receive my Beta Club award. A peer started talking to me and just laid out how their club worked, how FTC functioned, all of it. By the time I walked away with that award I already had a plan. I got back home and immediately started working on building the program at Cardinal Newman. That's how fast it happened. I'm the Team Captain now and we're looking forward to competing in the next event.</p>
-    </div>
-  </section>
-
-  <hr class="hr-fancy">
-
-  <section class="content-sec reveal">
-    <p class="sec-label">Team Captain</p>
-    <h2 class="sec-h2">The hardest part isn't<br><em>the building.</em></h2>
-    <div class="prose">
-      <p>The actual building is the fun part. It's the people side that takes work.</p>
-    </div>
-    <div class="captain-split">
-      <div class="captain-card d1">
-        <div class="captain-label">The Hard Part</div>
-        <div class="captain-text">Staying consistent and keeping communication with everyone. You can't build a robot with half a team showing up.</div>
-      </div>
-      <div class="captain-card d2">
-        <div class="captain-label">When It Works</div>
-        <div class="captain-text">When all hands are on deck it's really nice. The technical problems are the fun part — it's the people management that takes effort.</div>
-      </div>
-    </div>
-  </section>
-
+  <!-- TAGS -->
   <div class="content-sec" style="padding-top:0;">
     <div class="tags reveal">
       <span class="tag">FTC Robotics</span>
       <span class="tag">Beta Club</span>
+      <span class="tag">Java</span>
+      <span class="tag">Fusion 360</span>
+      <span class="tag">CAD</span>
+      <span class="tag">Autonomous Systems</span>
       <span class="tag">Team Captain</span>
-      <span class="tag">Mechatronics</span>
-      <span class="tag">Competition</span>
       <span class="tag">Cardinal Newman</span>
     </div>
   </div>
@@ -373,49 +311,55 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 </footer>
 
 <script>
-/* Spline load — fade in the viewer, fade out the overlay */
+/* Animated Grid Pattern */
 (function(){
-  const viewer = document.getElementById('splineViewer');
-  const overlay = document.getElementById('splineOverlay');
-
-  function onLoaded(){
-    viewer.classList.add('loaded');
-    overlay.classList.add('hidden');
-    // remove overlay from DOM after transition so it can't block pointer events
-    overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
+  const svg = document.getElementById('grid-pattern');
+  const CELL = 40, MAX_OPACITY = 0.14, DURATION = 3200, ACTIVE_COUNT = 28;
+  const ns = 'http://www.w3.org/2000/svg';
+  const defs = document.createElementNS(ns,'defs');
+  const pat = document.createElementNS(ns,'pattern');
+  pat.setAttribute('id','hgp');
+  pat.setAttribute('width',CELL); pat.setAttribute('height',CELL);
+  pat.setAttribute('patternUnits','userSpaceOnUse');
+  const gp = document.createElementNS(ns,'path');
+  gp.setAttribute('d',`M ${CELL} 0 L 0 0 0 ${CELL}`);
+  gp.setAttribute('fill','none');
+  gp.setAttribute('stroke','rgba(165,214,167,0.18)');
+  gp.setAttribute('stroke-width','1');
+  pat.appendChild(gp); defs.appendChild(pat); svg.appendChild(defs);
+  const bg = document.createElementNS(ns,'rect');
+  bg.setAttribute('width','100%'); bg.setAttribute('height','100%');
+  bg.setAttribute('fill','url(#hgp)'); svg.appendChild(bg);
+  const g = document.createElementNS(ns,'g'); svg.appendChild(g);
+  function cols(){ return Math.ceil((svg.clientWidth||innerWidth)/CELL)+1; }
+  function rows(){ return Math.ceil((svg.clientHeight||innerHeight)/CELL)+1; }
+  function go(r){
+    r.setAttribute('x', Math.floor(Math.random()*cols())*CELL+1);
+    r.setAttribute('y', Math.floor(Math.random()*rows())*CELL+1);
+    r.setAttribute('width',CELL-1); r.setAttribute('height',CELL-1);
+    r.setAttribute('fill','#a5d6a7'); r.style.opacity='0';
+    const h=DURATION/2;
+    setTimeout(()=>{
+      r.style.transition=`opacity ${h}ms ease`; r.style.opacity=MAX_OPACITY;
+      setTimeout(()=>{ r.style.opacity='0'; setTimeout(()=>go(r),h+80); },h);
+    }, Math.random()*DURATION);
   }
-
-  // spline-viewer fires a 'load' event when the scene is ready
-  viewer.addEventListener('load', onLoaded);
-
-  // Fallback: if load event never fires (some browser/ad-blocker combos),
-  // reveal after 6 seconds so the page doesn't stay blank
-  setTimeout(() => {
-    if (!viewer.classList.contains('loaded')) onLoaded();
-  }, 6000);
+  for(let i=0;i<ACTIVE_COUNT;i++){
+    const r=document.createElementNS(ns,'rect'); r.style.opacity='0'; g.appendChild(r);
+    setTimeout(()=>go(r), i*(DURATION/ACTIVE_COUNT));
+  }
 })();
 
 /* Progress */
 window.addEventListener('scroll',()=>{
-  const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);
+  const p=scrollY/(document.documentElement.scrollHeight-innerHeight);
   document.getElementById('prog').style.width=(p*100)+'%';
 },{passive:true});
 
-/* Spotlight follows mouse in hero */
-(function(){
-  const hero=document.getElementById('hero');
-  const spot=document.getElementById('spotlight');
-  hero.addEventListener('mousemove',e=>{
-    const r=hero.getBoundingClientRect();
-    spot.style.left=(e.clientX-r.left)+'px';
-    spot.style.top=(e.clientY-r.top)+'px';
-  });
-})();
-
-/* Reveal */
-const obs=new IntersectionObserver(e=>{
-  e.forEach(en=>{if(en.isIntersecting){en.target.classList.add('vis');obs.unobserve(en.target);}});
-},{threshold:0.1});
+/* Reveal on scroll */
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);} });
+},{threshold:0.08});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
 </body>
