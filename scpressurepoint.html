@@ -22,15 +22,14 @@ html::-webkit-scrollbar{display:none;}
 body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4;}
 
-#prog{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--primary),#81c784);z-index:10000;box-shadow:0 0 8px rgba(46,125,50,0.5);}
-
+/* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(248,245,240,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
 .nav-logo{font-family:var(--font-serif);font-weight:700;font-size:1.1rem;color:var(--primary);text-decoration:none;}
 .nav-back{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--sub);text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
 .nav-back:hover{color:var(--primary);}
 .nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
 
-/* HERO — full height, wave at bottom, left-aligned big text */
+/* HERO */
 #hero{
   position:relative;min-height:100vh;
   display:flex;flex-direction:column;
@@ -43,16 +42,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:f
 .hero-tag{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--primary);margin-bottom:18px;display:block;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
 .hero-h1{font-family:var(--font-serif);font-size:clamp(3rem,8vw,7rem);font-weight:900;line-height:0.97;color:var(--fg);letter-spacing:-0.03em;opacity:0;animation:fadeUp 0.8s 0.35s ease forwards;}
 .hero-h1 em{color:var(--primary);font-style:normal;display:block;}
-.hero-note{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.06em;color:var(--sub);margin-top:22px;background:var(--muted);border:1px solid var(--border);border-radius:6px;padding:8px 14px;display:inline-block;opacity:0;animation:fadeUp 0.6s 0.65s ease forwards;}
+.hero-sub{font-size:1rem;color:var(--sub);font-weight:300;line-height:1.65;max-width:480px;margin-top:22px;opacity:0;animation:fadeUp 0.6s 0.65s ease forwards;}
 .hero-btns{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:fadeUp 0.6s 0.85s ease forwards;}
 .btn-go{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:12px 28px;border-radius:4px;background:var(--primary);color:#fff;transition:all 0.22s;}
 .btn-go:hover{background:var(--dim);transform:translateY(-2px);}
 .btn-go svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;transition:transform 0.2s;}
 .btn-go:hover svg{transform:translateX(3px);}
 
+/* STATS — 3 across */
+.stats-strip{background:var(--muted);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.stats-inner{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);}
+.stat-cell{padding:32px 40px;border-right:1px solid var(--border);}
+.stat-cell:last-child{border-right:none;}
+.stat-n{font-family:var(--font-serif);font-size:2.4rem;font-weight:900;color:var(--primary);line-height:1;}
+.stat-lbl{font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--sub);margin-top:5px;}
+
 /* CONTENT */
 .page-wrap{max-width:860px;margin:0 auto;}
-.content-sec{padding:76px 48px;}
+.content-sec{padding:72px 48px;}
 .sec-label{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--primary);margin-bottom:12px;}
 .sec-h2{font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:var(--fg);line-height:1.15;margin-bottom:20px;}
 .sec-h2 em{color:var(--primary);font-style:italic;}
@@ -60,23 +67,31 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:f
 .prose p{margin-bottom:15px;}
 .prose p:last-child{margin-bottom:0;}
 
-/* HOW IT WORKS — numbered */
+/* HOW IT WORKS */
 .steps{margin-top:32px;display:flex;flex-direction:column;gap:0;}
 .step{display:flex;gap:24px;padding:22px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
 .step:last-child{border-bottom:none;}
-.step-n{font-family:var(--font-serif);font-size:1.5rem;font-weight:900;color:var(--secondary);line-height:1;padding-top:3px;flex-shrink:0;width:28px;border:1.5px solid var(--border);border-radius:6px;height:34px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-family:var(--font-mono);letter-spacing:0.06em;color:var(--primary);}
-.step-body{}
+.step-n{font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.06em;color:var(--primary);flex-shrink:0;width:28px;height:34px;border:1.5px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;padding-top:2px;}
 .step-title{font-family:var(--font-serif);font-size:0.95rem;font-weight:700;color:var(--fg);margin-bottom:4px;}
 .step-desc{font-size:0.84rem;color:var(--sub);line-height:1.65;}
+
+/* SITE SCOPE GRID */
+.scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:36px;}
+.scope-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:22px 20px;transition:border-color 0.2s,transform 0.2s;}
+.scope-card:hover{border-color:var(--primary);transform:translateY(-3px);}
+.scope-icon{width:34px;height:34px;background:var(--secondary);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.scope-icon svg{width:16px;height:16px;stroke:var(--primary);fill:none;stroke-width:1.8;}
+.scope-title{font-family:var(--font-serif);font-size:0.9rem;font-weight:700;color:var(--fg);margin-bottom:5px;}
+.scope-desc{font-size:0.82rem;color:var(--sub);line-height:1.6;}
 
 /* PARTNER STORY — dark card */
 .story-card{background:var(--fg);border-radius:16px;padding:42px 46px;position:relative;overflow:hidden;}
 .story-card::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;border-radius:50%;background:rgba(46,125,50,0.1);}
 .story-mono{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#81c784;margin-bottom:12px;}
 .story-h{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:14px;line-height:1.3;}
-.story-p{font-size:0.9rem;color:rgba(255,255,255,0.62);line-height:1.82;}
+.story-p{font-size:0.9rem;color:rgba(255,255,255,0.65);line-height:1.82;}
 
-/* WHY DIY */
+/* WHY BUILD IT */
 .why-row{display:flex;gap:16px;margin-top:32px;flex-wrap:wrap;}
 .why-card{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px 20px;transition:border-color 0.2s;}
 .why-card:hover{border-color:var(--primary);}
@@ -95,8 +110,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:f
 .btn-back:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);}
 .btn-back svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;transition:transform 0.2s;}
 .btn-back:hover svg{transform:translateX(-3px);}
+
 .reveal{opacity:0;transform:translateY(22px);transition:opacity 0.62s ease,transform 0.62s ease;}
 .reveal.vis{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+
 footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;max-width:860px;margin:0 auto;}
 .fn{font-family:var(--font-serif);font-size:0.88rem;font-weight:700;color:var(--primary);}
 .fc{font-family:var(--font-mono);font-size:0.6rem;color:var(--sub);}
@@ -104,15 +122,22 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
 
 @media(max-width:680px){
-  nav{padding:14px 20px;}#hero{padding:100px 24px 100px;align-items:flex-start;}
-  .content-sec{padding:60px 20px;}.hr-fancy{margin:0 20px;}
-  .story-card{padding:28px 22px;}.cta{padding:48px 20px;flex-direction:column;align-items:center;}
+  nav{padding:14px 20px;}
+  #hero{padding:100px 24px 100px;align-items:flex-start;}
+  .content-sec{padding:52px 20px;}
+  .hr-fancy{margin:0 20px;}
+  .stats-inner{grid-template-columns:1fr;}
+  .stat-cell{border-right:none;border-bottom:1px solid var(--border);}
+  .stat-cell:last-child{border-bottom:none;}
+  .scope-grid{grid-template-columns:1fr;}
+  .story-card{padding:28px 22px;}
+  .cta{padding:48px 20px;flex-direction:column;align-items:center;}
   footer{flex-direction:column;gap:10px;text-align:center;padding:24px 20px;}
 }
 </style>
 </head>
 <body>
-<div id="prog"></div>
+
 <nav>
   <a href="index.html" class="nav-logo">PB</a>
   <a href="index.html" class="nav-back">
@@ -124,9 +149,9 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 <section id="hero">
   <canvas id="wave-canvas"></canvas>
   <div class="hero-inner">
-    <span class="hero-tag">Web &amp; Business · Self-Employed</span>
+    <span class="hero-tag">Business &amp; Web · Self-Employed · Columbia, SC</span>
     <h1 class="hero-h1">SC<br><em>Pressure</em><br>Point</h1>
-    <span class="hero-note">⚠ Unlicensed · Before &amp; after photos on request</span>
+    <p class="hero-sub">I was 14 and couldn't legally get a job. So I made my own. Pressure washing and home services — real clients, real money, still running.</p>
     <div class="hero-btns">
       <a href="https://scpressurepoint.github.io" target="_blank" class="btn-go">
         See the site
@@ -136,50 +161,100 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
   </div>
 </section>
 
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-cell reveal d1">
+      <div class="stat-n">2+</div>
+      <div class="stat-lbl">Years Running</div>
+    </div>
+    <div class="stat-cell reveal d2">
+      <div class="stat-n">14</div>
+      <div class="stat-lbl">Age When Started</div>
+    </div>
+    <div class="stat-cell reveal d3">
+      <div class="stat-n">$0</div>
+      <div class="stat-lbl">Cost to Host the Site</div>
+    </div>
+  </div>
+</div>
+
 <div class="page-wrap">
 
   <section class="content-sec reveal">
-    <p class="sec-label">What it is</p>
-    <h2 class="sec-h2">It's my idea.<br><em>On my terms.</em></h2>
+    <p class="sec-label">The story</p>
+    <h2 class="sec-h2">Couldn't get hired.<br><em>Built my own job instead.</em></h2>
     <div class="prose">
-      <p>I started doing pressure washing and odd jobs at 14. It's not a fully licensed business — this is here for whenever I decide to take it a step further. Right now I mainly use the site to show clients before and after pictures and make sure they know I'm unlicensed. Honest and upfront.</p>
-      <p>The site gives me something to point people to so they can see the work. It's a portfolio for the pressure washing the same way this site is a portfolio for the tech stuff.</p>
+      <p>At 14 I was legally too young to be employed anywhere. So instead of waiting around, I started doing pressure washing and home services on my own. Handled everything — finding customers, giving quotes, scheduling, showing up, doing the work, collecting payment.</p>
+      <p>It's been running for two years. The business isn't fully licensed yet, but it's real — real clients, real before-and-after results, real reviews from real people. I built the site to give people something concrete to look at before they decide to hire me.</p>
     </div>
   </section>
 
   <hr class="hr-fancy">
 
   <section class="content-sec reveal">
-    <p class="sec-label">How it works</p>
+    <p class="sec-label">How a job works</p>
     <h2 class="sec-h2">Lead comes in.<br><em>Here's what happens.</em></h2>
     <div class="steps">
       <div class="step">
         <div class="step-n">01</div>
         <div class="step-body">
-          <div class="step-title">Lead comes in</div>
-          <div class="step-desc">Someone reaches out — usually by word of mouth or through the site.</div>
+          <div class="step-title">Someone reaches out</div>
+          <div class="step-desc">Usually word of mouth or through the site. Text is the fastest — I reply same day.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-n">02</div>
         <div class="step-body">
           <div class="step-title">Aerial quote from Google Earth</div>
-          <div class="step-desc">I pull up the property on Google Earth, get a rough sense of the square footage and what needs doing, and give them a ballpark number. I make it clear nothing's final until I see it in person.</div>
+          <div class="step-desc">Pull up the property, estimate the square footage, and give a ballpark number. Clear that it's not final until I see it in person.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-n">03</div>
         <div class="step-body">
           <div class="step-title">In-person assessment</div>
-          <div class="step-desc">Show up, look at the actual job, lock in the real price, and schedule it.</div>
+          <div class="step-desc">Show up, look at the actual job, lock in the real price, and schedule it. No surprises on either side.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-n">04</div>
         <div class="step-body">
           <div class="step-title">Do the job</div>
-          <div class="step-desc">Show up, do the work, document before and afters. High standard regardless of the size of the job.</div>
+          <div class="step-desc">Show up on time, do the work to a high standard, document before and afters. Same level of care regardless of how big or small the job is.</div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="hr-fancy">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">What was built</p>
+    <h2 class="sec-h2">A real business site,<br><em>not a landing page.</em></h2>
+    <div class="prose">
+      <p>The site does more than just show people I exist. It gives them everything they need to decide whether to hire me — pricing, services, real job photos, answers to the questions they'd ask anyway.</p>
+    </div>
+    <div class="scope-grid">
+      <div class="scope-card reveal d1">
+        <div class="scope-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <div class="scope-title">Full services page</div>
+        <div class="scope-desc">Every service listed with a clear description — driveways, sidewalks, patios, brick, entryways. No guessing what I do or don't cover.</div>
+      </div>
+      <div class="scope-card reveal d2">
+        <div class="scope-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div class="scope-title">Before and after gallery</div>
+        <div class="scope-desc">Real photos from real jobs. Concrete driveways, sidewalks, steps — proof of what the work actually looks like when it's done.</div>
+      </div>
+      <div class="scope-card reveal d3">
+        <div class="scope-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="scope-title">Transparent pricing</div>
+        <div class="scope-desc">Per-square-foot rates listed upfront — $0.15 to $0.30 depending on the job. People know what to expect before they ever contact me.</div>
+      </div>
+      <div class="scope-card reveal d4">
+        <div class="scope-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="scope-title">Contact form with photo upload</div>
+        <div class="scope-desc">Clients can submit photos of the job site before I even show up. Speeds up quoting and means fewer back-and-forth texts.</div>
       </div>
     </div>
   </section>
@@ -188,40 +263,42 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 
   <section class="content-sec">
     <div class="story-card reveal">
-      <p class="story-mono">A Job That Stands Out</p>
+      <p class="story-mono">A Lesson Learned</p>
       <h3 class="story-h">I worked with a partner once.<br>Never again.</h3>
-      <p class="story-p">I did a job with a friend when we were partners under a different name. After the job he wanted more money than he worked for. That was bad enough on its own — but what made it worse was that after that job we stopped working together entirely, because I couldn't deal with that. I learned fast that when it comes to work and money, you find out who people really are pretty quickly. I've operated on my own since. I know what I did, I know what I earned, and I know what I owe myself.</p>
+      <p class="story-p">Early on I did a job with a friend under a different name. After the job he wanted more money than he worked for. That was bad enough — but what made it worse was it ended the working relationship entirely, because that's not something I could just let go. I learned fast that when money and work get mixed together, you find out who people really are quickly. I've operated solo since. I know what I did, I know what I earned, and I know what I owe myself.</p>
     </div>
   </section>
 
   <hr class="hr-fancy">
 
   <section class="content-sec reveal">
-    <p class="sec-label">Why build it yourself</p>
+    <p class="sec-label">Why build the site yourself</p>
     <h2 class="sec-h2">Nothing holding<br><em>me back.</em></h2>
-    <div class="prose">
-      <p>Why not just use Squarespace?</p>
-    </div>
     <div class="why-row">
       <div class="why-card">
         <div class="why-label">Cost</div>
-        <div class="why-text">It was free to make it myself. No monthly subscription for a pressure washing side hustle.</div>
+        <div class="why-text">GitHub Pages is free. No monthly subscription eating into what I make from a pressure washing side business.</div>
       </div>
       <div class="why-card">
-        <div class="why-label">Interest</div>
-        <div class="why-text">I was already into web development. It was a chance to build something real and actually use what I was learning.</div>
+        <div class="why-label">Proof of work</div>
+        <div class="why-text">Building the site myself means it shows up in two places on my portfolio — once as a business and once as a client project I built and deployed.</div>
       </div>
       <div class="why-card">
         <div class="why-label">Control</div>
-        <div class="why-text">I didn't have anything holding me back from making it exactly how I had it in my head. No limits from a template or a drag-and-drop editor.</div>
+        <div class="why-text">No template limitations. Transparent pricing display, custom contact form with photo upload, before-and-after layout — none of that fits neatly into Squarespace.</div>
       </div>
     </div>
   </section>
 
   <section class="content-sec" style="padding-top:0;">
     <div class="tags reveal">
-      <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
-      <span class="tag">GitHub Pages</span><span class="tag">Self-Employed</span><span class="tag">Columbia SC</span>
+      <span class="tag">HTML</span>
+      <span class="tag">CSS</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag">GitHub Pages</span>
+      <span class="tag">Self-Employed</span>
+      <span class="tag">Client Management</span>
+      <span class="tag">Columbia SC</span>
     </div>
   </section>
 
@@ -244,10 +321,6 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 </footer>
 
 <script>
-window.addEventListener('scroll',()=>{
-  const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);
-  document.getElementById('prog').style.width=(p*100)+'%';
-},{passive:true});
 const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){en.target.classList.add('vis');obs.unobserve(en.target);}});},{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
@@ -261,17 +334,14 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
   function draw(){
     ctx.clearRect(0,0,c.width,c.height);
     const w=c.width,h=c.height;
-    // Wave 1 — lightest
     ctx.beginPath();ctx.moveTo(0,h*.45);
     for(let x=0;x<=w;x+=3)ctx.lineTo(x,h*.45+Math.sin((x/w)*4*Math.PI+t)*h*.15);
     ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();
     ctx.fillStyle='rgba(200,230,201,0.4)';ctx.fill();
-    // Wave 2
     ctx.beginPath();ctx.moveTo(0,h*.6);
     for(let x=0;x<=w;x+=3)ctx.lineTo(x,h*.6+Math.sin((x/w)*3.5*Math.PI+t*1.2+1)*h*.12);
     ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();
     ctx.fillStyle='rgba(129,199,132,0.28)';ctx.fill();
-    // Wave 3 — darkest
     ctx.beginPath();ctx.moveTo(0,h*.75);
     for(let x=0;x<=w;x+=3)ctx.lineTo(x,h*.75+Math.sin((x/w)*5*Math.PI+t*.9+2)*h*.09);
     ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();
