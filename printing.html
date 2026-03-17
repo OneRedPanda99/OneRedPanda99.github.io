@@ -22,15 +22,14 @@ html::-webkit-scrollbar{display:none;}
 body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4;}
 
-#prog{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--primary),#81c784);z-index:10000;box-shadow:0 0 8px rgba(46,125,50,0.5);}
-
+/* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(248,245,240,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
 .nav-logo{font-family:var(--font-serif);font-weight:700;font-size:1.1rem;color:var(--primary);text-decoration:none;}
 .nav-back{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--sub);text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
 .nav-back:hover{color:var(--primary);}
 .nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
 
-/* HERO — big editorial, canvas behind */
+/* HERO */
 #hero{
   position:relative;min-height:100vh;
   display:flex;flex-direction:column;
@@ -46,16 +45,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:f
 .hero-line{width:60px;height:3px;background:var(--primary);margin:28px 0;opacity:0;animation:fadeUp 0.5s 0.7s ease forwards;}
 .hero-p{font-size:1rem;color:var(--sub);line-height:1.7;font-weight:300;max-width:420px;opacity:0;animation:fadeUp 0.6s 0.85s ease forwards;}
 
-/* MARQUEE strip between hero and content */
-.marquee-strip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--muted);padding:16px 0;overflow:hidden;position:relative;z-index:3;}
-.marquee-track{display:flex;white-space:nowrap;animation:scroll 16s linear infinite;}
-.marquee-item{display:inline-flex;align-items:center;gap:10px;padding:0 28px;font-family:var(--font-mono);font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--sub);}
-.marquee-item::before{content:'◆';color:var(--primary);font-size:0.4rem;}
-@keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-
 /* CONTENT */
 .page-wrap{max-width:860px;margin:0 auto;}
-.content-sec{padding:76px 48px;}
+.content-sec{padding:72px 48px;}
 .sec-label{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--primary);margin-bottom:12px;}
 .sec-h2{font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:var(--fg);line-height:1.15;margin-bottom:20px;}
 .sec-h2 em{color:var(--primary);font-style:italic;}
@@ -63,40 +55,47 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:f
 .prose p{margin-bottom:15px;}
 .prose p:last-child{margin-bottom:0;}
 
-/* PRINT GRID — what was actually made */
-.prints-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:32px;}
-.print-tile{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 12px;text-align:center;transition:border-color 0.2s,transform 0.2s,background 0.2s;cursor:default;}
-.print-tile:hover{border-color:var(--primary);background:var(--secondary);transform:translateY(-4px);}
-.print-icon{font-size:1.5rem;display:block;margin-bottom:8px;}
-.print-label{font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--sub);}
+/* WHAT I'VE MADE — 2 column grid with left accent */
+.builds-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:36px;}
+.build-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px 22px;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.22s,box-shadow 0.2s;}
+.build-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary);transform:scaleY(0);transform-origin:bottom;transition:transform 0.25s ease;}
+.build-card:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:0 12px 32px rgba(46,125,50,0.1);}
+.build-card:hover::before{transform:scaleY(1);}
+.build-label{font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--primary);margin-bottom:8px;}
+.build-title{font-family:var(--font-serif);font-size:1rem;font-weight:700;color:var(--fg);margin-bottom:8px;line-height:1.3;}
+.build-desc{font-size:0.83rem;color:var(--sub);line-height:1.65;}
 
-/* FAIL CARD — dark, honest */
+/* FAIL CARD */
 .fail-card{background:var(--fg);border-radius:16px;padding:42px 46px;position:relative;overflow:hidden;}
 .fail-card::after{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;border-radius:50%;background:rgba(46,125,50,0.12);}
 .fail-mono{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#81c784;margin-bottom:12px;}
 .fail-h{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:14px;line-height:1.3;}
-.fail-p{font-size:0.9rem;color:rgba(255,255,255,0.62);line-height:1.82;}
+.fail-p{font-size:0.9rem;color:rgba(255,255,255,0.65);line-height:1.82;}
 
-/* FUTURE CARDS */
-.future-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px;}
-.future-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:26px 22px;transition:border-color 0.2s,transform 0.22s;position:relative;overflow:hidden;}
-.future-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary);opacity:0;transition:opacity 0.2s;}
-.future-card:hover{border-color:var(--primary);transform:translateY(-3px);}
-.future-card:hover::before{opacity:1;}
-.future-title{font-family:var(--font-serif);font-size:1rem;font-weight:700;color:var(--fg);margin-bottom:7px;}
-.future-desc{font-size:0.84rem;color:var(--sub);line-height:1.6;}
+/* BRIDGE SECTION — where this leads */
+.bridge-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:36px;}
+.bridge-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:26px 22px;transition:border-color 0.2s,transform 0.22s;}
+.bridge-card:hover{border-color:var(--primary);transform:translateY(-3px);}
+.bridge-icon{width:36px;height:36px;background:var(--secondary);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.bridge-icon svg{width:17px;height:17px;stroke:var(--primary);fill:none;stroke-width:1.8;}
+.bridge-title{font-family:var(--font-serif);font-size:0.95rem;font-weight:700;color:var(--fg);margin-bottom:6px;}
+.bridge-desc{font-size:0.83rem;color:var(--sub);line-height:1.6;}
 
+/* TAGS */
 .tags{display:flex;flex-wrap:wrap;gap:8px;}
 .tag{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.08em;padding:5px 12px;border-radius:100px;background:var(--muted);color:var(--dim);border:1px solid var(--border);}
+
 .hr-fancy{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 48px;}
 .cta{text-align:center;padding:64px 48px;}
 .btn-back{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:13px 30px;border-radius:4px;border:2px solid var(--border);color:var(--fg);transition:all 0.22s;}
 .btn-back:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);}
 .btn-back svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;transition:transform 0.2s;}
 .btn-back:hover svg{transform:translateX(-3px);}
+
 .reveal{opacity:0;transform:translateY(22px);transition:opacity 0.62s ease,transform 0.62s ease;}
 .reveal.vis{opacity:1;transform:none;}
 .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+
 footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;max-width:860px;margin:0 auto;}
 .fn{font-family:var(--font-serif);font-size:0.88rem;font-weight:700;color:var(--primary);}
 .fc{font-family:var(--font-mono);font-size:0.6rem;color:var(--sub);}
@@ -104,17 +103,21 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
 
 @media(max-width:680px){
-  nav{padding:14px 20px;}#hero{padding:100px 24px 56px;align-items:center;text-align:center;}
+  nav{padding:14px 20px;}
+  #hero{padding:100px 24px 56px;align-items:center;text-align:center;}
   .hero-line{margin:24px auto;}
-  .content-sec{padding:60px 20px;}.hr-fancy{margin:0 20px;}
-  .prints-grid{grid-template-columns:repeat(2,1fr);}
-  .future-grid{grid-template-columns:1fr;}.fail-card{padding:28px 24px;}
-  .cta{padding:48px 20px;}footer{flex-direction:column;gap:10px;text-align:center;padding:24px 20px;}
+  .content-sec{padding:52px 20px;}
+  .hr-fancy{margin:0 20px;}
+  .builds-grid{grid-template-columns:1fr;}
+  .bridge-wrap{grid-template-columns:1fr;}
+  .fail-card{padding:28px 24px;}
+  .cta{padding:48px 20px;}
+  footer{flex-direction:column;gap:10px;text-align:center;padding:24px 20px;}
 }
 </style>
 </head>
 <body>
-<div id="prog"></div>
+
 <nav>
   <a href="index.html" class="nav-logo">PB</a>
   <a href="index.html" class="nav-back">
@@ -127,43 +130,20 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
   <canvas id="cad-canvas"></canvas>
   <div class="hero-inner">
     <span class="hero-eyebrow">3D Design &amp; Printing</span>
-    <h1 class="hero-h1">Making<br><em>your own stuff.</em></h1>
+    <h1 class="hero-h1">If I can<br><em>design it, I can<br>build it.</em></h1>
     <div class="hero-line"></div>
-    <p class="hero-p">Masks, batarangs, ball bearings — and eventually a robotic arm that organizes a desk.</p>
+    <p class="hero-p">Fusion 360, FDM printing, and a lot of failed first attempts. Learning how things are actually made.</p>
   </div>
 </section>
-
-<!-- SCROLLING MARQUEE STRIP -->
-<div class="marquee-strip">
-  <div class="marquee-track">
-    <span class="marquee-item">Fusion 360</span>
-    <span class="marquee-item">CAD Design</span>
-    <span class="marquee-item">FDM Printing</span>
-    <span class="marquee-item">Mechatronics</span>
-    <span class="marquee-item">Functional Parts</span>
-    <span class="marquee-item">Problem Solving</span>
-    <span class="marquee-item">Iteration</span>
-    <span class="marquee-item">PLA / PETG</span>
-    <!-- doubled for seamless loop -->
-    <span class="marquee-item">Fusion 360</span>
-    <span class="marquee-item">CAD Design</span>
-    <span class="marquee-item">FDM Printing</span>
-    <span class="marquee-item">Mechatronics</span>
-    <span class="marquee-item">Functional Parts</span>
-    <span class="marquee-item">Problem Solving</span>
-    <span class="marquee-item">Iteration</span>
-    <span class="marquee-item">PLA / PETG</span>
-  </div>
-</div>
 
 <div class="page-wrap">
 
   <section class="content-sec reveal">
     <p class="sec-label">How it started</p>
-    <h2 class="sec-h2">I saw a kid at school<br>using one. <em>That was it.</em></h2>
+    <h2 class="sec-h2">A kid at school had one.<br><em>I wanted one.</em></h2>
     <div class="prose">
-      <p>I was interested in making my own stuff and saw a kid using a 3D printer at my school. That was enough. I wanted to do something like that, so I figured out how to make it happen.</p>
-      <p>It started with wanting to make things. Not buy them, not download a model someone else designed — actually make them. A 3D printer turns an idea in your head into something physical. That was exactly what I was looking for.</p>
+      <p>I saw a kid using a 3D printer at school and that was it. I wanted to make my own things — not download models, not buy parts, actually design and produce them myself. So I figured out how to make that happen.</p>
+      <p>It started with Fusion 360. Learning parametric CAD from scratch, understanding how dimensions and constraints relate to each other, and slowly building an instinct for what's actually manufacturable versus what just looks fine on screen.</p>
     </div>
   </section>
 
@@ -171,17 +151,29 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 
   <section class="content-sec reveal">
     <p class="sec-label">What I've made</p>
-    <h2 class="sec-h2">Not just phone stands<br>and <em>keychains.</em></h2>
-    <div class="prose"><p>A mix of functional stuff and fun stuff. The functional stuff is what I care about more.</p></div>
-    <div class="prints-grid">
-      <div class="print-tile reveal d1"><span class="print-icon">🎭</span><span class="print-label">Masks</span></div>
-      <div class="print-tile reveal d1"><span class="print-icon">📎</span><span class="print-label">Clips</span></div>
-      <div class="print-tile reveal d2"><span class="print-icon">🏺</span><span class="print-label">Vases</span></div>
-      <div class="print-tile reveal d2"><span class="print-icon">🦇</span><span class="print-label">Batarangs</span></div>
-      <div class="print-tile reveal d3"><span class="print-icon">☕</span><span class="print-label">Cup Holders</span></div>
-      <div class="print-tile reveal d3"><span class="print-icon">🎵</span><span class="print-label">Whistles</span></div>
-      <div class="print-tile reveal d4"><span class="print-icon">💳</span><span class="print-label">Wallets</span></div>
-      <div class="print-tile reveal d4"><span class="print-icon">⚙️</span><span class="print-label">Ball Bearings</span></div>
+    <h2 class="sec-h2">Functional first,<br><em>everything else second.</em></h2>
+    <div class="prose"><p>Some of it is practice. Some of it I actually use. The stuff I care about most required real iteration — printing, testing, adjusting tolerances, printing again.</p></div>
+    <div class="builds-grid">
+      <div class="build-card reveal d1">
+        <div class="build-label">Mechanical</div>
+        <div class="build-title">Ball Bearings</div>
+        <div class="build-desc">Printed entirely to learn tolerance. Too loose and the outer race wobbles. Too tight and it won't spin. Getting the clearance right took multiple iterations — but once it clicked, I understood how to think about fit for every part after that.</div>
+      </div>
+      <div class="build-card reveal d2">
+        <div class="build-label">Everyday Use</div>
+        <div class="build-title">Clips, Mounts, Holders</div>
+        <div class="build-desc">Cable clips, cup holders, shelf mounts. The unglamorous stuff that actually gets used. These are the prints that test whether a design survives contact with the real world — stress, repetition, not breaking the third time someone uses it.</div>
+      </div>
+      <div class="build-card reveal d3">
+        <div class="build-label">Wearables</div>
+        <div class="build-title">Masks</div>
+        <div class="build-desc">Designing around a human face is a different problem than a flat bracket. You're dealing with compound curves, asymmetry, and a part that has to fit a person. Pushed me to get better at surface modeling in Fusion 360.</div>
+      </div>
+      <div class="build-card reveal d4">
+        <div class="build-label">Practice</div>
+        <div class="build-title">Batarangs and Sharp Geometry</div>
+        <div class="build-desc">Not every print needs a purpose. Sharp internal angles, thin features, symmetry — these are the things that break prints and expose what you don't know about your slicer settings. Good practice before designing something that actually has to work.</div>
+      </div>
     </div>
   </section>
 
@@ -190,34 +182,46 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
   <section class="content-sec">
     <div class="fail-card reveal">
       <p class="fail-mono">The Learning Curve</p>
-      <h3 class="fail-h">A print fell off the bed.<br>Turns out you have to actually clean it.</h3>
-      <p class="fail-p">My first real failure was a print that fell off the bed mid-print. Bed wasn't clean, so the filament wouldn't stick. Once I learned how to properly prep and clean the print bed, the adhesion issues pretty much went away. It's one of those things where the fix is obvious once you know it, but you have to mess up first to get there. That's kind of the whole deal with 3D printing.</p>
+      <h3 class="fail-h">The print fell off the bed mid-way.<br>Turns out you have to clean it first.</h3>
+      <p class="fail-p">My first real failure was a print that detached mid-job. The bed wasn't clean, so the filament wouldn't adhere. The fix was obvious once I knew it — IPA, a scraper, a few minutes of prep. But you only learn that by ruining a print first. That's the whole deal with 3D printing: every failure is the cheapest way to learn something that would've taken hours to read about and still not fully understand.</p>
     </div>
   </section>
 
   <hr class="hr-fancy">
 
   <section class="content-sec reveal">
-    <p class="sec-label">What's next</p>
-    <h2 class="sec-h2">Functional stuff that<br><em>solves real problems.</em></h2>
-    <div class="prose"><p>I want to design projects that actually do something — not just print a model someone else made. Design a system, make it work, use it every day.</p></div>
-    <div class="future-grid">
-      <div class="future-card reveal d1">
-        <div class="future-title">Robotic Desk Organizer</div>
-        <div class="future-desc">A robotic arm that organizes my desk. Design it in Fusion 360, print the parts, wire it up. A full mechatronics project start to finish.</div>
+    <p class="sec-label">Where this goes</p>
+    <h2 class="sec-h2">Printing parts is the<br><em>beginning, not the point.</em></h2>
+    <div class="prose">
+      <p>The reason I care about 3D printing isn't the printing itself — it's that designing and making physical things from scratch is the core skill underneath mechatronics and engineering. A printed part that just sits on a shelf is useless. A printed part that holds a sensor mount on a robot that actually moves is interesting.</p>
+      <p>That's the direction. The FTC robotics program I started at Cardinal Newman is where these skills actually get used — designing parts in Fusion 360 that have to survive competition, mounting hardware, holding tolerances under load.</p>
+    </div>
+    <div class="bridge-wrap">
+      <div class="bridge-card reveal d1">
+        <div class="bridge-icon">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg>
+        </div>
+        <div class="bridge-title">Applied in Robotics</div>
+        <div class="bridge-desc">Custom mounts, brackets, and structural parts for the FTC robotics program — designed in Fusion 360, printed and tested under real competition conditions.</div>
       </div>
-      <div class="future-card reveal d2">
-        <div class="future-title">Laundry Folding System</div>
-        <div class="future-desc">A system to fold my laundry. Sounds ridiculous — and that's exactly why I want to build it. Something annoying, something mechanical, something I can actually make work.</div>
+      <div class="bridge-card reveal d2">
+        <div class="bridge-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>
+        </div>
+        <div class="bridge-title">Goal: Mechatronics</div>
+        <div class="bridge-desc">Mechanical design, electronics, and software working together. 3D printing is the mechanical side — understanding how to make parts that fit and function is the foundation everything else builds on.</div>
       </div>
     </div>
   </section>
 
   <section class="content-sec" style="padding-top:0;">
     <div class="tags reveal">
-      <span class="tag">Fusion 360</span><span class="tag">CAD</span>
-      <span class="tag">3D Printing</span><span class="tag">FDM</span>
-      <span class="tag">Mechatronics</span><span class="tag">Functional Design</span>
+      <span class="tag">Fusion 360</span>
+      <span class="tag">CAD</span>
+      <span class="tag">FDM Printing</span>
+      <span class="tag">PLA / PETG</span>
+      <span class="tag">Tolerances</span>
+      <span class="tag">Mechatronics</span>
     </div>
   </section>
 
@@ -236,14 +240,10 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 </footer>
 
 <script>
-window.addEventListener('scroll',()=>{
-  const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);
-  document.getElementById('prog').style.width=(p*100)+'%';
-},{passive:true});
 const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){en.target.classList.add('vis');obs.unobserve(en.target);}});},{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-/* CAD grid draws itself in */
+/* CAD grid — animated engineering blueprint background */
 (function(){
   const c=document.getElementById('cad-canvas');
   const ctx=c.getContext('2d');
@@ -266,7 +266,6 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
       ctx.strokeStyle=`rgba(${G},${0.04+Math.sin(t+l.x*.04)*.015})`;
       ctx.lineWidth=0.7;ctx.beginPath();ctx.moveTo(l.x,0);ctx.lineTo(l.x,H*l.p);ctx.stroke();
     });
-    // Annotation crosshairs
     ctx.setLineDash([4,8]);ctx.lineWidth=1;
     [[0.15,0.35],[0.8,0.25],[0.6,0.75]].forEach(([fx,fy])=>{
       const cx=fx*W,cy=fy*H,s=8;
