@@ -109,7 +109,7 @@ section{padding:64px 48px;max-width:1100px;margin:0 auto;}
 
 /* ── PROJECTS ── */
 #projects .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px;}
-.focus-card{position:relative;border-radius:12px;overflow:hidden;height:260px;background:var(--muted);border:2px solid var(--border);transition:all 0.3s ease;cursor:pointer;}
+.focus-card{position:relative;border-radius:12px;overflow:hidden;height:260px;background:var(--muted);border:2px solid var(--border);transition:all 0.3s ease;cursor:pointer;display:block;text-decoration: none;cursor: pointer;}
 .cards-grid:hover .focus-card:not(:hover){filter:blur(2px);transform:scale(0.97);opacity:0.75;}
 .focus-card-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;}
 .focus-card:hover .focus-card-bg{transform:scale(1.06);}
@@ -390,7 +390,8 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
     <p class="section-subtitle">Hover and click each card to see details!</p>
   </div>
   <div class="cards-grid">
-    <div class="focus-card reveal">
+
+    <a href="server.html" class="focus-card reveal">
       <img class="focus-card-bg" src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop" alt="Server Infrastructure">
       <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Home Server Network</div></div>
       <div class="focus-card-overlay">
@@ -399,8 +400,9 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
           <span class="focus-card-link">Static IP · BungeeCord · 80+ Members · Discord Bot</span>
         </div>
       </div>
-    </div>
-    <div class="focus-card reveal">
+    </a>
+
+    <a href="printing.html" class="focus-card reveal">
       <img class="focus-card-bg" src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?q=80&w=800&auto=format&fit=crop" alt="3D Printing">
       <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">3D Design</div></div>
       <div class="focus-card-overlay">
@@ -409,9 +411,10 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
           <span class="focus-card-link">CAD-designed mechanical components and enclosures</span>
         </div>
       </div>
-    </div>
-    <div class="focus-card reveal">
-      <img class="focus-card-bg" src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=800&auto=format&fit=crop" alt="Robotics" href="https://oneredpanda99.github.io/robotics">
+    </a>
+
+    <a href="robotics.html" class="focus-card reveal">
+      <img class="focus-card-bg" src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=800&auto=format&fit=crop" alt="Robotics">
       <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Robotics</div></div>
       <div class="focus-card-overlay">
         <div>
@@ -419,27 +422,30 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
           <span class="focus-card-link">Founded the program. Team Captain. First placement in 6 years.</span>
         </div>
       </div>
-    </div>
-    <div class="focus-card reveal">
+    </a>
+
+    <a href="claras-soaps.html" class="focus-card reveal">
       <img class="focus-card-bg" src="https://images.unsplash.com/photo-1607006344380-b6775a0824a7?q=80&w=800&auto=format&fit=crop" alt="Claras Soaps">
       <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Website Development</div></div>
       <div class="focus-card-overlay">
         <div>
           <div class="focus-card-title">Clara's Soaps</div>
-          <a href="https://clarassoaps.github.io" target="_blank" class="focus-card-link">clarassoaps.github.io</a>
+          <span class="focus-card-link">clarassoaps.github.io</span>
         </div>
       </div>
-    </div>
-    <div class="focus-card reveal">
+    </a>
+
+    <a href="scpressurepoint.html" class="focus-card reveal">
       <img class="focus-card-bg" src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop" alt="SC Pressure Point">
       <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Website Development</div></div>
       <div class="focus-card-overlay">
         <div>
           <div class="focus-card-title">Website Development | Pressure Washing</div>
-          <a href="https://scpressurepoint.github.io" target="_blank" class="focus-card-link">scpressurepoint.github.io</a>
+          <span class="focus-card-link">scpressurepoint.github.io</span>
         </div>
       </div>
-    </div>
+    </a>
+
     <div class="focus-card placeholder reveal">
       <div class="placeholder-inner">
         <div class="placeholder-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
@@ -447,6 +453,7 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
         <div class="placeholder-sub">Next Project</div>
       </div>
     </div>
+
   </div>
 </section>
 
