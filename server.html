@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Server Administrator — Parker Branham</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Montserrat:wght@300;400;600&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0f0a;--surface:#0f160f;--border:#1a2e1a;
+  --primary:#39ff14;--dim:#22c55e;--muted:#166534;
+  --text:#e2f0e2;--subtext:#86a086;--font-mono:'Source Code Pro',monospace;
+  --font-serif:'Merriweather',serif;--font-sans:'Montserrat',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--muted) var(--bg);}
+body{background:var(--bg);color:var(--text);font-family:var(--font-mono);overflow-x:hidden;}
+
+/* CRT scanline overlay */
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:9998;}
+/* Noise */
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9997;opacity:0.5;}
+
+/* Scroll progress */
+#prog{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--primary);z-index:9999;box-shadow:0 0 12px var(--primary);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(10,15,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--font-mono);font-size:0.8rem;font-weight:700;color:var(--primary);text-decoration:none;letter-spacing:0.12em;}
+.nav-back{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--subtext);text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
+.nav-back:hover{color:var(--primary);}
+.nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* HERO — terminal window */
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 24px 60px;position:relative;overflow:hidden;}
+.matrix-canvas{position:absolute;inset:0;opacity:0.15;}
+.terminal-window{position:relative;z-index:2;width:100%;max-width:780px;border-radius:12px;overflow:hidden;box-shadow:0 0 60px rgba(57,255,20,0.12),0 40px 80px rgba(0,0,0,0.6);}
+.terminal-bar{background:#1a2e1a;padding:14px 18px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.t-dot{width:12px;height:12px;border-radius:50%;}
+.t-dot.red{background:#ff5f57;}
+.t-dot.yellow{background:#febc2e;}
+.t-dot.green{background:#28c840;}
+.terminal-title{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--subtext);margin-left:auto;margin-right:auto;}
+.terminal-body{background:#0a0f0a;padding:28px 28px 36px;min-height:340px;}
+.term-line{font-family:var(--font-mono);font-size:0.82rem;line-height:1.8;opacity:0;}
+.term-line.show{opacity:1;}
+.term-prompt{color:var(--dim);}
+.term-cmd{color:var(--text);}
+.term-output{color:var(--subtext);padding-left:18px;font-size:0.78rem;}
+.term-highlight{color:var(--primary);}
+.blink{animation:blink 1s step-end infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.hero-tagline{position:relative;z-index:2;text-align:center;margin-top:44px;}
+.hero-tagline h1{font-family:var(--font-serif);font-size:clamp(2rem,6vw,4.5rem);font-weight:900;color:var(--text);line-height:1.1;}
+.hero-tagline h1 span{color:var(--primary);text-shadow:0 0 30px rgba(57,255,20,0.4);}
+.hero-tagline p{font-family:var(--font-sans);font-size:0.95rem;color:var(--subtext);margin-top:14px;font-weight:300;}
+
+/* STATS ROW */
+.stats-row{display:flex;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;max-width:700px;margin:60px auto 0;position:relative;z-index:2;}
+.stat-box{flex:1;padding:28px 20px;text-align:center;border-right:1px solid var(--border);}
+.stat-box:last-child{border-right:none;}
+.stat-box-num{font-family:var(--font-mono);font-size:2.2rem;font-weight:700;color:var(--primary);text-shadow:0 0 20px rgba(57,255,20,0.3);}
+.stat-box-label{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--subtext);margin-top:6px;}
+
+/* CONTENT */
+.content{max-width:820px;margin:0 auto;padding:80px 40px;}
+.section-tag{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);margin-bottom:14px;}
+.section-heading{font-family:var(--font-serif);font-size:clamp(1.6rem,4vw,2.6rem);font-weight:900;color:var(--text);line-height:1.2;margin-bottom:24px;}
+.section-heading span{color:var(--primary);}
+.prose{font-family:var(--font-sans);font-size:0.93rem;color:var(--subtext);line-height:1.85;font-weight:300;}
+.prose p{margin-bottom:18px;}
+
+/* TIMELINE */
+.timeline{margin-top:60px;position:relative;padding-left:28px;border-left:2px solid var(--border);}
+.tl-item{margin-bottom:44px;position:relative;}
+.tl-item::before{content:'';position:absolute;left:-35px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--primary);box-shadow:0 0 12px rgba(57,255,20,0.5);}
+.tl-year{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);margin-bottom:6px;}
+.tl-title{font-family:var(--font-mono);font-size:1rem;font-weight:600;color:var(--text);margin-bottom:8px;}
+.tl-desc{font-family:var(--font-sans);font-size:0.87rem;color:var(--subtext);line-height:1.7;font-weight:300;}
+
+/* CODE BLOCKS */
+.code-block{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin:28px 0;position:relative;overflow:hidden;}
+.code-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--primary),transparent);}
+.code-block code{font-family:var(--font-mono);font-size:0.78rem;color:var(--dim);line-height:1.8;display:block;}
+.code-kw{color:var(--primary);}
+.code-str{color:#a8e6a8;}
+.code-comment{color:#3a5a3a;}
+
+/* BULLET LIST */
+.fancy-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:24px;}
+.fancy-list li{font-family:var(--font-sans);font-size:0.9rem;color:var(--subtext);padding-left:22px;position:relative;line-height:1.65;font-weight:300;}
+.fancy-list li::before{content:'>';position:absolute;left:0;color:var(--primary);font-family:var(--font-mono);font-weight:700;}
+
+/* TAGS */
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;}
+.tag{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em;padding:5px 14px;border-radius:4px;background:rgba(57,255,20,0.07);color:var(--dim);border:1px solid rgba(57,255,20,0.2);transition:all 0.2s;}
+.tag:hover{background:rgba(57,255,20,0.15);border-color:var(--primary);color:var(--primary);}
+
+/* DIVIDER */
+.fancy-div{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:60px 0;}
+
+/* CTA */
+.cta-wrap{text-align:center;margin-top:60px;}
+.cta-btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;padding:16px 36px;border-radius:6px;border:2px solid var(--primary);color:var(--primary);transition:all 0.25s;}
+.cta-btn:hover{background:var(--primary);color:var(--bg);box-shadow:0 0 24px rgba(57,255,20,0.3);}
+.cta-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5;transition:transform 0.2s;}
+.cta-btn:hover svg{transform:translateX(-4px);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:32px 40px;text-align:center;font-family:var(--font-mono);font-size:0.62rem;color:var(--subtext);}
+
+@media(max-width:680px){
+  nav{padding:14px 18px;}
+  .content{padding:60px 20px;}
+  .stats-row{flex-direction:column;}
+  .stat-box{border-right:none;border-bottom:1px solid var(--border);}
+  .stat-box:last-child{border-bottom:none;}
+  .terminal-body{padding:18px;}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">PB_</a>
+  <a href="index.html" class="nav-back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Portfolio
+  </a>
+</nav>
+
+<!-- MATRIX CANVAS HERO -->
+<section id="hero">
+  <canvas class="matrix-canvas" id="matrix"></canvas>
+
+  <div class="terminal-window reveal" id="term-win">
+    <div class="terminal-bar">
+      <div class="t-dot red"></div>
+      <div class="t-dot yellow"></div>
+      <div class="t-dot green"></div>
+      <span class="terminal-title">parker@home-server: ~/minecraft-network</span>
+    </div>
+    <div class="terminal-body" id="terminal-body">
+      <div class="term-line" id="tl0"><span class="term-prompt">parker@home-server:~$ </span><span class="term-cmd" id="tc0"></span></div>
+      <div class="term-line" id="tl1"><span class="term-output" id="to1"></span></div>
+      <div class="term-line" id="tl2"><span class="term-output" id="to2"></span></div>
+      <div class="term-line" id="tl3"><span class="term-prompt">parker@home-server:~$ </span><span class="term-cmd" id="tc3"></span></div>
+      <div class="term-line" id="tl4"><span class="term-output" id="to4"></span></div>
+      <div class="term-line" id="tl5"><span class="term-output" id="to5"></span></div>
+      <div class="term-line" id="tl6"><span class="term-prompt">parker@home-server:~$ </span><span class="term-cmd" id="tc6"></span><span class="blink">█</span></div>
+    </div>
+  </div>
+
+  <div class="hero-tagline reveal">
+    <h1>Server <span>Administrator</span></h1>
+    <p>From a bedroom in Columbia, SC · Age 10 to 13 · 80+ member community</p>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-row reveal" style="margin-left:auto;margin-right:auto;max-width:700px;margin-top:0;position:relative;z-index:2;">
+  <div class="stat-box">
+    <div class="stat-box-num">80+</div>
+    <div class="stat-box-label">Community Members</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-box-num">20+</div>
+    <div class="stat-box-label">Daily Active Players</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-box-num">3</div>
+    <div class="stat-box-label">Years Running</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-box-num">∞</div>
+    <div class="stat-box-label">Things Learned</div>
+  </div>
+</div>
+
+<!-- STORY -->
+<div class="content">
+  <div class="reveal">
+    <p class="section-tag">The Origin</p>
+    <h2 class="section-heading">It started with<br>a <span>frustrating problem.</span></h2>
+    <div class="prose">
+      <p>When I was 10 years old my favorite game to play with my friends was Minecraft. However, there was one problem that made it all so very frustrating to play. We played on an edition that allowed you to join your friend's world as long as they were in it. Well my friends weren't online as much as I was and we had different schedules so that made it extremely difficult to play.</p>
+      <p>So, I asked my IT Expert of a father how to set up a Minecraft server. Through him I was able to learn how to setup and create as many servers I wanted and slowly learned about plugins and then solved problems of cross platform and eventually was able to play with all of my friends on the same server.</p>
+    </div>
+  </div>
+
+  <hr class="fancy-div">
+
+  <div class="reveal">
+    <p class="section-tag">The Growth</p>
+    <h2 class="section-heading">One server turned into<br>a <span>community.</span></h2>
+    <div class="prose">
+      <p>A month before I turned 11 I got the Java edition of Minecraft and that led to more server compatibility issues and learning curves, but also more capabilities. By the time I was 13 I had grown a community to 80+ members and 20+ daily active members on my server.</p>
+      <p>What went from wanting a place to play Minecraft with my friends turned into a larger but small scale Minecraft Community — something I could sit back and be proud of. If it weren't for the academic and emotional stresses of going into High School, it would be safe to say I could've continued to grow this community and learned even more.</p>
+    </div>
+  </div>
+
+  <div class="code-block reveal">
+    <code>
+<span class="code-comment"># BungeeCord config.yml — server routing</span>
+<span class="code-kw">listeners</span>:
+  - <span class="code-kw">host</span>: <span class="code-str">0.0.0.0:25565</span>
+    <span class="code-kw">max_players</span>: 100
+    <span class="code-kw">tab_list</span>: GLOBAL_PING
+<span class="code-kw">servers</span>:
+  <span class="code-kw">lobby</span>:
+    <span class="code-kw">address</span>: <span class="code-str">localhost:25566</span>
+  <span class="code-kw">survival</span>:
+    <span class="code-kw">address</span>: <span class="code-str">localhost:25567</span>
+  <span class="code-kw">creative</span>:
+    <span class="code-kw">address</span>: <span class="code-str">localhost:25568</span>
+<span class="code-comment"># Static IP + port forwarded on router → public access</span>
+    </code>
+  </div>
+
+  <hr class="fancy-div">
+
+  <div class="reveal">
+    <p class="section-tag">Technical Breakdown</p>
+    <h2 class="section-heading">What was actually<br><span>built.</span></h2>
+    <ul class="fancy-list">
+      <li>Configured a static IP and learned port forwarding for Public server access.</li>
+      <li>Set up BungeeCord (a Proxy) to route players across multiple different machines and server instances.</li>
+      <li>Wrote Plugins for server and bridged multiple plugins to fix compatibility.</li>
+      <li>Built Discord bot integration for on the fly console information, player to player chatting via discord channels, and command execution for admins.</li>
+      <li>Managed a 80+ member community.</li>
+    </ul>
+  </div>
+
+  <div class="tag-row reveal">
+    <span class="tag">BungeeCord</span>
+    <span class="tag">Networking</span>
+    <span class="tag">Discord API</span>
+    <span class="tag">Java</span>
+    <span class="tag">Static IP</span>
+    <span class="tag">Port Forwarding</span>
+    <span class="tag">Plugin Development</span>
+    <span class="tag">Community Management</span>
+  </div>
+
+  <hr class="fancy-div">
+
+  <!-- TIMELINE -->
+  <div class="reveal">
+    <p class="section-tag">Timeline</p>
+    <h2 class="section-heading">How it <span>evolved.</span></h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">Age 10 — 2019</div>
+        <div class="tl-title">First Server Setup</div>
+        <div class="tl-desc">With my dad's help, set up my first home-hosted Minecraft server. Learned basic networking — static IP, port forwarding, and router config to make it publicly accessible.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">Just Before Age 11 — 2020</div>
+        <div class="tl-title">Java Edition + BungeeCord Proxy</div>
+        <div class="tl-desc">Switched to Java edition, opening up more capabilities. Deployed BungeeCord to route players between multiple server instances on the same machine. Solved cross-platform compatibility issues.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">Age 12 — 2021</div>
+        <div class="tl-title">Plugin Development + Discord Integration</div>
+        <div class="tl-desc">Started writing custom plugins. Built a Discord bot that bridged in-game chat, relayed console output, and let admins run server commands remotely through Discord channels.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">Age 13 — 2022</div>
+        <div class="tl-title">80+ Member Community</div>
+        <div class="tl-desc">Grew the server to 80+ registered members and 20+ daily active players. Managed the community, moderated players, maintained uptime, and kept the server running through High School prep.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-wrap reveal">
+    <a href="index.html" class="cta-btn">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Portfolio
+    </a>
+  </div>
+</div>
+
+<footer>
+  Parker Branham &nbsp;·&nbsp; Server Administrator &nbsp;·&nbsp; Columbia, SC
+</footer>
+
+<script>
+/* Scroll progress */
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);
+  document.getElementById('prog').style.width=(p*100)+'%';
+},{passive:true});
+
+/* Reveal */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* Matrix rain */
+(function(){
+  const canvas=document.getElementById('matrix');
+  const ctx=canvas.getContext('2d');
+  function setup(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
+  setup();
+  window.addEventListener('resize',setup);
+  const chars='01アイウエオカキクケコサシスセソBUNCECORDSTATICIPJAVA';
+  const size=13;
+  let cols=Math.floor(canvas.width/size);
+  let drops=Array(cols).fill(0).map(()=>Math.random()*canvas.height/size);
+  function draw(){
+    ctx.fillStyle='rgba(10,15,10,0.05)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#22c55e';
+    ctx.font=size+'px Source Code Pro, monospace';
+    for(let i=0;i<cols;i++){
+      const ch=chars[Math.floor(Math.random()*chars.length)];
+      ctx.fillText(ch,i*size,drops[i]*size);
+      if(drops[i]*size>canvas.height&&Math.random()>0.975)drops[i]=0;
+      drops[i]+=0.5;
+    }
+  }
+  setInterval(draw,50);
+})();
+
+/* Terminal typewriter */
+(function(){
+  const lines=[
+    {id:'tl0',cmd:'tc0',text:'./start-server.sh --port 25565',delay:800},
+    {id:'tl1',out:'to1',text:'[BungeeCord] Listening on /0.0.0.0:25565',delay:1400},
+    {id:'tl2',out:'to2',text:'[INFO] 3 servers online: lobby, survival, creative',delay:1700},
+    {id:'tl3',cmd:'tc3',text:'status --community',delay:2400},
+    {id:'tl4',out:'to4',text:'Members: 83  Active today: 22  Uptime: 47d 11h',delay:3000},
+    {id:'tl5',out:'to5',text:'Discord bridge: ONLINE  Console relay: ACTIVE',delay:3400},
+    {id:'tl6',cmd:'tc6',text:'',delay:4000},
+  ];
+  lines.forEach(l=>{
+    setTimeout(()=>{
+      const lineEl=document.getElementById(l.id);
+      lineEl.classList.add('show');
+      if(l.cmd){
+        let i=0;
+        const el=document.getElementById(l.cmd);
+        const iv=setInterval(()=>{el.textContent=l.text.slice(0,++i);if(i>=l.text.length)clearInterval(iv);},55);
+      }
+      if(l.out){
+        const el=document.getElementById(l.out);
+        el.textContent=l.text;
+      }
+    },l.delay);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Design & Printing — Parker Branham</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8f5f0;--card:#fff;--muted:#f0e9e0;--accent:#c8e6c9;
+  --border:#e0d6c9;--primary:#2e7d32;--secondary:#e8f5e9;
+  --fg:#3e2723;--sub:#6d4c41;--dim:#1b5e20;
+  --font-mono:'Source Code Pro',monospace;
+  --font-sans:'Montserrat',sans-serif;
+  --font-serif:'Merriweather',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;scrollbar-width:none;}
+html::-webkit-scrollbar{display:none;}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4;}
+
+#prog{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--primary),#81c784);z-index:10000;box-shadow:0 0 8px rgba(46,125,50,0.5);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(248,245,240,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--font-serif);font-weight:700;font-size:1.1rem;color:var(--primary);text-decoration:none;}
+.nav-back{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--sub);text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
+.nav-back:hover{color:var(--primary);}
+.nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* HERO — big editorial, canvas behind */
+#hero{
+  position:relative;min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:flex-start;justify-content:flex-end;
+  padding:100px 80px 72px;
+  overflow:hidden;
+}
+#cad-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.hero-inner{position:relative;z-index:2;max-width:680px;}
+.hero-eyebrow{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--primary);margin-bottom:16px;display:block;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+.hero-h1{font-family:var(--font-serif);font-size:clamp(3rem,8vw,7rem);font-weight:900;line-height:0.96;color:var(--fg);letter-spacing:-0.03em;opacity:0;animation:fadeUp 0.8s 0.35s ease forwards;}
+.hero-h1 em{color:var(--primary);font-style:italic;display:block;}
+.hero-line{width:60px;height:3px;background:var(--primary);margin:28px 0;opacity:0;animation:fadeUp 0.5s 0.7s ease forwards;}
+.hero-p{font-size:1rem;color:var(--sub);line-height:1.7;font-weight:300;max-width:420px;opacity:0;animation:fadeUp 0.6s 0.85s ease forwards;}
+
+/* MARQUEE strip between hero and content */
+.marquee-strip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--muted);padding:16px 0;overflow:hidden;position:relative;z-index:3;}
+.marquee-track{display:flex;white-space:nowrap;animation:scroll 16s linear infinite;}
+.marquee-item{display:inline-flex;align-items:center;gap:10px;padding:0 28px;font-family:var(--font-mono);font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--sub);}
+.marquee-item::before{content:'◆';color:var(--primary);font-size:0.4rem;}
+@keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* CONTENT */
+.page-wrap{max-width:860px;margin:0 auto;}
+.content-sec{padding:76px 48px;}
+.sec-label{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--primary);margin-bottom:12px;}
+.sec-h2{font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:var(--fg);line-height:1.15;margin-bottom:20px;}
+.sec-h2 em{color:var(--primary);font-style:italic;}
+.prose{font-size:0.92rem;color:var(--sub);line-height:1.88;max-width:580px;}
+.prose p{margin-bottom:15px;}
+.prose p:last-child{margin-bottom:0;}
+
+/* PRINT GRID — what was actually made */
+.prints-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:32px;}
+.print-tile{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 12px;text-align:center;transition:border-color 0.2s,transform 0.2s,background 0.2s;cursor:default;}
+.print-tile:hover{border-color:var(--primary);background:var(--secondary);transform:translateY(-4px);}
+.print-icon{font-size:1.5rem;display:block;margin-bottom:8px;}
+.print-label{font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--sub);}
+
+/* FAIL CARD — dark, honest */
+.fail-card{background:var(--fg);border-radius:16px;padding:42px 46px;position:relative;overflow:hidden;}
+.fail-card::after{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;border-radius:50%;background:rgba(46,125,50,0.12);}
+.fail-mono{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#81c784;margin-bottom:12px;}
+.fail-h{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:14px;line-height:1.3;}
+.fail-p{font-size:0.9rem;color:rgba(255,255,255,0.62);line-height:1.82;}
+
+/* FUTURE CARDS */
+.future-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px;}
+.future-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:26px 22px;transition:border-color 0.2s,transform 0.22s;position:relative;overflow:hidden;}
+.future-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary);opacity:0;transition:opacity 0.2s;}
+.future-card:hover{border-color:var(--primary);transform:translateY(-3px);}
+.future-card:hover::before{opacity:1;}
+.future-title{font-family:var(--font-serif);font-size:1rem;font-weight:700;color:var(--fg);margin-bottom:7px;}
+.future-desc{font-size:0.84rem;color:var(--sub);line-height:1.6;}
+
+.tags{display:flex;flex-wrap:wrap;gap:8px;}
+.tag{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.08em;padding:5px 12px;border-radius:100px;background:var(--muted);color:var(--dim);border:1px solid var(--border);}
+.hr-fancy{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 48px;}
+.cta{text-align:center;padding:64px 48px;}
+.btn-back{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:13px 30px;border-radius:4px;border:2px solid var(--border);color:var(--fg);transition:all 0.22s;}
+.btn-back:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);}
+.btn-back svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;transition:transform 0.2s;}
+.btn-back:hover svg{transform:translateX(-3px);}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.62s ease,transform 0.62s ease;}
+.reveal.vis{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;max-width:860px;margin:0 auto;}
+.fn{font-family:var(--font-serif);font-size:0.88rem;font-weight:700;color:var(--primary);}
+.fc{font-family:var(--font-mono);font-size:0.6rem;color:var(--sub);}
+
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+
+@media(max-width:680px){
+  nav{padding:14px 20px;}#hero{padding:100px 24px 56px;align-items:center;text-align:center;}
+  .hero-line{margin:24px auto;}
+  .content-sec{padding:60px 20px;}.hr-fancy{margin:0 20px;}
+  .prints-grid{grid-template-columns:repeat(2,1fr);}
+  .future-grid{grid-template-columns:1fr;}.fail-card{padding:28px 24px;}
+  .cta{padding:48px 20px;}footer{flex-direction:column;gap:10px;text-align:center;padding:24px 20px;}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <a href="index.html" class="nav-logo">PB</a>
+  <a href="index.html" class="nav-back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Portfolio
+  </a>
+</nav>
+
+<section id="hero">
+  <canvas id="cad-canvas"></canvas>
+  <div class="hero-inner">
+    <span class="hero-eyebrow">3D Design &amp; Printing</span>
+    <h1 class="hero-h1">Making<br><em>your own stuff.</em></h1>
+    <div class="hero-line"></div>
+    <p class="hero-p">Masks, batarangs, ball bearings — and eventually a robotic arm that organizes a desk.</p>
+  </div>
+</section>
+
+<!-- SCROLLING MARQUEE STRIP -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-item">Fusion 360</span>
+    <span class="marquee-item">CAD Design</span>
+    <span class="marquee-item">FDM Printing</span>
+    <span class="marquee-item">Mechatronics</span>
+    <span class="marquee-item">Functional Parts</span>
+    <span class="marquee-item">Problem Solving</span>
+    <span class="marquee-item">Iteration</span>
+    <span class="marquee-item">PLA / PETG</span>
+    <!-- doubled for seamless loop -->
+    <span class="marquee-item">Fusion 360</span>
+    <span class="marquee-item">CAD Design</span>
+    <span class="marquee-item">FDM Printing</span>
+    <span class="marquee-item">Mechatronics</span>
+    <span class="marquee-item">Functional Parts</span>
+    <span class="marquee-item">Problem Solving</span>
+    <span class="marquee-item">Iteration</span>
+    <span class="marquee-item">PLA / PETG</span>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">How it started</p>
+    <h2 class="sec-h2">I saw a kid at school<br>using one. <em>That was it.</em></h2>
+    <div class="prose">
+      <p>I was interested in making my own stuff and saw a kid using a 3D printer at my school. That was enough. I wanted to do something like that, so I figured out how to make it happen.</p>
+      <p>It started with wanting to make things. Not buy them, not download a model someone else designed — actually make them. A 3D printer turns an idea in your head into something physical. That was exactly what I was looking for.</p>
+    </div>
+  </section>
+
+  <hr class="hr-fancy">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">What I've made</p>
+    <h2 class="sec-h2">Not just phone stands<br>and <em>keychains.</em></h2>
+    <div class="prose"><p>A mix of functional stuff and fun stuff. The functional stuff is what I care about more.</p></div>
+    <div class="prints-grid">
+      <div class="print-tile reveal d1"><span class="print-icon">🎭</span><span class="print-label">Masks</span></div>
+      <div class="print-tile reveal d1"><span class="print-icon">📎</span><span class="print-label">Clips</span></div>
+      <div class="print-tile reveal d2"><span class="print-icon">🏺</span><span class="print-label">Vases</span></div>
+      <div class="print-tile reveal d2"><span class="print-icon">🦇</span><span class="print-label">Batarangs</span></div>
+      <div class="print-tile reveal d3"><span class="print-icon">☕</span><span class="print-label">Cup Holders</span></div>
+      <div class="print-tile reveal d3"><span class="print-icon">🎵</span><span class="print-label">Whistles</span></div>
+      <div class="print-tile reveal d4"><span class="print-icon">💳</span><span class="print-label">Wallets</span></div>
+      <div class="print-tile reveal d4"><span class="print-icon">⚙️</span><span class="print-label">Ball Bearings</span></div>
+    </div>
+  </section>
+
+  <hr class="hr-fancy">
+
+  <section class="content-sec">
+    <div class="fail-card reveal">
+      <p class="fail-mono">The Learning Curve</p>
+      <h3 class="fail-h">A print fell off the bed.<br>Turns out you have to actually clean it.</h3>
+      <p class="fail-p">My first real failure was a print that fell off the bed mid-print. Bed wasn't clean, so the filament wouldn't stick. Once I learned how to properly prep and clean the print bed, the adhesion issues pretty much went away. It's one of those things where the fix is obvious once you know it, but you have to mess up first to get there. That's kind of the whole deal with 3D printing.</p>
+    </div>
+  </section>
+
+  <hr class="hr-fancy">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">What's next</p>
+    <h2 class="sec-h2">Functional stuff that<br><em>solves real problems.</em></h2>
+    <div class="prose"><p>I want to design projects that actually do something — not just print a model someone else made. Design a system, make it work, use it every day.</p></div>
+    <div class="future-grid">
+      <div class="future-card reveal d1">
+        <div class="future-title">Robotic Desk Organizer</div>
+        <div class="future-desc">A robotic arm that organizes my desk. Design it in Fusion 360, print the parts, wire it up. A full mechatronics project start to finish.</div>
+      </div>
+      <div class="future-card reveal d2">
+        <div class="future-title">Laundry Folding System</div>
+        <div class="future-desc">A system to fold my laundry. Sounds ridiculous — and that's exactly why I want to build it. Something annoying, something mechanical, something I can actually make work.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-sec" style="padding-top:0;">
+    <div class="tags reveal">
+      <span class="tag">Fusion 360</span><span class="tag">CAD</span>
+      <span class="tag">3D Printing</span><span class="tag">FDM</span>
+      <span class="tag">Mechatronics</span><span class="tag">Functional Design</span>
+    </div>
+  </section>
+
+</div>
+
+<hr class="hr-fancy">
+<div class="cta">
+  <a href="index.html" class="btn-back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Portfolio
+  </a>
+</div>
+<footer>
+  <div class="fn">Parker Branham</div>
+  <div class="fc">3D Design &amp; Printing · Columbia, SC</div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);
+  document.getElementById('prog').style.width=(p*100)+'%';
+},{passive:true});
+const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){en.target.classList.add('vis');obs.unobserve(en.target);}});},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* CAD grid draws itself in */
+(function(){
+  const c=document.getElementById('cad-canvas');
+  const ctx=c.getContext('2d');
+  let W,H;const G='46,125,50';
+  function setup(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;}
+  setup();window.addEventListener('resize',setup);
+  const hL=[],vL=[];
+  for(let y=40;y<2000;y+=40)hL.push({y,p:Math.random()*0.6,s:0.0005+Math.random()*0.0007});
+  for(let x=40;x<2000;x+=40)vL.push({x,p:Math.random()*0.6,s:0.0004+Math.random()*0.0006});
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);t+=0.004;
+    hL.forEach(l=>{
+      if(l.y>H)return;l.p=Math.min(1,l.p+l.s);
+      ctx.strokeStyle=`rgba(${G},${0.045+Math.sin(t+l.y*.04)*.015})`;
+      ctx.lineWidth=0.7;ctx.beginPath();ctx.moveTo(0,l.y);ctx.lineTo(W*l.p,l.y);ctx.stroke();
+    });
+    vL.forEach(l=>{
+      if(l.x>W)return;l.p=Math.min(1,l.p+l.s);
+      ctx.strokeStyle=`rgba(${G},${0.04+Math.sin(t+l.x*.04)*.015})`;
+      ctx.lineWidth=0.7;ctx.beginPath();ctx.moveTo(l.x,0);ctx.lineTo(l.x,H*l.p);ctx.stroke();
+    });
+    // Annotation crosshairs
+    ctx.setLineDash([4,8]);ctx.lineWidth=1;
+    [[0.15,0.35],[0.8,0.25],[0.6,0.75]].forEach(([fx,fy])=>{
+      const cx=fx*W,cy=fy*H,s=8;
+      const op=0.18+Math.sin(t+cx*.01)*.05;
+      ctx.strokeStyle=`rgba(${G},${op})`;
+      ctx.beginPath();ctx.moveTo(cx-s,cy);ctx.lineTo(cx+s,cy);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx,cy-s);ctx.lineTo(cx,cy+s);ctx.stroke();
+    });
+    ctx.setLineDash([]);
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>

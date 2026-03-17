@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clara's Soaps — Parker Branham</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8f5f0;--card:#fff;--muted:#f0e9e0;
+  --border:#e0d6c9;--primary:#2e7d32;--secondary:#e8f5e9;
+  --fg:#3e2723;--sub:#6d4c41;--dim:#1b5e20;
+  --font-mono:'Source Code Pro',monospace;
+  --font-sans:'Montserrat',sans-serif;
+  --font-serif:'Merriweather',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;scrollbar-width:none;}
+html::-webkit-scrollbar{display:none;}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4;}
+
+#prog{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--primary),#81c784);z-index:10000;box-shadow:0 0 8px rgba(46,125,50,0.5);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(248,245,240,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--font-serif);font-weight:700;font-size:1.1rem;color:var(--primary);text-decoration:none;}
+.nav-back{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--sub);text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
+.nav-back:hover{color:var(--primary);}
+.nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* HERO — centered, big italic name, bubbles float up */
+#hero{
+  position:relative;min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:100px 24px 72px;
+  overflow:hidden;
+}
+#bubble-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.hero-inner{position:relative;z-index:2;}
+.hero-tag{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--primary);margin-bottom:20px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+.hero-h1{font-family:var(--font-serif);font-size:clamp(3.5rem,10vw,9rem);font-weight:900;line-height:0.95;color:var(--fg);letter-spacing:-0.03em;opacity:0;animation:fadeUp 0.8s 0.35s ease forwards;}
+.hero-h1 span{color:var(--primary);display:block;font-style:italic;}
+.hero-sub{font-size:1rem;color:var(--sub);margin-top:22px;font-weight:300;line-height:1.65;max-width:440px;opacity:0;animation:fadeUp 0.6s 0.7s ease forwards;}
+.hero-link{margin-top:32px;display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:12px 28px;border-radius:4px;background:var(--primary);color:#fff;transition:all 0.22s;opacity:0;animation:fadeUp 0.6s 0.9s ease forwards;}
+.hero-link:hover{background:var(--dim);transform:translateY(-2px);box-shadow:0 8px 20px rgba(46,125,50,0.2);}
+.hero-link svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;}
+
+/* CONTENT */
+.page-wrap{max-width:860px;margin:0 auto;}
+.content-sec{padding:76px 48px;}
+.sec-label{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--primary);margin-bottom:12px;}
+.sec-h2{font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:var(--fg);line-height:1.15;margin-bottom:20px;}
+.sec-h2 em{color:var(--primary);font-style:italic;}
+.prose{font-size:0.92rem;color:var(--sub);line-height:1.88;max-width:580px;}
+.prose p{margin-bottom:15px;}
+.prose p:last-child{margin-bottom:0;}
+
+/* DELIVERABLES — clean card list */
+.del-list{margin-top:32px;display:flex;flex-direction:column;gap:0;}
+.del-item{display:flex;gap:20px;padding:22px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
+.del-item:last-child{border-bottom:none;}
+.del-icon-wrap{width:40px;height:40px;background:var(--secondary);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.del-icon-wrap svg{width:18px;height:18px;stroke:var(--primary);fill:none;stroke-width:1.8;}
+.del-body{}
+.del-title{font-family:var(--font-serif);font-size:0.95rem;font-weight:700;color:var(--fg);margin-bottom:4px;}
+.del-desc{font-size:0.84rem;color:var(--sub);line-height:1.6;}
+
+/* HONEST NOTE — dark card */
+.honest-card{background:var(--fg);border-radius:16px;padding:42px 46px;position:relative;overflow:hidden;}
+.honest-card::after{content:'';position:absolute;bottom:-80px;left:-80px;width:240px;height:240px;border-radius:50%;background:rgba(46,125,50,0.1);}
+.honest-mono{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#81c784;margin-bottom:12px;}
+.honest-h{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:14px;line-height:1.3;}
+.honest-p{font-size:0.9rem;color:rgba(255,255,255,0.62);line-height:1.82;}
+
+.tags{display:flex;flex-wrap:wrap;gap:8px;}
+.tag{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.08em;padding:5px 12px;border-radius:100px;background:var(--muted);color:var(--dim);border:1px solid var(--border);}
+.hr-fancy{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 48px;}
+.cta{text-align:center;padding:64px 48px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:13px 30px;border-radius:4px;background:var(--primary);color:#fff;transition:all 0.22s;}
+.btn-primary:hover{background:var(--dim);transform:translateY(-2px);}
+.btn-primary svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;}
+.btn-back{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:13px 30px;border-radius:4px;border:2px solid var(--border);color:var(--fg);transition:all 0.22s;}
+.btn-back:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);}
+.btn-back svg,.btn-primary svg{transition:transform 0.2s;}
+.btn-back:hover svg{transform:translateX(-3px);}
+.btn-primary:hover svg{transform:translateX(3px);}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.62s ease,transform 0.62s ease;}
+.reveal.vis{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;max-width:860px;margin:0 auto;}
+.fn{font-family:var(--font-serif);font-size:0.88rem;font-weight:700;color:var(--primary);}
+.fc{font-family:var(--font-mono);font-size:0.6rem;color:var(--sub);}
+
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+
+@media(max-width:680px){
+  nav{padding:14px 20px;}.content-sec{padding:60px 20px;}.hr-fancy{margin:0 20px;}
+  .honest-card{padding:28px 24px;}.cta{padding:48px 20px;flex-direction:column;align-items:center;}
+  footer{flex-direction:column;gap:10px;text-align:center;padding:24px 20px;}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <a href="index.html" class="nav-logo">PB</a>
+  <a href="index.html" class="nav-back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Portfolio
+  </a>
+</nav>
+
+<section id="hero">
+  <canvas id="bubble-canvas"></canvas>
+  <div class="hero-inner">
+    <p class="hero-tag">Client Work · Web Development</p>
+    <h1 class="hero-h1">Clara's<span>Soaps</span></h1>
+    <p class="hero-sub">My girlfriend wanted to start selling her handmade soap online. I built her a site to make that happen.</p>
+    <a href="https://clarassoaps.github.io" target="_blank" class="hero-link">
+      Visit the site
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
+
+<div class="page-wrap">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">The project</p>
+    <h2 class="sec-h2">She wanted to sell soap.<br><em>I built the site.</em></h2>
+    <div class="prose">
+      <p>Clara makes handmade soap and wanted to start selling it online — she needed a way to show her products, build some credibility, and eventually take orders. So I built her a website.</p>
+      <p>She hasn't fully launched yet since she's still getting set up on the business side of things, but the site is live and ready when she does. The goal was to build something personal that matched the handmade feel of her product — not something that looked like a generic template.</p>
+    </div>
+  </section>
+
+  <hr class="hr-fancy">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">What was built</p>
+    <h2 class="sec-h2">A real site for a<br><em>real product.</em></h2>
+    <div class="del-list">
+      <div class="del-item d1">
+        <div class="del-icon-wrap"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div class="del-body">
+          <div class="del-title">Scratch build — no templates</div>
+          <div class="del-desc">Designed and coded from a blank file. Clean HTML, CSS, and JavaScript. Nothing borrowed, nothing generic.</div>
+        </div>
+      </div>
+      <div class="del-item d2">
+        <div class="del-icon-wrap"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+        <div class="del-body">
+          <div class="del-title">Responsive design</div>
+          <div class="del-desc">Works on every screen size. Mobile-first, because most people are going to find it on their phones.</div>
+        </div>
+      </div>
+      <div class="del-item d3">
+        <div class="del-icon-wrap"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="del-body">
+          <div class="del-title">Payment transaction research</div>
+          <div class="del-desc">Learned about how money transactions work on websites — checkout flow, what customers need to feel comfortable buying. New territory I figured out on this one.</div>
+        </div>
+      </div>
+      <div class="del-item d4">
+        <div class="del-icon-wrap"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+        <div class="del-body">
+          <div class="del-title">GitHub Pages — free hosting</div>
+          <div class="del-desc">Live at clarassoaps.github.io. No monthly fees eating into what she makes.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="hr-fancy">
+
+  <section class="content-sec">
+    <div class="honest-card reveal">
+      <p class="honest-mono">Working With a Client</p>
+      <h3 class="honest-h">Easiest client meeting<br>I've ever had.</h3>
+      <p class="honest-p">Working with Clara wasn't bad since she was my girlfriend — so the feedback loops were pretty short. That said, it was still a real project with real requirements. She had ideas for how she wanted things to look and feel, and my job was to translate that into something that worked. I also learned something new on this one — specifically around how money transactions work on websites. That wasn't something I'd had to think about before, and it opened up a whole other side of what goes into building a site for a business.</p>
+    </div>
+  </section>
+
+  <section class="content-sec" style="padding-top:0;">
+    <div class="tags reveal">
+      <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+      <span class="tag">GitHub Pages</span><span class="tag">E-Commerce</span><span class="tag">Client Work</span>
+    </div>
+  </section>
+
+</div>
+
+<hr class="hr-fancy">
+<div class="cta">
+  <a href="https://clarassoaps.github.io" target="_blank" class="btn-primary">
+    clarassoaps.github.io
+    <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+  </a>
+  <a href="index.html" class="btn-back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Portfolio
+  </a>
+</div>
+<footer>
+  <div class="fn">Parker Branham</div>
+  <div class="fc">Clara's Soaps · Client Web Project</div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);
+  document.getElementById('prog').style.width=(p*100)+'%';
+},{passive:true});
+const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){en.target.classList.add('vis');obs.unobserve(en.target);}});},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* Floating bubbles — green/cream palette */
+(function(){
+  const canvas=document.getElementById('bubble-canvas');
+  const ctx=canvas.getContext('2d');
+  function resize(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
+  resize();window.addEventListener('resize',resize);
+  const colors=['46,125,50','62,39,35','129,199,132','200,230,201'];
+  const bubbles=Array.from({length:28},(_,i)=>({
+    x:Math.random()*canvas.width,
+    y:canvas.height+Math.random()*canvas.height*0.8,
+    r:Math.random()*20+5,
+    spd:Math.random()*0.32+0.1,
+    drift:(Math.random()-0.5)*0.28,
+    op:Math.random()*0.13+0.03,
+    ci:i%colors.length
+  }));
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    bubbles.forEach(b=>{
+      const c=colors[b.ci];
+      ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(${c},${b.op})`;ctx.lineWidth=1;ctx.stroke();
+      const g=ctx.createRadialGradient(b.x-b.r*.3,b.y-b.r*.3,0,b.x,b.y,b.r);
+      g.addColorStop(0,`rgba(${c},${b.op*.25})`);g.addColorStop(1,`rgba(${c},0)`);
+      ctx.fillStyle=g;ctx.fill();
+      ctx.beginPath();ctx.arc(b.x-b.r*.3,b.y-b.r*.3,b.r*.14,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${b.op*1.8})`;ctx.fill();
+      b.y-=b.spd;b.x+=b.drift;
+      if(b.y<-b.r*3){b.y=canvas.height+b.r*2;b.x=Math.random()*canvas.width;}
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>

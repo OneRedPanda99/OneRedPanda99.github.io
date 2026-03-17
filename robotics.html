@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robotics — Parker Branham</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Spline 3D viewer web component — no React needed -->
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.0.76/build/spline-viewer.js"></script>
+<style>
+:root{
+  --bg:#f8f5f0;--card:#f8f5f0;--muted:#f0e9e0;--accent:#c8e6c9;
+  --border:#e0d6c9;--primary:#2e7d32;--secondary:#e8f5e9;
+  --fg:#3e2723;--sub:#6d4c41;--dim:#1b5e20;
+  --dark:#3e2723;--dark-sub:rgba(255,255,255,0.65);--dark-accent:#81c784;
+  --font-mono:'Source Code Pro',monospace;
+  --font-sans:'Montserrat',sans-serif;
+  --font-serif:'Merriweather',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;scrollbar-width:none;}
+html::-webkit-scrollbar{display:none;}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4;}
+
+/* PROGRESS */
+#prog{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--primary),#81c784);z-index:10000;box-shadow:0 0 8px rgba(46,125,50,0.5);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(62,39,35,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);}
+.nav-logo{font-family:var(--font-serif);font-weight:700;font-size:1.1rem;color:var(--dark-accent);text-decoration:none;}
+.nav-back{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
+.nav-back:hover{color:var(--dark-accent);}
+.nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* ── HERO: dark, split layout ── */
+#hero{
+  background:var(--dark);
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  padding-top:57px;
+  position:relative;
+  overflow:hidden;
+}
+/* Spotlight that follows mouse */
+#spotlight{
+  position:absolute;
+  width:480px;height:480px;
+  border-radius:50%;
+  background:radial-gradient(circle at center,rgba(46,125,50,0.22) 0%,transparent 70%);
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  left:25%;top:50%;
+  transition:left 0.06s,top 0.06s;
+  z-index:1;
+}
+.hero-left{
+  padding:80px 60px 80px 80px;
+  position:relative;z-index:2;
+}
+.hero-eyebrow{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--dark-accent);margin-bottom:20px;display:block;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+.hero-h1{font-family:var(--font-serif);font-size:clamp(2.4rem,5vw,4.2rem);font-weight:900;line-height:1.1;color:#fff;margin-bottom:24px;opacity:0;animation:fadeUp 0.7s 0.4s ease forwards;}
+.hero-h1 em{color:var(--dark-accent);font-style:normal;}
+.hero-p{font-size:0.95rem;color:var(--dark-sub);line-height:1.75;font-weight:300;max-width:380px;opacity:0;animation:fadeUp 0.6s 0.6s ease forwards;}
+/* 4th badge */
+.badge{display:inline-flex;align-items:center;gap:12px;margin-top:36px;background:rgba(46,125,50,0.18);border:1px solid rgba(129,199,132,0.3);border-radius:12px;padding:16px 22px;opacity:0;animation:fadeUp 0.6s 0.8s ease forwards;}
+.badge-num{font-family:var(--font-serif);font-size:2.6rem;font-weight:900;color:var(--dark-accent);line-height:1;}
+.badge-text{}
+.badge-title{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--dark-accent);}
+.badge-desc{font-size:0.82rem;color:var(--dark-sub);margin-top:3px;line-height:1.4;}
+
+/* Spline right panel */
+.hero-right{
+  height:100vh;
+  position:relative;
+  z-index:2;
+}
+spline-viewer{
+  width:100%;
+  height:100%;
+  display:block;
+}
+/* Spline loading fallback */
+.spline-loading{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:14px;
+}
+.spline-loading-ring{
+  width:42px;height:42px;border-radius:50%;
+  border:2px solid rgba(129,199,132,0.2);
+  border-top-color:var(--dark-accent);
+  animation:spin 1s linear infinite;
+}
+.spline-loading-label{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+
+/* ── CONTENT ── */
+.page-wrap{max-width:860px;margin:0 auto;}
+.content-sec{padding:80px 48px;}
+.sec-label{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--primary);margin-bottom:12px;}
+.sec-h2{font-family:var(--font-serif);font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:700;color:var(--fg);line-height:1.2;margin-bottom:20px;}
+.sec-h2 em{color:var(--primary);font-style:italic;}
+.prose{font-size:0.92rem;color:var(--sub);line-height:1.88;font-weight:400;max-width:600px;}
+.prose p{margin-bottom:15px;}
+.prose p:last-child{margin-bottom:0;}
+
+/* ROBOT MISSION BLOCK */
+.mission-block{background:var(--muted);border-radius:14px;padding:32px 36px;margin-top:32px;border-left:4px solid var(--primary);}
+.mission-label{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--primary);margin-bottom:10px;}
+.mission-text{font-size:0.92rem;color:var(--sub);line-height:1.75;}
+
+/* ROLES — simple numbered list */
+.roles-list{margin-top:32px;display:flex;flex-direction:column;gap:0;}
+.role-row{display:flex;gap:24px;padding:22px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
+.role-row:last-child{border-bottom:none;}
+.role-n{font-family:var(--font-serif);font-size:1.5rem;font-weight:900;color:var(--accent);line-height:1;padding-top:3px;flex-shrink:0;width:28px;}
+.role-body{}
+.role-title{font-family:var(--font-serif);font-size:0.95rem;font-weight:700;color:var(--fg);margin-bottom:4px;}
+.role-desc{font-size:0.85rem;color:var(--sub);line-height:1.65;}
+
+/* STORY — dark inverted card */
+.story-card{background:var(--dark);border-radius:16px;padding:42px 46px;position:relative;overflow:hidden;}
+.story-card::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;border-radius:50%;background:rgba(46,125,50,0.1);pointer-events:none;}
+.story-mono{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#81c784;margin-bottom:12px;}
+.story-h{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:15px;line-height:1.3;}
+.story-p{font-size:0.9rem;color:rgba(255,255,255,0.65);line-height:1.82;}
+
+/* CAPTAIN SPLIT */
+.captain-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;}
+.captain-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;}
+.captain-label{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--primary);margin-bottom:8px;}
+.captain-text{font-size:0.88rem;color:var(--sub);line-height:1.65;}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;}
+.tag{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.08em;padding:5px 12px;border-radius:100px;background:var(--muted);color:var(--dim);border:1px solid var(--border);}
+
+.hr-fancy{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 48px;}
+
+/* CTA */
+.cta{text-align:center;padding:64px 48px;}
+.btn-back{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:13px 30px;border-radius:4px;border:2px solid var(--border);color:var(--fg);transition:all 0.22s;}
+.btn-back:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);}
+.btn-back svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;transition:transform 0.2s;}
+.btn-back:hover svg{transform:translateX(-3px);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.62s ease,transform 0.62s ease;}
+.reveal.vis{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;max-width:860px;margin:0 auto;}
+.fn{font-family:var(--font-serif);font-size:0.88rem;font-weight:700;color:var(--primary);}
+.fc{font-family:var(--font-mono);font-size:0.6rem;color:var(--sub);}
+
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+@media(max-width:860px){
+  #hero{grid-template-columns:1fr;grid-template-rows:auto 50vh;}
+  .hero-left{padding:100px 24px 40px;}
+  .hero-right{height:50vh;}
+  nav{padding:14px 20px;}
+  .content-sec{padding:60px 20px;}
+  .hr-fancy{margin:0 20px;}
+  .captain-split{grid-template-columns:1fr;}
+  .story-card{padding:28px 24px;}
+  .cta{padding:48px 20px;}
+  footer{flex-direction:column;gap:10px;text-align:center;padding:24px 20px;}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">PB</a>
+  <a href="index.html" class="nav-back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Portfolio
+  </a>
+</nav>
+
+<!-- HERO: dark + Spline -->
+<section id="hero">
+  <div id="spotlight"></div>
+
+  <div class="hero-left">
+    <span class="hero-eyebrow">Robotics · Beta Club &amp; FTC</span>
+    <h1 class="hero-h1">Beta Club.<br>Then <em>FTC.</em></h1>
+    <p class="hero-p">A beach-cleaning robot, a 4th place finish, and then — same day I got the award — starting a whole new program from scratch.</p>
+    <div class="badge">
+      <div class="badge-num">4th</div>
+      <div class="badge-text">
+        <div class="badge-title">Beta Club Robotics</div>
+        <div class="badge-desc">First placement in 6 years for Cardinal Newman.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <!-- Spline 3D robot — interactive, no React needed -->
+    <spline-viewer
+      url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+      loading-anim-type="spinner-small-dark"
+    ></spline-viewer>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<div class="page-wrap">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">The Robot</p>
+    <h2 class="sec-h2">Designed to clean<br><em>a beach.</em></h2>
+    <div class="prose">
+      <p>Our robot was designed to locate, pick up, and deliver trash to trash bins — specifically on the beach. The competition scenario was environmental cleanup, and we built something that could actually handle that task autonomously.</p>
+      <p>The design had to solve a real problem: find trash, grab it, move it somewhere. That meant working through sensors, grippers, and navigation. A lot of iteration before we got to something that worked under competition pressure.</p>
+    </div>
+    <div class="mission-block">
+      <div class="mission-label">Mission Objective</div>
+      <div class="mission-text">Locate, pick up, and deliver trash to designated bins — simulating autonomous beach cleanup. Scored on accuracy, speed, and reliability across multiple runs.</div>
+    </div>
+  </section>
+
+  <hr class="hr-fancy">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">My Role</p>
+    <h2 class="sec-h2">Keeping everyone<br><em>on the same page.</em></h2>
+    <div class="prose">
+      <p>My job was coordination. When you have a group of people all with different ideas about how to build something, someone has to say "okay, here's what we're doing." That was me.</p>
+    </div>
+    <div class="roles-list">
+      <div class="role-row">
+        <div class="role-n">01</div>
+        <div class="role-body">
+          <div class="role-title">Ran Every Meeting</div>
+          <div class="role-desc">Coordinated every team meeting, set the agenda, and kept things moving instead of everyone just talking past each other.</div>
+        </div>
+      </div>
+      <div class="role-row">
+        <div class="role-n">02</div>
+        <div class="role-body">
+          <div class="role-title">Unified the Direction</div>
+          <div class="role-desc">Made sure every team member agreed on what we were building and what the robot was doing. No conflicting builds, no wasted work.</div>
+        </div>
+      </div>
+      <div class="role-row">
+        <div class="role-n">03</div>
+        <div class="role-body">
+          <div class="role-title">Competed Under Pressure</div>
+          <div class="role-desc">Showed up on competition day and applied everything the team built under real conditions. 4th place — first placement in 6 years.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="hr-fancy">
+
+  <section class="content-sec">
+    <div class="story-card reveal">
+      <p class="story-mono">How the FTC Program Started</p>
+      <h3 class="story-h">I was standing in line<br>to get my award.</h3>
+      <p class="story-p">I got the information for FTC while standing in line to receive my Beta Club award. A peer started talking to me and just laid out how their club worked, how FTC functioned, all of it. By the time I walked away with that award I already had a plan. I got back home and immediately started working on building the program at Cardinal Newman. That's how fast it happened. I'm the Team Captain now and we're looking forward to competing in the next event.</p>
+    </div>
+  </section>
+
+  <hr class="hr-fancy">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">Team Captain</p>
+    <h2 class="sec-h2">The hardest part isn't<br><em>the building.</em></h2>
+    <div class="prose">
+      <p>The actual building is the fun part. It's the people side that takes work.</p>
+    </div>
+    <div class="captain-split">
+      <div class="captain-card d1">
+        <div class="captain-label">The Hard Part</div>
+        <div class="captain-text">Staying consistent and keeping communication with everyone. You can't build a robot with half a team showing up.</div>
+      </div>
+      <div class="captain-card d2">
+        <div class="captain-label">When It Works</div>
+        <div class="captain-text">When all hands are on deck it's really nice. The technical problems are the fun part — it's the people management that takes effort.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="content-sec" style="padding-top:0;">
+    <div class="tags reveal">
+      <span class="tag">FTC Robotics</span>
+      <span class="tag">Beta Club</span>
+      <span class="tag">Team Captain</span>
+      <span class="tag">Mechatronics</span>
+      <span class="tag">Competition</span>
+      <span class="tag">Cardinal Newman</span>
+    </div>
+  </div>
+
+</div>
+
+<hr class="hr-fancy">
+<div class="cta">
+  <a href="index.html" class="btn-back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Portfolio
+  </a>
+</div>
+<footer>
+  <div class="fn">Parker Branham</div>
+  <div class="fc">Robotics · Cardinal Newman High School</div>
+</footer>
+
+<script>
+/* Progress */
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);
+  document.getElementById('prog').style.width=(p*100)+'%';
+},{passive:true});
+
+/* Spotlight follows mouse in hero */
+(function(){
+  const hero=document.getElementById('hero');
+  const spot=document.getElementById('spotlight');
+  hero.addEventListener('mousemove',e=>{
+    const r=hero.getBoundingClientRect();
+    spot.style.left=(e.clientX-r.left)+'px';
+    spot.style.top=(e.clientY-r.top)+'px';
+  });
+})();
+
+/* Reveal */
+const obs=new IntersectionObserver(e=>{
+  e.forEach(en=>{if(en.isIntersecting){en.target.classList.add('vis');obs.unobserve(en.target);}});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
