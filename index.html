@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Parker Branham — high school junior in Columbia, SC building servers, robots, and websites.">
 <meta property="og:title" content="Parker Branham">
-<meta property="og:description" content="Parker's Portfolio!">
-<meta property="og:image" content="images/me/2_1me">
-<meta property="og:url" content="https://oneredpanda99.github.io">
+<meta property="og:description" content="Parker Branham — servers, robots, and websites. Columbia, SC.">
+<meta property="og:image" content="https://www.parkerbranham.com/images/me/2_1me.png">
+<meta property="og:url" content="https://www.parkerbranham.com">
 <meta name="twitter:card" content="summary_large_image">
 <title>Parker Branham - Columbia, SC</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="icon" type="image/jpeg" href="/images/me/PBLogo.png">
+<link rel="icon" type="image/png" href="images/me/PBLogo.png">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&family=Montserrat:wght@300;400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -44,6 +45,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:f
 .nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 .mobile-menu{display:none;position:fixed;top:57px;left:0;right:0;background:rgba(248,245,240,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);z-index:999;padding:20px 24px;flex-direction:column;gap:0;}
 .mobile-menu.open{display:flex;}
+.mobile-menu[hidden]{display:none !important;}
 .mobile-menu a{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted-foreground);text-decoration:none;padding:14px 0;border-bottom:1px solid var(--border);}
 .mobile-menu a:last-child{border-bottom:none;}
 .mobile-menu a:hover{color:var(--primary);}
@@ -60,14 +62,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:f
 .btn-primary{background:var(--primary);color:var(--primary-foreground);font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:12px 26px;border-radius:4px;transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);border:2px solid transparent;display:inline-flex;align-items:center;gap:7px;}
 .btn-primary svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;}
 .btn-primary:hover{background:transparent;color:var(--primary);border-color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 20px rgba(46,125,50,0.18);}
-.btn-secondary{background:transparent;color:var(--foreground);font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:12px 26px;border-radius:4px;border:2px solid var(--border);transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);display:inline-flex;align-items:center;gap:7px;}
+.btn-secondary{background:transparent;color:var(--foreground);font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:12px 26px;border-radius:4px;border:2px solid #bcaaa4;transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);display:inline-flex;align-items:center;gap:7px;cursor:pointer;}
 .btn-secondary svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;}
 .btn-secondary:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 20px rgba(46,125,50,0.1);}
-.scroll-hint{position:absolute;bottom:-165px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 0.6s 1.4s ease forwards;}
+.scroll-hint{position:absolute;bottom:36px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 0.6s 1.4s ease forwards;pointer-events:none;}
 .scroll-hint span{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted-foreground);}
 .scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--primary),transparent);animation:scrollPulse 2s infinite;}
 .btn-secondary.copied::after{content:"Copied!";margin-left:8px;color:#4caf50;font-weight:600;opacity:1;transition:opacity .3s ease;}
 .btn-secondary::after{content:"";opacity:0;}
+a:focus-visible,button:focus-visible{outline:2px solid var(--primary);outline-offset:3px;}
+.footer-email{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted-foreground);background:none;border:none;cursor:pointer;padding:0;transition:color 0.2s;}
+.footer-email:hover,.footer-email.copied{color:var(--primary);}
 
 
 
@@ -159,7 +164,7 @@ section{padding:64px 48px;max-width:1100px;margin:0 auto;}
 .copy-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;background:var(--secondary);color:var(--primary);border:1px solid var(--accent);padding:6px 14px;border-radius:4px;cursor:pointer;transition:all 0.2s ease;}
 .copy-btn:hover{background:var(--accent);}
 .copy-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;}
-.contact-links-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.contact-links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
 .contact-link-card{background:var(--card);border:2px solid var(--border);border-radius:10px;padding:18px;text-decoration:none;transition:border-color 0.2s,transform 0.25s cubic-bezier(0.34,1.56,0.64,1);display:flex;flex-direction:column;gap:6px;}
 .contact-link-card:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:0 12px 28px rgba(46,125,50,0.1);}
 .contact-link-icon{width:32px;height:32px;background:var(--secondary);border-radius:8px;display:flex;align-items:center;justify-content:center;}
@@ -214,6 +219,15 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
   .exp-dot{display:none;}
   #scroll-section{height:auto;padding:60px 20px;}
   .scroll-sticky{position:relative;top:0;}
+  .focus-card-overlay{opacity:1;background:linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 55%);}
+  .cards-grid:hover .focus-card:not(:hover){filter:none;transform:none;opacity:1;}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  .hero-tag,.hero-name,.hero-role,.hero-cta,.scroll-hint{animation:none;opacity:1;transform:none;}
+  .reveal{opacity:1;transform:none;transition:none;}
+  .photo-marquee-track,.photo-marquee-row.reverse .photo-marquee-track{animation:none;}
+  .scroll-line{animation:none;}
 }
 </style>
 </head>
@@ -229,11 +243,11 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
     <li><a href="#photography">Photography</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <div class="nav-hamburger no-select" id="hamburger" aria-label="Open menu">
+  <div class="nav-hamburger no-select" id="hamburger" role="button" tabindex="0" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
     <span></span><span></span><span></span>
   </div>
 </nav>
-<div class="mobile-menu" id="mobile-menu">
+<div class="mobile-menu" id="mobile-menu" hidden>
   <a href="#about" onclick="closeMobileMenu()">About</a>
   <a href="#experience" onclick="closeMobileMenu()">Experience</a>
   <a href="#projects" onclick="closeMobileMenu()">Projects</a>
@@ -249,11 +263,12 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
     <h1 class="hero-name no-select">Parker<br><span>Branham</span></h1>
     <p class="hero-role no-select">I'm a junior in high school building servers, robots, and websites. I've also been earning my own money since I was 14.</p>
     <div class="hero-cta">
-      <a href="https://github.com/OneRedPanda99" target="_blank" class="btn-primary no-select"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub</a>
-      <a href="#" class="btn-secondary no-select" onclick="navigator.clipboard.writeText('parkerbranham@gmail.com');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),1500);"><svg viewBox='0 0 24 24'><path d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'/><polyline points='22,6 12,13 2,6'/></svg>Email</a>
-      <a href="https://linkedin.com/in/parker-branham-9b32a5341/" target="_blank" class="btn-secondary no-select"><img src="images/icons/linkedin.png" alt="LinkedIn" style="width:13px;height:13px;object-fit:contain;">LinkedIn</a>
+      <a href="https://github.com/OneRedPanda99" target="_blank" rel="noopener noreferrer" class="btn-primary no-select"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub</a>
+      <button type="button" class="btn-secondary no-select" id="hero-email-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Email</button>
+      <a href="https://www.linkedin.com/in/parker-branham-9b32a5341/" target="_blank" rel="noopener noreferrer" class="btn-secondary no-select"><img src="images/icons/linkedin.png" alt="" width="13" height="13" style="width:13px;height:13px;object-fit:contain;">LinkedIn</a>
     </div>
-  <div class="scroll-hint no-select">
+  </div>
+  <div class="scroll-hint no-select" aria-hidden="true">
     <span>Scroll</span>
     <div class="scroll-line"></div>
   </div>
@@ -279,7 +294,7 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
         <div class="stat-panel">
           <div class="stat-num no-select">2+</div>
           <div class="stat-label no-select">Years Self-Employed</div>
-          <div class="stat-desc">I've been Pressure washing and doing home services since I was 14 years old.</div>
+          <div class="stat-desc">I've been pressure washing and doing home services since I was 14 years old.</div>
         </div>
       </div>
     </div>
@@ -296,7 +311,7 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
     <p class="section-subtitle">I'm a junior at Cardinal Newman with the dream to one day be an Engineer. I've been tinkering with computers since I was 10, starting with self-hosted Minecraft servers and working up to CAD-designed parts, a robotics program I founded, and client websites. I'm a perfectionist, and I want things to work exactly the way I picture them, and when they don't, I'll fix them until they do.</p>
     <div class="about-facts">
       <div class="fact-row"><span class="fact-key no-select">School</span><span class="fact-val">Cardinal Newman High School</span></div>
-      <div class="fact-row"><span class="fact-key no-select">GPA</span><span class="fact-val">4.34 SC Uniform</span></div>
+      <div class="fact-row"><span class="fact-key no-select">GPA</span><span class="fact-val">4.73 SC Uniform</span></div>
       <div class="fact-row"><span class="fact-key no-select">Graduation</span><span class="fact-val">May 2027</span></div>
       <div class="fact-row"><span class="fact-key no-select">Goal</span><span class="fact-val">Mechatronics / Engineering</span></div>
       <div class="fact-row"><span class="fact-key no-select">Location</span><span class="fact-val">Columbia, South Carolina</span></div>
@@ -305,7 +320,7 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
   <div class="tilt-card-wrap reveal" id="tilt-wrap">
     <div class="tilt-card" id="tilt-card">
       <div class="tilt-spotlight" id="tilt-spotlight"></div>
-      <img class="tilt-card-img" src="images/me/2_1me.png" alt="Technology and engineering">
+      <img class="tilt-card-img" src="images/me/2_1me.png" alt="Parker Branham">
       <div class="tilt-card-body">
         <span class="tilt-card-tag no-select">Junior - Class of 2027</span>
         <div class="tilt-card-title">Maker and Problem Solver</div>
@@ -333,7 +348,7 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
       <div class="exp-content">
         <div class="exp-role">Team Captain &amp; Founder</div>
         <div class="exp-company no-select">FTC Robotics - Cardinal Newman</div>
-        <div class="exp-desc">I built the FTC robotics program from nothing but a spark at a better future for other students like me. I lead the team while designing, building, and competing, Previously placed 4th at Beta Club Robotics, the first placement for the school in six years.</div>
+        <div class="exp-desc">I built the FTC robotics program from nothing but a spark at a better future for other students like me. I lead the team while designing, building, and competing. Previously placed 4th at Beta Club Robotics, the first placement for the school in six years.</div>
         <div class="exp-tags"><span class="skill-tag">Robotics</span><span class="skill-tag">Leadership</span><span class="skill-tag">CAD</span><span class="skill-tag">Java</span></div>
       </div>
     </div>
@@ -413,7 +428,7 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
     </a>
 
     <a href="robotics.html" class="focus-card reveal">
-      <img class="focus-card-bg" src="https://oneredpanda99.github.io/images/robotics/WithBertPROJECT.jpg" alt="Robotics">
+      <img class="focus-card-bg" src="images/robotics/WithBertPROJECT.jpg" alt="Robotics">
       <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Robotics</div></div>
       <div class="focus-card-overlay">
         <div>
@@ -424,7 +439,7 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
     </a>
 
     <a href="claras-soaps.html" class="focus-card reveal">
-      <img class="focus-card-bg" src="https://oneredpanda99.github.io/images/projects/ClarasSoapsWebsite.png" alt="Claras Soaps">
+      <img class="focus-card-bg" src="images/projects/ClarasSoapsWebsite.png" alt="Clara's Soaps">
       <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Website Development</div></div>
       <div class="focus-card-overlay">
         <div>
@@ -435,7 +450,7 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
     </a>
 
     <a href="scpressurepoint.html" class="focus-card reveal">
-      <img class="focus-card-bg" src="https://oneredpanda99.github.io/images/projects/SCPressurePointWebsiteRatio.png" alt="SC Pressure Point">
+      <img class="focus-card-bg" src="images/projects/SCPressurePointWebsiteRatio.png" alt="SC Pressure Point">
       <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Website Development</div></div>
       <div class="focus-card-overlay">
         <div>
@@ -463,55 +478,55 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
   <div class="reveal">
     <p class="section-label no-select">Photography</p>
     <h2 class="section-title">Film &amp; Digital.</h2>
-    <p class="section-subtitle">Canon A1 and Fujifilm. RAW files edited in Photoshop. Follow at <a href="https://instagram.com/branham.camera" target="_blank" style="color:var(--primary);">@branham.camera</a></p>
+    <p class="section-subtitle">Canon A1 and Fujifilm. RAW files edited in Photoshop. Follow at <a href="https://instagram.com/branham.camera" target="_blank" rel="noopener noreferrer" style="color:var(--primary);">@branham.camera</a></p>
   </div>
-  <div class="photo-gallery-wrap">
+  <div class="photo-gallery-wrap" aria-label="Photography gallery">
     <div class="photo-marquee-row">
       <div class="photo-marquee-track">
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/building.JPG" alt="Building"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/bungalo.JPG" alt="Bungalo"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/coastaricagreen.JPG" alt="Costa Rica"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/coastaricapurple.JPG" alt="Costa Rica"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/doglookingforward.JPG" alt="Dog"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/dogupsidedown.JPG" alt="Dog"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/feetoverwell.JPG" alt="Feet over well"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/guynexttofirehydrant.JPG" alt="Fire hydrant"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/mountains.JPG" alt="Mountains"></div>
+        <div class="photo-item"><img src="images/photography/building.JPG" alt="Building architecture" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/bungalo.JPG" alt="Bungalow" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/coastaricagreen.jpg" alt="Costa Rica greenery" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/coastaricapurple.jpg" alt="Costa Rica purple flowers" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/doglookingforward.jpg" alt="Dog looking forward" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/dogupsidedown.jpg" alt="Dog upside down" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/feetoverwell.jpg" alt="Feet over a well" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/guynexttofirehydrant.jpg" alt="Person next to fire hydrant" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/mountains.JPG" alt="Mountains" loading="lazy"></div>
         <!-- duplicate for seamless loop -->
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/building.JPG" alt="Building"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/bungalo.JPG" alt="Bungalo"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/coastaricagreen.JPG" alt="Costa Rica"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/coastaricapurple.JPG" alt="Costa Rica"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/doglookingforward.JPG" alt="Dog"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/dogupsidedown.JPG" alt="Dog"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/feetoverwell.JPG" alt="Feet over well"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/guynexttofirehydrant.JPG" alt="Fire hydrant"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/mountains.JPG" alt="Mountains"></div>
+        <div class="photo-item"><img src="images/photography/building.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/bungalo.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/coastaricagreen.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/coastaricapurple.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/doglookingforward.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/dogupsidedown.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/feetoverwell.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/guynexttofirehydrant.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/mountains.JPG" alt="" loading="lazy" aria-hidden="true"></div>
       </div>
     </div>
     <div class="photo-marquee-row reverse">
       <div class="photo-marquee-track">
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/outoforder.JPG" alt="Out of order"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/phoneoncouch.JPG" alt="Phone on couch"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/phoneonfloor.JPG" alt="Phone on floor"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/railroad.JPG" alt="Railroad"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/snowlightpost.JPG" alt="Snow light post"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/snowybirdfeeder.JPG" alt="Snowy bird feeder"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/snowyexitpath.JPG" alt="Snowy exit path"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/snowypath.JPG" alt="Snowy path"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/sunset.JPG" alt="Sunset"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/whiteboard.JPG" alt="Whiteboard"></div>
+        <div class="photo-item"><img src="images/photography/outoforder.JPG" alt="Out of order sign" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/phoneoncouch.jpg" alt="Phone on couch" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/phoneonfloor.jpg" alt="Phone on floor" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/railroad.jpg" alt="Railroad tracks" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/snowlightpost.JPG" alt="Snowy light post" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/snowybirdfeeder.JPG" alt="Snowy bird feeder" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/snowyexitpath.JPG" alt="Snowy exit path" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/snowypath.JPG" alt="Snowy path" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/sunset.jpg" alt="Sunset" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/whiteboard.jpg" alt="Whiteboard" loading="lazy"></div>
         <!-- duplicate for seamless loop -->
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/outoforder.JPG" alt="Out of order"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/phoneoncouch.JPG" alt="Phone on couch"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/phoneonfloor.JPG" alt="Phone on floor"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/railroad.JPG" alt="Railroad"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/snowlightpost.JPG" alt="Snow light post"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/snowybirdfeeder.JPG" alt="Snowy bird feeder"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/snowyexitpath.JPG" alt="Snowy exit path"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/snowypath.JPG" alt="Snowy path"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/sunset.JPG" alt="Sunset"></div>
-        <div class="photo-item"><img src="https://oneredpanda99.github.io/images/photography/whiteboard.JPG" alt="Whiteboard"></div>
+        <div class="photo-item"><img src="images/photography/outoforder.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/phoneoncouch.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/phoneonfloor.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/railroad.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/snowlightpost.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/snowybirdfeeder.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/snowyexitpath.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/snowypath.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/sunset.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/whiteboard.jpg" alt="" loading="lazy" aria-hidden="true"></div>
       </div>
     </div>
   </div>
@@ -530,30 +545,35 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
       <p>If you have a project, want to hire me, or just want to connect, reach out directly.</p>
       <div class="contact-email-row">
         <span class="contact-email-display" id="email-text">parkerbranham@gmail.com</span>
-        <button class="copy-btn" onclick="copyEmail()">
-          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <button type="button" class="copy-btn" onclick="copyEmail()" aria-label="Copy email address">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           <span id="copy-label">Copy</span>
         </button>
       </div>
     </div>
     <div class="contact-links-grid reveal">
-      <a href="https://github.com/OneRedPanda99" target="_blank" class="contact-link-card">
-        <div class="contact-link-icon"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></div>
+      <a href="https://github.com/OneRedPanda99" target="_blank" rel="noopener noreferrer" class="contact-link-card">
+        <div class="contact-link-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></div>
         <div class="contact-link-name">GitHub</div>
         <div class="contact-link-url">OneRedPanda99</div>
       </a>
-      <a href="https://instagram.com/branham.camera" target="_blank" class="contact-link-card">
-        <div class="contact-link-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+      <a href="https://www.linkedin.com/in/parker-branham-9b32a5341/" target="_blank" rel="noopener noreferrer" class="contact-link-card">
+        <div class="contact-link-icon"><img src="images/icons/linkedin.png" alt="" width="16" height="16" style="width:16px;height:16px;object-fit:contain;"></div>
+        <div class="contact-link-name">LinkedIn</div>
+        <div class="contact-link-url">parker-branham</div>
+      </a>
+      <a href="https://instagram.com/branham.camera" target="_blank" rel="noopener noreferrer" class="contact-link-card">
+        <div class="contact-link-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
         <div class="contact-link-name">Instagram</div>
         <div class="contact-link-url">@branham.camera</div>
       </a>
-      <a href="https://clarassoaps.github.io" target="_blank" class="contact-link-card">
-        <div class="contact-link-icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+      <a href="https://clarassoaps.github.io" target="_blank" rel="noopener noreferrer" class="contact-link-card">
+        <div class="contact-link-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
         <div class="contact-link-name">Clara's Soaps</div>
         <div class="contact-link-url">clarassoaps.github.io</div>
       </a>
-      <a href="https://scpressurepoint.github.io" target="_blank" class="contact-link-card">
-        <div class="contact-link-icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+      <a href="https://scpressurepoint.github.io" target="_blank" rel="noopener noreferrer" class="contact-link-card">
+        <div class="contact-link-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
         <div class="contact-link-name">SC Pressure Point</div>
         <div class="contact-link-url">scpressurepoint.github.io</div>
       </a>
@@ -565,32 +585,55 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
 <footer>
   <div class="footer-name no-select">Parker Branham</div>
   <div class="footer-links">
-    <a href="https://github.com/OneRedPanda99" target="_blank">GitHub</a>
-    <a href="https://clarassoaps.github.io" target="_blank">Clara's Soaps</a>
-    <a href="https://scpressurepoint.github.io" target="_blank">SC Pressure Point</a>
-    <a href="https://instagram.com/branham.camera" target="_blank">@branham.camera</a>
-    <a href="#" class="btn-secondary no-select"onclick="navigator.clipboard.writeText('parkerbranham@gmail.com'); this.classList.add('copied');"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Email</a>
-
+    <a href="https://github.com/OneRedPanda99" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href="https://www.linkedin.com/in/parker-branham-9b32a5341/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="https://clarassoaps.github.io" target="_blank" rel="noopener noreferrer">Clara's Soaps</a>
+    <a href="https://scpressurepoint.github.io" target="_blank" rel="noopener noreferrer">SC Pressure Point</a>
+    <a href="https://instagram.com/branham.camera" target="_blank" rel="noopener noreferrer">@branham.camera</a>
+    <button type="button" class="footer-email no-select" id="footer-email-btn">Email</button>
   </div>
   <div class="footer-copy no-select">&copy; 2026 Parker Branham &middot; Columbia, SC</div>
 </footer>
 
 <script>
+const EMAIL = 'parkerbranham@gmail.com';
+
 /* Mobile menu */
 const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobile-menu');
-hamburger.addEventListener('click', () => {
-  mobileMenu.classList.toggle('open');
-  hamburger.classList.toggle('open');
-});
-function closeMobileMenu() {
-  mobileMenu.classList.remove('open');
-  hamburger.classList.remove('open');
+function setMenuOpen(open) {
+  mobileMenu.classList.toggle('open', open);
+  hamburger.classList.toggle('open', open);
+  hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  hamburger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  if (open) mobileMenu.removeAttribute('hidden');
+  else mobileMenu.setAttribute('hidden', '');
 }
+hamburger.addEventListener('click', () => setMenuOpen(!mobileMenu.classList.contains('open')));
+hamburger.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setMenuOpen(!mobileMenu.classList.contains('open')); }
+});
+function closeMobileMenu() { setMenuOpen(false); }
+
+function flashCopied(el) {
+  el.classList.add('copied');
+  setTimeout(() => el.classList.remove('copied'), 1500);
+}
+function copyEmailToClipboard(feedbackEl) {
+  navigator.clipboard.writeText(EMAIL).then(() => {
+    if (feedbackEl) flashCopied(feedbackEl);
+  }).catch(() => {});
+}
+const heroEmailBtn = document.getElementById('hero-email-btn');
+if (heroEmailBtn) heroEmailBtn.addEventListener('click', () => copyEmailToClipboard(heroEmailBtn));
+const footerEmailBtn = document.getElementById('footer-email-btn');
+if (footerEmailBtn) footerEmailBtn.addEventListener('click', () => copyEmailToClipboard(footerEmailBtn));
 
 /* Flickering grid */
 (function() {
   const canvas = document.getElementById('flickering-canvas');
+  if (!canvas) return;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ctx = canvas.getContext('2d');
   let cols, rows, squares, dpr;
   const SQ = 16, GAP = 10, MAX_OP = 0.38, FLICKER = 0.15;
@@ -604,27 +647,30 @@ function closeMobileMenu() {
     for (let i = 0; i < squares.length; i++) squares[i] = Math.random() * MAX_OP;
   }
   let lastTime = 0;
-  function animate(t) {
-    const dt = (t - lastTime) / 1000; lastTime = t;
+  function drawFrame(t) {
+    const dt = reduceMotion ? 0 : (t - lastTime) / 1000; lastTime = t;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
-        if (Math.random() < FLICKER * dt) squares[i * rows + j] = Math.random() * MAX_OP;
+        if (!reduceMotion && Math.random() < FLICKER * dt) squares[i * rows + j] = Math.random() * MAX_OP;
         ctx.fillStyle = `rgba(${COLOR},${squares[i * rows + j]})`;
         ctx.fillRect(i * (SQ + GAP) * dpr, j * (SQ + GAP) * dpr, SQ * dpr, SQ * dpr);
       }
     }
-    requestAnimationFrame(animate);
+    if (!reduceMotion) requestAnimationFrame(drawFrame);
   }
   setup();
-  window.addEventListener('resize', setup);
-  requestAnimationFrame(animate);
+  window.addEventListener('resize', () => { setup(); if (reduceMotion) drawFrame(0); });
+  if (reduceMotion) drawFrame(0);
+  else requestAnimationFrame(drawFrame);
 })();
 
 /* 3D scroll card - flat at center, tilts away above/below */
 (function() {
   const card = document.getElementById('scroll-3d-card');
   const section = document.getElementById('scroll-section');
+  if (!card || !section) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   let current = 0, currentScale = 1;
   function lerp(a, b, t) { return a + (b - a) * t; }
   function update() {
@@ -650,7 +696,8 @@ function closeMobileMenu() {
   const wrap = document.getElementById('tilt-wrap');
   const card = document.getElementById('tilt-card');
   const spot = document.getElementById('tilt-spotlight');
-  if (!card) return;
+  if (!card || !wrap) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   let aId, tRX = 0, tRY = 0, cRX = 0, cRY = 0, hovering = false;
   function lerp(a, b, t) { return a + (b - a) * t; }
   function loop() {
@@ -683,7 +730,7 @@ function closeMobileMenu() {
 
 /* Copy email */
 function copyEmail() {
-  navigator.clipboard.writeText(document.getElementById('email-text').textContent).then(() => {
+  navigator.clipboard.writeText(EMAIL).then(() => {
     const lbl = document.getElementById('copy-label');
     lbl.textContent = 'Copied!';
     setTimeout(() => { lbl.textContent = 'Copy'; }, 2000);
