@@ -96,6 +96,36 @@ html.egg-vapor .hero-inner {
   transform: perspective(800px) rotateY(-1.2deg) skewX(-0.6deg);
 }
 
+html.egg-vapor h1,
+html.egg-vapor .hero-h1,
+html.egg-vapor .hero-name,
+html.egg-vapor .section-title {
+  text-shadow:
+    2px 2px 0 #ff71ce,
+    -2px -2px 0 #01cdfe,
+    0 0 18px rgba(185, 103, 255, 0.45);
+}
+
+#egg-vapor-sun {
+  display: none;
+  position: fixed;
+  bottom: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffeb3b 0%, #ff6f00 55%, #e91e63 100%);
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 99990;
+  box-shadow: 0 0 80px rgba(255, 111, 0, 0.35);
+}
+
+html.egg-vapor #egg-vapor-sun {
+  display: block;
+}
+
 #egg-scanlines {
   display: none;
   position: fixed;
@@ -117,6 +147,81 @@ html.egg-vapor #egg-scanlines {
   display: block;
 }
 
+/* ── Matrix rain overlay ── */
+#egg-matrix-rain {
+  display: none;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99980;
+  overflow: hidden;
+  opacity: 0.18;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 48px,
+      rgba(0, 255, 100, 0.03) 48px,
+      rgba(0, 255, 100, 0.03) 49px
+    );
+}
+
+html.egg-matrix #egg-matrix-rain {
+  display: block;
+}
+
+html.egg-matrix #egg-matrix-rain::before,
+html.egg-matrix #egg-matrix-rain::after {
+  content: 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜｦﾝ01';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  right: 0;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #0f0;
+  word-break: break-all;
+  white-space: pre-wrap;
+  animation: egg-matrix-fall 12s linear infinite;
+}
+
+html.egg-matrix #egg-matrix-rain::after {
+  left: 30%;
+  animation-duration: 9s;
+  animation-delay: -4s;
+  opacity: 0.7;
+}
+
+@keyframes egg-matrix-fall {
+  to { transform: translateY(200%); }
+}
+
+/* ── Deep fry noise ── */
+#egg-fry-noise {
+  display: none;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99970;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+html.egg-fry #egg-fry-noise {
+  display: block;
+}
+
+html.egg-fry:not(.egg-reduce) body {
+  animation: egg-fry-pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes egg-fry-pulse {
+  from { filter: var(--egg-filter, none) brightness(1.05); }
+  to { filter: var(--egg-filter, none) brightness(1.12) saturate(2.6); }
+}
+
 /* Filters + wobble applied to body via JS-driven classes / CSS vars */
 html.egg-fx body {
   filter: var(--egg-filter, none);
@@ -124,6 +229,22 @@ html.egg-fx body {
 
 html.egg-rainbow:not(.egg-reduce) body {
   animation: egg-hue 4.5s linear infinite;
+}
+
+html.egg-rainbow:not(.egg-reduce)::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99960;
+  background: linear-gradient(90deg, rgba(255,0,0,0.04), rgba(0,255,255,0.04), rgba(255,0,255,0.04));
+  mix-blend-mode: screen;
+  animation: egg-chroma 2s ease-in-out infinite alternate;
+}
+
+@keyframes egg-chroma {
+  from { transform: translateX(-3px); }
+  to { transform: translateX(3px); }
 }
 
 @keyframes egg-hue {
@@ -143,8 +264,23 @@ html.egg-rainbow.egg-wobble:not(.egg-reduce) body {
 }
 
 @keyframes egg-wobble {
-  0%, 100% { transform: rotate(-0.6deg) translateX(-2px); }
-  50% { transform: rotate(0.7deg) translateX(2px); }
+  0%, 100% { transform: rotate(-0.6deg) translateX(-2px) scale(1); }
+  50% { transform: rotate(0.7deg) translateX(2px) scale(1.008); }
+}
+
+html.egg-party-juice:not(.egg-reduce) body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99950;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08), transparent 60%);
+  animation: egg-party-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes egg-party-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.02); }
 }
 
 /* Matrix: un-invert media so photos stay readable-ish */
@@ -156,10 +292,278 @@ html.egg-matrix .focus-card-bg {
   filter: invert(1) hue-rotate(-90deg) saturate(0.85);
 }
 
+/* ── Screen shake ── */
+html.egg-shake body {
+  animation: egg-screen-shake 0.28s ease-in-out;
+}
+
+@keyframes egg-screen-shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(calc(var(--egg-shake-int, 6px) * -1), var(--egg-shake-int, 6px)); }
+  40% { transform: translate(var(--egg-shake-int, 6px), calc(var(--egg-shake-int, 6px) * -0.5)); }
+  60% { transform: translate(calc(var(--egg-shake-int, 6px) * -0.5), var(--egg-shake-int, 6px)); }
+  80% { transform: translate(var(--egg-shake-int, 6px), 0); }
+}
+
+/* ── Glitch burst ── */
+html.egg-glitch-active body {
+  animation: egg-glitch-skew 0.6s steps(2) 1;
+}
+
+html.egg-glitch-active::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 0, 80, 0.06) 0 2px,
+    rgba(0, 255, 255, 0.06) 2px 4px
+  );
+  animation: egg-glitch-scan 0.6s steps(4) 1;
+}
+
+@keyframes egg-glitch-skew {
+  0%, 100% { transform: none; filter: var(--egg-filter, none); }
+  15% { transform: skewX(-2deg) translateX(-4px); filter: hue-rotate(90deg) contrast(1.2); }
+  30% { transform: skewX(2deg) translateX(6px); }
+  45% { transform: translateX(-8px); clip-path: inset(10% 0 60% 0); }
+  60% { transform: translateX(4px); clip-path: inset(40% 0 20% 0); }
+  75% { transform: skewX(-1deg); }
+}
+
+@keyframes egg-glitch-scan {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── Fake BSOD ── */
+#egg-bsod {
+  position: fixed;
+  inset: 0;
+  z-index: 200000;
+  background: #0078d7;
+  color: #fff;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.egg-bsod-inner { max-width: 700px; }
+
+.egg-bsod-emoji {
+  font-size: 7rem;
+  font-weight: 300;
+  margin-bottom: 24px;
+}
+
+.egg-bsod-title {
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+
+.egg-bsod-sub,
+.egg-bsod-pct,
+.egg-bsod-code {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  opacity: 0.95;
+}
+
+.egg-bsod-hint {
+  margin-top: 40px;
+  font-size: 0.85rem;
+  opacity: 0.55;
+}
+
+/* ── Cursor trail ── */
+#egg-cursor-trail {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 150000;
+}
+
+.egg-trail-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: hsl(var(--egg-trail-hue, 140), 80%, 55%);
+  box-shadow: 0 0 10px hsl(var(--egg-trail-hue, 140), 90%, 60%);
+  pointer-events: none;
+  animation: egg-trail-fade 0.7s ease-out forwards;
+}
+
+@keyframes egg-trail-fade {
+  from { opacity: 0.9; transform: translate(-50%, -50%) scale(1); }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+}
+
+/* ── Emoji rain ── */
+.egg-emoji-rain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 140000;
+  overflow: hidden;
+}
+
+.egg-emoji-rain span {
+  position: absolute;
+  top: -40px;
+  animation: egg-emoji-fall linear forwards;
+}
+
+@keyframes egg-emoji-fall {
+  to { transform: translateY(110vh) rotate(360deg); opacity: 0.3; }
+}
+
+/* ── Hack panel ── */
+#egg-hack-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 180000;
+  background: #020a04;
+  color: #33ff66;
+  font-family: 'Source Code Pro', 'Consolas', 'Courier New', monospace;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.egg-hack-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0 1px,
+    transparent 1px 3px
+  );
+  z-index: 2;
+}
+
+.egg-hack-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(51, 255, 102, 0.25);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: rgba(0, 20, 0, 0.8);
+  z-index: 3;
+}
+
+.egg-hack-blink {
+  animation: egg-hack-blink 1s step-end infinite;
+  color: #ff3333;
+}
+
+@keyframes egg-hack-blink {
+  50% { opacity: 0; }
+}
+
+.egg-hack-output {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  z-index: 1;
+  text-shadow: 0 0 6px rgba(51, 255, 102, 0.35);
+}
+
+.egg-hack-line { margin-bottom: 2px; word-break: break-word; }
+.egg-hack-dim { color: #1faa41; }
+.egg-hack-ok { color: #66ff99; }
+.egg-hack-warn { color: #aaff00; }
+.egg-hack-bad { color: #ff4444; }
+.egg-hack-granted { color: #00ffff; font-weight: 700; text-shadow: 0 0 12px #00ffff; }
+.egg-hack-info { color: #88ffcc; }
+.egg-hack-echo { color: #55ee77; opacity: 0.85; }
+.egg-hack-prompt { color: #33ff66; }
+
+.egg-hack-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-top: 1px solid rgba(51, 255, 102, 0.25);
+  background: rgba(0, 12, 0, 0.9);
+  z-index: 3;
+}
+
+.egg-hack-prompt-char { color: #00ff88; font-weight: 700; }
+
+.egg-hack-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #33ff66;
+  font-family: inherit;
+  font-size: 0.85rem;
+  caret-color: #33ff66;
+}
+
+.egg-hack-footer {
+  padding: 6px 16px;
+  font-size: 0.65rem;
+  color: rgba(51, 255, 102, 0.4);
+  text-align: center;
+  z-index: 3;
+}
+
+html.egg-hack-flash body {
+  filter: invert(1) hue-rotate(180deg);
+  transition: filter 0.15s;
+}
+
+/* ── X-Fight overlay ── */
+#egg-fight-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 190000;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+#egg-fight-canvas {
+  display: block;
+  border: 2px solid rgba(0, 229, 255, 0.35);
+  box-shadow: 0 0 40px rgba(0, 229, 255, 0.15), inset 0 0 60px rgba(0, 0, 0, 0.5);
+  image-rendering: pixelated;
+  max-width: 96vw;
+  max-height: 90vh;
+}
+
+html.egg-fight-flash body {
+  animation: egg-fight-flash-anim 0.25s ease-out;
+}
+
+@keyframes egg-fight-flash-anim {
+  0% { filter: brightness(2); }
+  100% { filter: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html.egg-rainbow body,
   html.egg-wobble body,
-  html.egg-rainbow.egg-wobble body {
+  html.egg-rainbow.egg-wobble body,
+  html.egg-fry body {
     animation: none !important;
   }
 
@@ -171,5 +575,23 @@ html.egg-matrix .focus-card-bg {
   html.egg-vapor .hero-content,
   html.egg-vapor .hero-inner {
     transform: none;
+  }
+
+  html.egg-rainbow::after,
+  html.egg-party-juice body::after {
+    display: none;
+  }
+
+  html.egg-matrix #egg-matrix-rain::before,
+  html.egg-matrix #egg-matrix-rain::after {
+    animation: none;
+  }
+
+  html.egg-glitch-active body {
+    animation: none;
+  }
+
+  html.egg-shake body {
+    animation: none;
   }
 }
