@@ -1,0 +1,175 @@
+/* pb easter eggs — activated via keyboard only; see source comments */
+
+/* ── Dark mode (persisted) ── */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --card: #1a1f1a;
+  --ring: #81c784;
+  --input: #2a332a;
+  --muted: #222822;
+  --accent: #1b3d1f;
+  --border: #2e3a2e;
+  --primary: #81c784;
+  --secondary: #1b2e1c;
+  --background: #0f130f;
+  --foreground: #e8efe8;
+  --muted-foreground: #9aaa9a;
+  --accent-foreground: #c8e6c9;
+  --primary-foreground: #0a100a;
+  --secondary-foreground: #c8e6c9;
+  --bg: #0f130f;
+  --fg: #e8efe8;
+  --sub: #9aaa9a;
+  --dim: #a5d6a7;
+  --surface: #161c16;
+  --text: #e8efe8;
+  --subtext: #9aaa9a;
+}
+
+html[data-theme="dark"] body {
+  background: var(--background, var(--bg));
+  color: var(--foreground, var(--fg, var(--text)));
+}
+
+html[data-theme="dark"] nav,
+html[data-theme="dark"] .mobile-menu {
+  background: rgba(15, 19, 15, 0.92) !important;
+}
+
+html[data-theme="dark"] body::before {
+  opacity: 0.25;
+}
+
+html[data-theme="dark"] .btn-secondary {
+  border-color: #4a5a4a;
+}
+
+html[data-theme="dark"] .scroll-card-3d {
+  background: #111;
+}
+
+html[data-theme="dark"] .focus-card-meta {
+  background: rgba(15, 19, 15, 0.95);
+}
+
+/* ── Comic Sans chaos ── */
+html.egg-comic,
+html.egg-comic body,
+html.egg-comic button,
+html.egg-comic input,
+html.egg-comic a,
+html.egg-comic h1,
+html.egg-comic h2,
+html.egg-comic h3,
+html.egg-comic h4,
+html.egg-comic p,
+html.egg-comic span,
+html.egg-comic li,
+html.egg-comic .nav-logo,
+html.egg-comic .nav-links a,
+html.egg-comic .hero-name,
+html.egg-comic .section-title,
+html.egg-comic .section-label,
+html.egg-comic .hero-h1,
+html.egg-comic .sec-h2 {
+  font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue", cursive !important;
+}
+
+/* ── Vaporwave ── */
+html.egg-vapor {
+  --primary: #ff71ce !important;
+  --ring: #01cdfe !important;
+  --accent: #b967ff !important;
+  --secondary: #2a1a3a !important;
+  --dim: #05ffa1 !important;
+}
+
+html.egg-vapor body {
+  background-image:
+    linear-gradient(135deg, rgba(255, 113, 206, 0.12), rgba(1, 205, 254, 0.1)),
+    linear-gradient(var(--background, var(--bg, #f8f5f0)), var(--background, var(--bg, #f8f5f0)));
+}
+
+html.egg-vapor #hero,
+html.egg-vapor .hero-content,
+html.egg-vapor .hero-inner {
+  transform: perspective(800px) rotateY(-1.2deg) skewX(-0.6deg);
+}
+
+#egg-scanlines {
+  display: none;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100000;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.07) 2px,
+    rgba(0, 0, 0, 0.07) 4px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+}
+
+html.egg-vapor #egg-scanlines {
+  display: block;
+}
+
+/* Filters + wobble applied to body via JS-driven classes / CSS vars */
+html.egg-fx body {
+  filter: var(--egg-filter, none);
+}
+
+html.egg-rainbow:not(.egg-reduce) body {
+  animation: egg-hue 4.5s linear infinite;
+}
+
+@keyframes egg-hue {
+  from { filter: var(--egg-filter-base) hue-rotate(0deg); }
+  to { filter: var(--egg-filter-base) hue-rotate(360deg); }
+}
+
+html.egg-wobble:not(.egg-reduce) body {
+  animation: egg-wobble 0.55s ease-in-out infinite;
+  transform-origin: 50% 40%;
+}
+
+html.egg-rainbow.egg-wobble:not(.egg-reduce) body {
+  animation:
+    egg-hue 4.5s linear infinite,
+    egg-wobble 0.55s ease-in-out infinite;
+}
+
+@keyframes egg-wobble {
+  0%, 100% { transform: rotate(-0.6deg) translateX(-2px); }
+  50% { transform: rotate(0.7deg) translateX(2px); }
+}
+
+/* Matrix: un-invert media so photos stay readable-ish */
+html.egg-matrix img,
+html.egg-matrix video,
+html.egg-matrix canvas,
+html.egg-matrix .tilt-card-img,
+html.egg-matrix .focus-card-bg {
+  filter: invert(1) hue-rotate(-90deg) saturate(0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.egg-rainbow body,
+  html.egg-wobble body,
+  html.egg-rainbow.egg-wobble body {
+    animation: none !important;
+  }
+
+  html.egg-wobble body {
+    transform: none;
+  }
+
+  html.egg-vapor #hero,
+  html.egg-vapor .hero-content,
+  html.egg-vapor .hero-inner {
+    transform: none;
+  }
+}

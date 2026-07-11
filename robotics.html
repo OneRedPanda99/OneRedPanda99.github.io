@@ -137,6 +137,8 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
   footer{flex-direction:column;gap:10px;text-align:center;padding:24px 20px;}
 }
 </style>
+<link rel="stylesheet" href="css/easter-eggs.css">
+<!-- rainbow? matrix? check js/ -->
 </head>
 <body>
 <div id="prog"></div>
@@ -315,5 +317,7 @@ const obs=new IntersectionObserver(es=>{
 },{threshold:0.08});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
+<script src="js/easter-eggs.js"></script>
+<!-- wobble if you dare -->
 </body>
 </html>

@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta property="og:title" content="SC Pressure Point — Parker Branham">
-<meta property="og:description" content="Pressure washing business and the site built to run it — started at 14.">
-<meta property="og:image" content="https://www.parkerbranham.com/images/projects/SCPressurePointWebsiteRatio.png">
+<meta property="og:description" content="Student-owned pressure washing in Columbia, SC — published sq-ft pricing, and the site I built to run it.">
+<meta property="og:image" content="https://www.parkerbranham.com/images/projects/SCPressurePointWebsite.png">
 <meta property="og:url" content="https://www.parkerbranham.com/scpressurepoint.html">
 <link rel="icon" type="image/png" href="images/me/PBLogo.png">
 <title>SC Pressure Point — Parker Branham</title>
@@ -89,6 +89,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:f
 .scope-title{font-family:var(--font-serif);font-size:0.9rem;font-weight:700;color:var(--fg);margin-bottom:5px;}
 .scope-desc{font-size:0.82rem;color:var(--sub);line-height:1.6;}
 
+/* SITE PREVIEW */
+.site-preview{display:block;margin-top:28px;border-radius:12px;overflow:hidden;border:1px solid var(--border);transition:border-color 0.2s,transform 0.2s;}
+.site-preview:hover{border-color:var(--primary);transform:translateY(-3px);}
+.site-preview img{width:100%;height:auto;display:block;vertical-align:middle;}
+
 /* PARTNER STORY — dark card */
 .story-card{background:var(--fg);border-radius:16px;padding:42px 46px;position:relative;overflow:hidden;}
 .story-card::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;border-radius:50%;background:rgba(46,125,50,0.1);}
@@ -140,6 +145,8 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
   footer{flex-direction:column;gap:10px;text-align:center;padding:24px 20px;}
 }
 </style>
+<link rel="stylesheet" href="css/easter-eggs.css">
+<!-- konami? -->
 </head>
 <body>
 
@@ -154,12 +161,12 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 <section id="hero">
   <canvas id="wave-canvas"></canvas>
   <div class="hero-inner">
-    <span class="hero-tag">Business &amp; Web · Self-Employed · Columbia, SC</span>
+    <span class="hero-tag">Business &amp; Web · Student-Owned · Columbia, SC</span>
     <h1 class="hero-h1">SC<br><em>Pressure</em>Point</h1>
-    <p class="hero-sub">I was 14 and couldn't legally get a job. So I made my own. Pressure washing and home services — real clients, real money, still running.</p>
+    <p class="hero-sub">Student-owned pressure washing in Columbia, SC. Published sq-ft pricing, text the owner directly, 100% satisfaction guaranteed — and I built the site that runs it.</p>
     <div class="hero-btns">
-      <a href="https://scpressurepoint.github.io" target="_blank" rel="noopener noreferrer" class="btn-go">
-        See the site
+      <a href="https://scpressurepoint.com" target="_blank" rel="noopener noreferrer" class="btn-go">
+        Visit scpressurepoint.com
         <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
     </div>
@@ -171,15 +178,15 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
   <div class="stats-inner">
     <div class="stat-cell reveal d1">
       <div class="stat-n">2+</div>
-      <div class="stat-lbl">Years Running</div>
+      <div class="stat-lbl">Years in Business</div>
     </div>
     <div class="stat-cell reveal d2">
-      <div class="stat-n">14</div>
-      <div class="stat-lbl">Age When Started</div>
+      <div class="stat-n">5.0★</div>
+      <div class="stat-lbl">Google Rating</div>
     </div>
     <div class="stat-cell reveal d3">
-      <div class="stat-n">$0</div>
-      <div class="stat-lbl">Cost to Make and Host the Site</div>
+      <div class="stat-n">100%</div>
+      <div class="stat-lbl">Satisfaction Guaranteed</div>
     </div>
   </div>
 </div>
@@ -187,11 +194,11 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 <div class="page-wrap">
 
   <section class="content-sec reveal">
-    <p class="sec-label">The story</p>
-    <h2 class="sec-h2">Couldn't get hired.<br><em>Built my own job instead.</em></h2>
+    <p class="sec-label">The business</p>
+    <h2 class="sec-h2">Couldn't get hired.<br><em>Built my own company instead.</em></h2>
     <div class="prose">
-      <p>At 14 I was legally too young to be employed anywhere. So instead of waiting around, I started doing pressure washing and home services on my own. I handled everything — finding customers, giving quotes, scheduling, showing up, doing the work, collecting payment.</p>
-      <p>It's been running for two years. I built the site because I wanted to give people something concrete to look at before they decide to hire me.</p>
+      <p>At 14 I was legally too young to be employed anywhere. So I started SC Pressure Point — a student-owned pressure washing company based in Columbia, SC. I handle outreach, quotes, scheduling, and the work itself. When customers text, they reach the owner.</p>
+      <p>Two-plus years later it's still running: published per-sq-ft pricing, free estimates, and a 100% satisfaction guarantee. Serving Columbia, Lexington, Irmo, West Columbia, Forest Acres, and nearby areas.</p>
     </div>
   </section>
 
@@ -199,34 +206,34 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 
   <section class="content-sec reveal">
     <p class="sec-label">How a job works</p>
-    <h2 class="sec-h2">Lead comes in.<br><em>Here's what happens.</em></h2>
+    <h2 class="sec-h2">Text a photo.<br><em>Get a fast quote.</em></h2>
     <div class="steps">
       <div class="step">
         <div class="step-n">01</div>
         <div class="step-body">
           <div class="step-title">Someone reaches out</div>
-          <div class="step-desc">Usually word of mouth or through the site.</div>
+          <div class="step-desc">Text preferred — usually a photo of the surface plus what they need cleaned. Weekday replies aim for an estimate within two hours.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-n">02</div>
         <div class="step-body">
-          <div class="step-title">Aerial quote from Google Earth</div>
-          <div class="step-desc">After conversing or receiving a form from my website I then measure using Google Earth's measuring tool, and provide the max cost ($.30 Per Sq Ft) and let them know it likely won't be that much so that the customer knows it is the worst case scenario.</div>
+          <div class="step-title">Honest per-sq-ft quote</div>
+          <div class="step-desc">Pricing is published at $0.20–$0.40 per square foot by surface. I measure the job, quote by actual square footage, and keep estimates free — no vague “job size” pricing.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-n">03</div>
         <div class="step-body">
-          <div class="step-title">In-person assessment</div>
-          <div class="step-desc">Show up, look at the actual job, lock in the real price, and schedule it. No surprises on either side.</div>
+          <div class="step-title">Schedule &amp; show up</div>
+          <div class="step-desc">Lock in the price and a time that works. Available weekdays and weekends. Same owner standards whether I'm on-site or leading a crew.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-n">04</div>
         <div class="step-body">
-          <div class="step-title">Do the job</div>
-          <div class="step-desc">Show up on time, do the work to a high standard, document before and afters. Same level of care regardless of how big or small the job is.</div>
+          <div class="step-title">Clean it — and stand behind it</div>
+          <div class="step-desc">Driveways, sidewalks, steps, patios, siding soft wash, gutters, fences, and more. If something falls short, I make it right personally.</div>
         </div>
       </div>
     </div>
@@ -238,28 +245,31 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
     <p class="sec-label">What was built</p>
     <h2 class="sec-h2">A real business site,<br><em>not a landing page.</em></h2>
     <div class="prose">
-      <p>The site does more than just show people I exist. It gives them everything they need to decide whether to hire me — pricing, services, real job photos, answers to the questions they'd ask anyway.</p>
+      <p>scpressurepoint.com gives customers everything they need before they hire — services, published pricing, before-and-after gallery, service-area pages, FAQ, and a quote form that accepts photos.</p>
     </div>
+    <a href="https://scpressurepoint.com" target="_blank" rel="noopener noreferrer" class="site-preview reveal">
+      <img src="images/projects/SCPressurePointWebsite.png" alt="SC Pressure Point homepage — Pressure Washing in Columbia, SC, student-owned, published sq-ft pricing, quote form, phone (803) 272-8118">
+    </a>
     <div class="scope-grid">
       <div class="scope-card reveal d1">
         <div class="scope-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <div class="scope-title">Full services page</div>
-        <div class="scope-desc">Every service listed with a clear description — driveways, sidewalks, patios, brick, entryways. No guessing what I do or don't cover.</div>
+        <div class="scope-title">Full services catalog</div>
+        <div class="scope-desc">Driveways, sidewalks, steps &amp; entryways, patios &amp; decks, house siding soft wash, soffit &amp; gutters, fences — each with its own page.</div>
       </div>
       <div class="scope-card reveal d2">
         <div class="scope-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
-        <div class="scope-title">Before and after gallery</div>
-        <div class="scope-desc">Real photos from real jobs. Concrete driveways, sidewalks, steps — proof of what the work actually looks like when it's done.</div>
+        <div class="scope-title">Before &amp; after gallery</div>
+        <div class="scope-desc">Real jobs with interactive before/after sliders — driveways, sidewalks, steps, brick &amp; mortar — plus Instagram at @scpressurepoint.</div>
       </div>
       <div class="scope-card reveal d3">
         <div class="scope-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-        <div class="scope-title">Transparent pricing</div>
-        <div class="scope-desc">Per-square-foot rates listed upfront — $0.15 to $0.30 depending on the job. People know what to expect before they ever contact me.</div>
+        <div class="scope-title">Published sq-ft pricing</div>
+        <div class="scope-desc">$0.20–$0.40 per sq ft listed upfront by surface, with typical ranges (e.g. two-car driveway ~$125–$275). Cash, check, Venmo, Zelle, Apple Cash.</div>
       </div>
       <div class="scope-card reveal d4">
         <div class="scope-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-        <div class="scope-title">Contact form with photo upload</div>
-        <div class="scope-desc">Clients can submit photos of the job site before I even show up. Speeds up quoting and means fewer back-and-forth texts.</div>
+        <div class="scope-title">Quote form &amp; direct text</div>
+        <div class="scope-desc">Request a quote online or text (803) 272-8118. Photo-based estimates keep quoting fast and cut down on back-and-forth.</div>
       </div>
     </div>
   </section>
@@ -268,19 +278,19 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 
   <section class="content-sec reveal">
     <p class="sec-label">Why build the site yourself</p>
-    <h2 class="sec-h2">Nothing holding<br><em>me back.</em></h2>
+    <h2 class="sec-h2">Owner standards<br><em>online too.</em></h2>
     <div class="why-row">
       <div class="why-card">
         <div class="why-label">Cost</div>
-        <div class="why-text">GitHub Pages is free. No monthly subscription eating into what I make from a pressure washing side business.</div>
+        <div class="why-text">No monthly template subscription eating into a student-run business. Built and hosted without the big-company overhead.</div>
       </div>
       <div class="why-card">
         <div class="why-label">Proof of work</div>
-        <div class="why-text">Building the site myself means it shows up in two places on my portfolio — once as a business and once as a client project I built and deployed.</div>
+        <div class="why-text">The live site is both the business and a portfolio piece — a full product I designed, wrote, and shipped myself.</div>
       </div>
       <div class="why-card">
         <div class="why-label">Control</div>
-        <div class="why-text">No template limitations. Transparent pricing display, custom contact form with photo upload, before-and-after layout — none of that fits neatly into Squarespace.</div>
+        <div class="why-text">Transparent pricing, photo quotes, before-and-after gallery, and local service-area pages — built for how SC Pressure Point actually sells.</div>
       </div>
     </div>
   </section>
@@ -290,8 +300,8 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
       <span class="tag">HTML</span>
       <span class="tag">CSS</span>
       <span class="tag">JavaScript</span>
-      <span class="tag">GitHub Pages</span>
-      <span class="tag">Self-Employed</span>
+      <span class="tag">scpressurepoint.com</span>
+      <span class="tag">Student-Owned</span>
       <span class="tag">Client Management</span>
       <span class="tag">Columbia SC</span>
     </div>
@@ -301,8 +311,8 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
 
 <hr class="hr-fancy">
 <div class="cta">
-  <a href="https://scpressurepoint.github.io" target="_blank" rel="noopener noreferrer" class="btn-primary">
-    scpressurepoint.github.io
+  <a href="https://scpressurepoint.com" target="_blank" rel="noopener noreferrer" class="btn-primary">
+    scpressurepoint.com
     <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
   </a>
   <a href="index.html" class="btn-back">
@@ -346,5 +356,7 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
   draw();
 })();
 </script>
+<script src="js/easter-eggs.js"></script>
+<!-- ctrl+alt clears the fog · 0 resets the chaos -->
 </body>
 </html>
