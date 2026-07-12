@@ -1,0 +1,161 @@
+/* X-Fight — indie beat-em-up overlay */
+
+#egg-fight-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 190000;
+  background: #020408;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+#egg-fight-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 80% 70% at 50% 45%, transparent 35%, rgba(0, 0, 0, 0.55) 100%);
+  z-index: 2;
+}
+
+#egg-fight-overlay.egg-fight-chromatic::after {
+  content: "";
+  position: absolute;
+  inset: -2%;
+  pointer-events: none;
+  z-index: 4;
+  mix-blend-mode: screen;
+  background:
+    linear-gradient(90deg, rgba(255, 0, 80, 0.12) 0%, transparent 33%),
+    linear-gradient(270deg, rgba(0, 220, 255, 0.12) 0%, transparent 33%);
+  animation: egg-fight-chromatic 0.18s ease-out;
+}
+
+@keyframes egg-fight-chromatic {
+  0% { opacity: 1; transform: translateX(-4px); }
+  100% { opacity: 0; transform: none; }
+}
+
+#egg-fight-canvas {
+  display: block;
+  position: relative;
+  z-index: 1;
+  border: 3px solid rgba(0, 229, 255, 0.25);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.8),
+    0 0 60px rgba(0, 180, 255, 0.12),
+    0 24px 80px rgba(0, 0, 0, 0.65),
+    inset 0 0 100px rgba(0, 0, 0, 0.35);
+  max-width: 98vw;
+  max-height: 96vh;
+  image-rendering: auto;
+}
+
+.egg-fight-announce {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%) scale(0.3);
+  z-index: 5;
+  pointer-events: none;
+  font-weight: 900;
+  font-size: clamp(3rem, 10vw, 7rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow:
+    0 0 20px rgba(255, 255, 255, 0.8),
+    0 4px 0 #ff1744,
+    0 8px 0 rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(255, 23, 68, 0.6);
+  opacity: 0;
+  white-space: nowrap;
+}
+
+.egg-fight-announce.show {
+  animation: egg-fight-announce-pop 0.85s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+}
+
+.egg-fight-announce.ko {
+  color: #ffeb3b;
+  text-shadow:
+    0 0 30px rgba(255, 235, 59, 0.9),
+    0 4px 0 #ff6f00,
+    0 10px 0 rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(255, 111, 0, 0.7);
+}
+
+.egg-fight-announce.perfect {
+  font-size: clamp(2rem, 7vw, 4.5rem);
+  color: #69f0ae;
+  text-shadow:
+    0 0 24px rgba(105, 240, 174, 0.9),
+    0 3px 0 #00c853,
+    0 0 50px rgba(0, 200, 83, 0.5);
+}
+
+.egg-fight-announce.critical {
+  color: #ff4081;
+  text-shadow:
+    0 0 40px rgba(255, 64, 129, 1),
+    0 0 80px rgba(255, 23, 68, 0.8);
+}
+
+@keyframes egg-fight-announce-pop {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(2.5); filter: blur(6px); }
+  15% { opacity: 1; transform: translate(-50%, -50%) scale(0.85); filter: none; }
+  30% { transform: translate(-50%, -50%) scale(1.08); }
+  50% { transform: translate(-50%, -50%) scale(1); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -58%) scale(0.95); }
+}
+
+.egg-fight-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.04em;
+  text-align: center;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+html.egg-fight-flash body {
+  animation: egg-fight-flash-anim 0.22s ease-out;
+}
+
+@keyframes egg-fight-flash-anim {
+  0% { filter: brightness(2.2) saturate(1.3); }
+  100% { filter: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #egg-fight-overlay.egg-fight-chromatic::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  .egg-fight-announce.show {
+    animation: egg-fight-announce-fade 0.5s ease forwards;
+  }
+
+  @keyframes egg-fight-announce-fade {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  html.egg-fight-flash body {
+    animation: none;
+    filter: brightness(1.3);
+    transition: filter 0.15s;
+  }
+}

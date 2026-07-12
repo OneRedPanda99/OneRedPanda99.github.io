@@ -529,35 +529,8 @@ html.egg-hack-flash body {
   transition: filter 0.15s;
 }
 
-/* ── X-Fight overlay ── */
-#egg-fight-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 190000;
-  background: rgba(0, 0, 0, 0.88);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(4px);
-}
-
-#egg-fight-canvas {
-  display: block;
-  border: 2px solid rgba(0, 229, 255, 0.35);
-  box-shadow: 0 0 40px rgba(0, 229, 255, 0.15), inset 0 0 60px rgba(0, 0, 0, 0.5);
-  image-rendering: pixelated;
-  max-width: 96vw;
-  max-height: 90vh;
-}
-
-html.egg-fight-flash body {
-  animation: egg-fight-flash-anim 0.25s ease-out;
-}
-
-@keyframes egg-fight-flash-anim {
-  0% { filter: brightness(2); }
-  100% { filter: none; }
-}
+/* ── X-Fight overlay (see easter-eggs-fight.css) ── */
+@import url('easter-eggs-fight.css');
 
 @media (prefers-reduced-motion: reduce) {
   html.egg-rainbow body,
