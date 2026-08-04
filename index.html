@@ -151,9 +151,13 @@ section{padding:64px 48px;max-width:1100px;margin:0 auto;}
 .photo-marquee-row{display:flex;white-space:nowrap;overflow:hidden;}
 .photo-marquee-track{display:flex;gap:14px;animation:marqueeScroll 30s linear infinite;will-change:transform;}
 .photo-marquee-row.reverse .photo-marquee-track{animation:marqueeScrollReverse 35s linear infinite;}
-.photo-item{width:210px;height:140px;flex-shrink:0;border-radius:8px;overflow:hidden;border:2px solid var(--border);}
+.photo-item{width:210px;height:140px;flex-shrink:0;border-radius:8px;overflow:hidden;border:2px solid var(--border);cursor:pointer;}
 .photo-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s ease;}
 .photo-item:hover img{transform:scale(1.06);}
+.photo-cta{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;color:var(--primary);padding:11px 24px;border:2px solid var(--border);border-radius:4px;transition:all 0.22s;}
+.photo-cta:hover{border-color:var(--primary);transform:translateY(-2px);}
+.photo-cta svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;transition:transform 0.2s;}
+.photo-cta:hover svg{transform:translateX(4px);}
 
 /* ── CONTACT ── */
 #contact{padding:64px 48px;max-width:1100px;margin:0 auto;}
@@ -473,59 +477,65 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
     <h2 class="section-title">Film &amp; Digital.</h2>
     <p class="section-subtitle">Canon A1 and Fujifilm. RAW files edited in Photoshop. Follow at <a href="https://instagram.com/branham.camera" target="_blank" rel="noopener noreferrer" style="color:var(--primary);">@branham.camera</a></p>
   </div>
+  <div class="reveal" style="margin-top:22px;">
+    <a href="photography.html" class="photo-cta">
+      View the full gallery
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
   <div class="photo-gallery-wrap" aria-label="Photography gallery">
     <div class="photo-marquee-row">
       <div class="photo-marquee-track">
-        <div class="photo-item"><img src="images/photography/building.JPG" alt="Building architecture" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/bungalo.JPG" alt="Bungalow" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/coastaricagreen.jpg" alt="Costa Rica greenery" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/coastaricapurple.jpg" alt="Costa Rica purple flowers" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/doglookingforward.jpg" alt="Dog looking forward" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/dogupsidedown.jpg" alt="Dog upside down" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/feetoverwell.jpg" alt="Feet over a well" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/guynexttofirehydrant.jpg" alt="Person next to fire hydrant" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/mountains.JPG" alt="Mountains" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/porsche-museum.jpg" alt="Classic dark Porsche at the Porsche Museum" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/white-flower.jpg" alt="White flower macro with soft green bokeh" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/building.JPG" alt="Building architecture" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/bungalo.JPG" alt="Bungalow" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/coastaricagreen.jpg" alt="Costa Rica greenery" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/coastaricapurple.jpg" alt="Costa Rica purple flowers" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/doglookingforward.jpg" alt="Dog looking forward" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/dogupsidedown.jpg" alt="Dog upside down" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/feetoverwell.jpg" alt="Feet over a well" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/guynexttofirehydrant.jpg" alt="Person next to fire hydrant" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/mountains.JPG" alt="Mountains" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/porsche-museum.jpg" alt="Classic dark Porsche at the Porsche Museum" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/white-flower.jpg" alt="White flower macro with soft green bokeh" loading="lazy"></div>
         <!-- duplicate for seamless loop -->
-        <div class="photo-item"><img src="images/photography/building.JPG" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/bungalo.JPG" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/coastaricagreen.jpg" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/coastaricapurple.jpg" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/doglookingforward.jpg" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/dogupsidedown.jpg" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/feetoverwell.jpg" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/guynexttofirehydrant.jpg" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/mountains.JPG" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/porsche-museum.jpg" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/white-flower.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/building.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/bungalo.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/coastaricagreen.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/coastaricapurple.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/doglookingforward.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/dogupsidedown.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/feetoverwell.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/guynexttofirehydrant.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/mountains.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/porsche-museum.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/white-flower.jpg" alt="" loading="lazy" aria-hidden="true"></div>
       </div>
     </div>
     <div class="photo-marquee-row reverse">
       <div class="photo-marquee-track">
-        <div class="photo-item"><img src="images/photography/outoforder.JPG" alt="Out of order sign" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/phoneoncouch.jpg" alt="Phone on couch" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/phoneonfloor.jpg" alt="Phone on floor" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/railroad.jpg" alt="Railroad tracks" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/snowlightpost.JPG" alt="Snowy light post" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/snowybirdfeeder.JPG" alt="Snowy bird feeder" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/snowyexitpath.JPG" alt="Snowy exit path" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/snowypath.JPG" alt="Snowy path" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/sunset.jpg" alt="Sunset" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/whiteboard.jpg" alt="Whiteboard" loading="lazy"></div>
-        <div class="photo-item"><img src="images/photography/dim-hallway.jpg" alt="Dim hallway with arched exit and bicycle on wall" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/outoforder.JPG" alt="Out of order sign" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/phoneoncouch.jpg" alt="Phone on couch" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/phoneonfloor.jpg" alt="Phone on floor" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/railroad.jpg" alt="Railroad tracks" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/snowlightpost.JPG" alt="Snowy light post" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/snowybirdfeeder.JPG" alt="Snowy bird feeder" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/snowyexitpath.JPG" alt="Snowy exit path" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/snowypath.JPG" alt="Snowy path" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/sunset.jpg" alt="Sunset" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/whiteboard.jpg" alt="Whiteboard" loading="lazy"></div>
+        <div class="photo-item"><img src="images/photography/thumb/dim-hallway.jpg" alt="Dim hallway with arched exit and bicycle on wall" loading="lazy"></div>
         <!-- duplicate for seamless loop -->
-        <div class="photo-item"><img src="images/photography/outoforder.JPG" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/phoneoncouch.jpg" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/phoneonfloor.jpg" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/railroad.jpg" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/snowlightpost.JPG" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/snowybirdfeeder.JPG" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/snowyexitpath.JPG" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/snowypath.JPG" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/sunset.jpg" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/whiteboard.jpg" alt="" loading="lazy" aria-hidden="true"></div>
-        <div class="photo-item"><img src="images/photography/dim-hallway.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/outoforder.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/phoneoncouch.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/phoneonfloor.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/railroad.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/snowlightpost.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/snowybirdfeeder.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/snowyexitpath.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/snowypath.JPG" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/sunset.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/whiteboard.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+        <div class="photo-item"><img src="images/photography/thumb/dim-hallway.jpg" alt="" loading="lazy" aria-hidden="true"></div>
       </div>
     </div>
   </div>
@@ -721,6 +731,13 @@ if (footerEmailBtn) footerEmailBtn.addEventListener('click', () => copyEmailToCl
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+})();
+
+/* Marquee photos lead to the full gallery */
+(function() {
+  document.querySelectorAll('.photo-item').forEach(el => {
+    el.addEventListener('click', () => { location.href = 'photography.html'; });
+  });
 })();
 
 /* Copy email */
