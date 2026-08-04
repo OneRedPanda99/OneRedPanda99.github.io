@@ -86,11 +86,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:f
 .tile:hover img{transform:scale(1.045);filter:saturate(1.1);}
 .tile::after{content:'';position:absolute;inset:0;border:1px solid rgba(62,39,35,0.08);border-radius:10px;pointer-events:none;}
 .tile:focus-visible{outline:3px solid var(--primary);outline-offset:3px;}
-.tile-cap{position:absolute;left:0;right:0;bottom:0;padding:26px 14px 12px;
-  background:linear-gradient(to top,rgba(0,0,0,0.62),transparent);
-  font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;
-  color:rgba(255,255,255,0.9);text-align:left;opacity:0;transition:opacity .28s;pointer-events:none;}
-.tile:hover .tile-cap,.tile:focus-visible .tile-cap{opacity:1;}
 
 /* LIGHTBOX */
 .lb{position:fixed;inset:0;z-index:10001;background:rgba(28,18,15,0.965);backdrop-filter:blur(8px);
@@ -306,8 +301,7 @@ function build(list){
     b.type = 'button';
     b.setAttribute('aria-label', `View ${p.alt} larger`);
     b.innerHTML =
-      `<img src="${THUMB}${p.file}" alt="${p.alt}" width="${p.w}" height="${p.h}" loading="lazy" decoding="async">` +
-      `<span class="tile-cap">${p.alt}</span>`;
+      `<img src="${THUMB}${p.file}" alt="${p.alt}" width="${p.w}" height="${p.h}" loading="lazy" decoding="async">`;
     b.addEventListener('click', () => openLightbox(i));
     grid.appendChild(b);
     span(b, p);
