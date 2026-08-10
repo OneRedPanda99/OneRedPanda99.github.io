@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="Clearline — Parker Branham">
+<meta property="og:description" content="A Firebase-backed CRM I built — real architecture and real bug-fixing, not a demo.">
+<meta property="og:image" content="https://www.parkerbranham.com/images/projects/clearline.svg">
+<meta property="og:url" content="https://www.parkerbranham.com/clearline.html">
+<link rel="icon" type="image/png" href="images/me/PBLogo.png">
+<title>Clearline — Parker Branham</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8f5f0;--card:#fff;--muted:#f0e9e0;
+  --border:#e0d6c9;--primary:#2e7d32;--secondary:#e8f5e9;
+  --fg:#3e2723;--sub:#6d4c41;--dim:#1b5e20;
+  --font-mono:'Source Code Pro',monospace;
+  --font-sans:'Montserrat',sans-serif;
+  --font-serif:'Merriweather',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;scrollbar-width:none;}
+html::-webkit-scrollbar{display:none;}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(248,245,240,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--font-serif);font-weight:700;font-size:1.1rem;color:var(--primary);text-decoration:none;}
+.nav-back{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--sub);text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
+.nav-back:hover{color:var(--primary);}
+.nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* HERO */
+#hero{
+  position:relative;min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:flex-start;justify-content:center;
+  padding:100px 80px 120px;
+  overflow:hidden;
+}
+.hero-inner{position:relative;z-index:2;max-width:720px;}
+.hero-tag{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--primary);margin-bottom:18px;display:block;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+.hero-h1{font-family:var(--font-serif);font-size:clamp(3rem,8vw,7rem);font-weight:900;line-height:0.97;color:var(--fg);letter-spacing:-0.03em;opacity:0;animation:fadeUp 0.8s 0.35s ease forwards;}
+.hero-h1 em{color:var(--primary);font-style:normal;display:block;}
+.hero-sub{font-size:1rem;color:var(--sub);font-weight:300;line-height:1.65;max-width:520px;margin-top:22px;opacity:0;animation:fadeUp 0.6s 0.65s ease forwards;}
+
+/* STATS */
+.stats-strip{background:var(--muted);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.stats-inner{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);}
+.stat-cell{padding:32px 40px;border-right:1px solid var(--border);}
+.stat-cell:last-child{border-right:none;}
+.stat-n{font-family:var(--font-serif);font-size:2.4rem;font-weight:900;color:var(--primary);line-height:1;}
+.stat-lbl{font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--sub);margin-top:5px;}
+
+/* CONTENT */
+.page-wrap{max-width:860px;margin:0 auto;}
+.content-sec{padding:72px 48px;}
+.sec-label{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--primary);margin-bottom:12px;}
+.sec-h2{font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:var(--fg);line-height:1.15;margin-bottom:20px;}
+.sec-h2 em{color:var(--primary);font-style:italic;}
+.prose{font-size:0.92rem;color:var(--sub);line-height:1.88;max-width:580px;}
+.prose p{margin-bottom:15px;}
+.prose p:last-child{margin-bottom:0;}
+.prose strong{color:var(--fg);}
+
+.content-bullets{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:8px;}
+.content-bullets li{font-size:0.88rem;color:var(--sub);padding-left:18px;position:relative;line-height:1.5;}
+.content-bullets li::before{content:'—';position:absolute;left:0;color:var(--primary);}
+
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.tag{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.08em;padding:5px 12px;border-radius:100px;background:var(--muted);color:var(--dim);border:1px solid var(--border);}
+
+.hr-fancy{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 48px;}
+
+.cta{text-align:center;padding:64px 48px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:13px 30px;border-radius:4px;background:var(--primary);color:#fff;transition:all 0.22s;}
+.btn-primary:hover{background:var(--dim);transform:translateY(-2px);}
+.btn-primary svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;transition:transform 0.2s;}
+.btn-primary:hover svg{transform:translateX(3px);}
+.btn-back{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:13px 30px;border-radius:4px;border:2px solid var(--border);color:var(--fg);transition:all 0.22s;}
+.btn-back:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);}
+.btn-back svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;transition:transform 0.2s;}
+.btn-back:hover svg{transform:translateX(-3px);}
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.62s ease,transform 0.62s ease;}
+.reveal.vis{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+
+footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;max-width:860px;margin:0 auto;}
+.fn{font-family:var(--font-serif);font-size:0.88rem;font-weight:700;color:var(--primary);}
+.fc{font-family:var(--font-mono);font-size:0.6rem;color:var(--sub);}
+
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+
+@media(max-width:680px){
+  nav{padding:14px 20px;}
+  #hero{padding:100px 24px 100px;align-items:flex-start;}
+  .content-sec{padding:52px 20px;}
+  .hr-fancy{margin:0 20px;}
+  .stats-inner{grid-template-columns:1fr;}
+  .stat-cell{border-right:none;border-bottom:1px solid var(--border);}
+  .stat-cell:last-child{border-bottom:none;}
+  .cta{padding:48px 20px;flex-direction:column;align-items:center;}
+  footer{flex-direction:column;gap:10px;text-align:center;padding:24px 20px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">PB</a>
+  <a href="index.html" class="nav-back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Portfolio
+  </a>
+</nav>
+
+<section id="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">Software · Firebase CRM</span>
+    <h1 class="hero-h1">Clear<em>line</em></h1>
+    <p class="hero-sub">A Firebase-backed CRM I built for a real business — not a class assignment. Real architecture decisions and real bug-fixing on something that actually deploys.</p>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-cell reveal d1">
+      <div class="stat-n">Firebase</div>
+      <div class="stat-lbl">Firestore Backend</div>
+    </div>
+    <div class="stat-cell reveal d2">
+      <div class="stat-n">Vanilla</div>
+      <div class="stat-lbl">JS PWA · No Framework</div>
+    </div>
+    <div class="stat-cell reveal d3">
+      <div class="stat-n">Live</div>
+      <div class="stat-lbl">GitHub Pages Deploy</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">Why it exists</p>
+    <h2 class="sec-h2">From texts and<br><em>scattered notes</em></h2>
+    <div class="prose">
+      <p>SC Pressure Point ran on text messages and memory — fine at first, unworkable as jobs piled up. Clearline is the fix: a customer relationship manager that keeps jobs, customers, quotes, and schedules in one place instead of across a phone.</p>
+      <p>It's the most substantial engineering project I've shipped — a deployable product with a backend, not a static page.</p>
+    </div>
+  </section>
+
+  <hr class="hr-fancy">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">Architecture &amp; decisions</p>
+    <h2 class="sec-h2">What I<br><em>actually built</em></h2>
+    <div class="prose">
+      <p>I chose a no-framework, vanilla-JS PWA on purpose — fewer moving parts to break, and it's something I fully understand end to end. Firebase Firestore handles the data; GitHub Pages serves the app.</p>
+      <ul class="content-bullets">
+        <li>Firestore as the live backend — jobs, customers, quotes, schedules</li>
+        <li>Vanilla JS PWA (no React/Vue) — small, fast, fully owned</li>
+        <li>GitHub Pages deploy that regenerates config from secrets on every push</li>
+        <li>Access model built on a signed-in <strong>accessUids</strong> list, plus a backfill tool to grant access to existing records</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="hr-fancy">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">Real engineering</p>
+    <h2 class="sec-h2">The bugs were<br><em>real too.</em></h2>
+    <div class="prose">
+      <p>Shipping it meant solving actual problems, not toy ones:</p>
+      <ul class="content-bullets">
+        <li>Firestore security rules: the jobs <strong>list</strong> query broke until I set the rule to <code>signedIn() &amp;&amp; uid() in accessUids</code> — a <code>get()</code>/owner check made array-contains queries unprovable</li>
+        <li>Chasing "permission-denied" errors that were sometimes stale rules, sometimes client bugs — had to pull the full console stack, not just the error text</li>
+        <li>Deploy discipline: rules publish manually; the deploy script rebuilds config from secrets each push (one unquoted secret once broke the live site)</li>
+        <li>Tradeoffs between simplicity and a clean security model, decided and documented</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="hr-fancy">
+
+  <section class="content-sec reveal">
+    <p class="sec-label">What it taught me</p>
+    <h2 class="sec-h2">A product is<br><em>more than code.</em></h2>
+    <div class="prose">
+      <p>Clearline is where I learned to think like an engineer instead of a tinkerer: a security model that holds, a deploy that's reproducible, and the discipline to debug at the root instead of patching the symptom. The decisions I'd make differently next time are the most valuable part.</p>
+    </div>
+    <div class="tags reveal">
+      <span class="tag">Firebase</span>
+      <span class="tag">Firestore</span>
+      <span class="tag">Vanilla JS</span>
+      <span class="tag">PWA</span>
+      <span class="tag">GitHub Pages</span>
+      <span class="tag">CRUD</span>
+      <span class="tag">Security Rules</span>
+      <span class="tag">CRM</span>
+    </div>
+  </section>
+
+</div>
+
+<hr class="hr-fancy">
+<div class="cta">
+  <a href="index.html" class="btn-back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Portfolio
+  </a>
+</div>
+<footer>
+  <div class="fn">Parker Branham</div>
+  <div class="fc">Clearline · Firebase CRM</div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){en.target.classList.add('vis');obs.unobserve(en.target);}});},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
