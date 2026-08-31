@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Unpublished client work — kept for later restore, not for indexing
+Disallow: /claras-soaps.html
+
+Sitemap: https://www.parkerbranham.com/sitemap.xml

@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "pb-portfolio-seo",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "4318"],
+      "port": 4318,
+      "autoPort": false
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+# Parker Branham
+
+> Personal portfolio of Parker Branham — a high school senior in Columbia, South Carolina who
+> builds websites, runs a home-hosted Minecraft server network, competes in FIRST Tech Challenge
+> robotics, does 3D design and printing, and shoots film and digital photography. He also owns
+> and operates SC Pressure Point, a student-run pressure washing business.
+
+Site: https://www.parkerbranham.com/
+Contact: GitHub https://github.com/OneRedPanda99 · LinkedIn https://www.linkedin.com/in/parker-branham-9b32a5341/
+
+## Pages
+
+- [Home](https://www.parkerbranham.com/): Bio, project overview, experience, and contact.
+- [Clearline](https://www.parkerbranham.com/clearline.html): A Firebase-backed CRM built end to end — auth, data model, and a receipt-ingest pipeline.
+- [SC Pressure Point](https://www.parkerbranham.com/scpressurepoint.html): Student-owned pressure washing business in Columbia, SC, with published square-foot pricing. Live site: https://scpressurepoint.com
+- [Server Administrator](https://www.parkerbranham.com/server.html): Home-hosted Minecraft network — BungeeCord proxy, custom plugins, a Discord bot, 80+ members.
+- [Robotics](https://www.parkerbranham.com/robotics.html): Beta Club placement, then founding Cardinal Newman's FIRST Tech Challenge program.
+- [3D Design & Printing](https://www.parkerbranham.com/printing.html): Fusion 360 CAD work and FDM printing.
+- [Photography](https://www.parkerbranham.com/photography.html): Film and digital — Canon A1 and Sony A6400, RAW edited in Photoshop.
+
+## Optional
+
+- [Résumé (PDF)](https://www.parkerbranham.com/resume.pdf)
+- [Source code](https://github.com/OneRedPanda99/OneRedPanda99.github.io)
