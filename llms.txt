@@ -1,9 +1,11 @@
 # Parker Branham
 
-> Personal portfolio of Parker Branham — a high school senior in Columbia, South Carolina who
-> builds websites, runs a home-hosted Minecraft server network, competes in FIRST Tech Challenge
-> robotics, does 3D design and printing, and shoots film and digital photography. He also owns
-> and operates SC Pressure Point, a student-run pressure washing business.
+> Personal portfolio of Parker Branham, a high school senior (Class of 2027) at Cardinal Newman
+> School in Columbia, South Carolina, planning to study mechatronics engineering. He runs a
+> home-hosted Minecraft server network, builds websites, competes in Beta Club robotics and is
+> working to start a FIRST Tech Challenge team, does 3D design and printing, stage manages for
+> his school's theater, and shoots film and digital photography. He founded SC Pressure Point,
+> a student-owned pressure washing business, currently paused.
 
 Site: https://www.parkerbranham.com/
 Contact: GitHub https://github.com/OneRedPanda99 · LinkedIn https://www.linkedin.com/in/parker-branham-9b32a5341/
@@ -11,12 +13,12 @@ Contact: GitHub https://github.com/OneRedPanda99 · LinkedIn https://www.linkedi
 ## Pages
 
 - [Home](https://www.parkerbranham.com/): Bio, project overview, experience, and contact.
-- [Clearline](https://www.parkerbranham.com/clearline.html): A Firebase-backed CRM built end to end — auth, data model, and a receipt-ingest pipeline.
-- [SC Pressure Point](https://www.parkerbranham.com/scpressurepoint.html): Student-owned pressure washing business in Columbia, SC, with published square-foot pricing. Live site: https://scpressurepoint.com
-- [Server Administrator](https://www.parkerbranham.com/server.html): Home-hosted Minecraft network — BungeeCord proxy, custom plugins, a Discord bot, 80+ members.
-- [Robotics](https://www.parkerbranham.com/robotics.html): Beta Club placement, then founding Cardinal Newman's FIRST Tech Challenge program.
+- [Clearline](https://www.parkerbranham.com/clearline.html): An unfinished Firebase-backed CRM built for SC Pressure Point: auth, data model, and security rules.
+- [SC Pressure Point](https://www.parkerbranham.com/scpressurepoint.html): Student-owned pressure washing business in Columbia, SC (paused), with published square-foot pricing. Live site: https://scpressurepoint.com
+- [Server Administrator](https://www.parkerbranham.com/server.html): Home-hosted Minecraft network with a BungeeCord proxy, custom plugins, a Discord bot, and about 80 members.
+- [Robotics](https://www.parkerbranham.com/robotics.html): 4th place at Beta Club Robotics, and an effort to start an FTC team at Cardinal Newman (not yet approved).
 - [3D Design & Printing](https://www.parkerbranham.com/printing.html): Fusion 360 CAD work and FDM printing.
-- [Photography](https://www.parkerbranham.com/photography.html): Film and digital — Canon A1 and Sony A6400, RAW edited in Photoshop.
+- [Photography](https://www.parkerbranham.com/photography.html): Film and digital, shot on a Canon A-1 and a Sony A6400; digital edited from RAW in Photoshop.
 
 ## Optional
 

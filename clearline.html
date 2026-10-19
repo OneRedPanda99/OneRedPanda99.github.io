@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Clearline — a Firebase-backed CRM Parker Branham built end to end: auth, data model, receipt pipeline, and the bugs he had to fix along the way.">
+<meta name="description" content="Clearline — a Firebase-backed CRM Parker Branham built for his pressure washing business: auth, data model, security rules, and the bugs he had to fix along the way.">
 <link rel="canonical" href="https://www.parkerbranham.com/clearline.html">
 <meta name="author" content="Parker Branham">
 <meta name="theme-color" content="#2e7d32">
 <meta property="og:title" content="Clearline — Parker Branham">
-<meta property="og:description" content="A Firebase-backed CRM I built — real architecture and real bug-fixing, not a demo.">
+<meta property="og:description" content="A Firebase-backed CRM I built for my pressure washing business — real architecture and real bug-fixing.">
 <meta property="og:image" content="https://www.parkerbranham.com/images/projects/clearline.svg">
 <meta property="og:url" content="https://www.parkerbranham.com/clearline.html">
 <meta property="og:type" content="article">
@@ -142,7 +142,7 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
       "@type": "SoftwareApplication",
       "name": "Clearline",
       "url": "https://www.parkerbranham.com/clearline.html",
-      "description": "A Firebase-backed CRM built from scratch — real architecture and real bug-fixing, not a demo.",
+      "description": "A Firebase-backed CRM built from scratch for a pressure washing business — real architecture and real bug-fixing.",
       "image": "https://www.parkerbranham.com/images/projects/clearline.svg",
       "author": {
         "@id": "https://www.parkerbranham.com/#parker"
@@ -171,7 +171,7 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
   <div class="hero-inner">
     <span class="hero-tag">Software · Firebase CRM</span>
     <h1 class="hero-h1">Clear<em>line</em></h1>
-    <p class="hero-sub">A Firebase-backed CRM I built for a real business — not a class assignment. Real architecture decisions and real bug-fixing on something that actually deploys.</p>
+    <p class="hero-sub">A Firebase-backed CRM I built to run SC Pressure Point. It's unfinished, and I've stopped working on it, but it's where I made my first real architecture decisions and fixed my first real backend bugs.</p>
   </div>
 </section>
 
@@ -187,8 +187,8 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
       <div class="stat-lbl">JS PWA · No Framework</div>
     </div>
     <div class="stat-cell reveal d3">
-      <div class="stat-n">Live</div>
-      <div class="stat-lbl">GitHub Pages Deploy</div>
+      <div class="stat-n">Paused</div>
+      <div class="stat-lbl">Unfinished · Not Maintained</div>
     </div>
   </div>
 </div>
@@ -199,8 +199,8 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
     <p class="sec-label">Why it exists</p>
     <h2 class="sec-h2">From texts and<br><em>scattered notes</em></h2>
     <div class="prose">
-      <p>SC Pressure Point ran on text messages and memory — fine at first, unworkable as jobs piled up. Clearline is the fix: a customer relationship manager that keeps jobs, customers, quotes, and schedules in one place instead of across a phone.</p>
-      <p>It's the most substantial engineering project I've shipped — a deployable product with a backend, not a static page.</p>
+      <p>SC Pressure Point ran on text messages and memory. That worked at first, but not once jobs piled up. Off-the-shelf software cost $20 to $100 a month and didn't fit how I worked, so I built my own. Clearline handles customers, jobs, measurements, estimates, and billing in one place instead of scattered across a phone.</p>
+      <p>It's the biggest engineering project I've taken on: an app with a real backend, not a static page. I used it for SC Pressure Point, then stopped development when I paused the business.</p>
     </div>
   </section>
 
@@ -226,7 +226,7 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
     <p class="sec-label">Real engineering</p>
     <h2 class="sec-h2">The bugs were<br><em>real too.</em></h2>
     <div class="prose">
-      <p>Shipping it meant solving actual problems, not toy ones:</p>
+      <p>Getting it working meant solving real problems, not toy ones:</p>
       <ul class="content-bullets">
         <li>Firestore security rules: the jobs <strong>list</strong> query broke until I set the rule to <code>signedIn() &amp;&amp; uid() in accessUids</code> — a <code>get()</code>/owner check made array-contains queries unprovable</li>
         <li>Chasing "permission-denied" errors that were sometimes stale rules, sometimes client bugs — had to pull the full console stack, not just the error text</li>
@@ -242,7 +242,7 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
     <p class="sec-label">What it taught me</p>
     <h2 class="sec-h2">A product is<br><em>more than code.</em></h2>
     <div class="prose">
-      <p>Clearline is where I learned to think like an engineer instead of a tinkerer: a security model that holds, a deploy that's reproducible, and the discipline to debug at the root instead of patching the symptom. The decisions I'd make differently next time are the most valuable part.</p>
+      <p>Clearline is where I learned to think like an engineer instead of a tinkerer: a security model that holds, a deploy that's reproducible, and the discipline to debug at the root instead of patching the symptom. Even unfinished, the decisions I'd make differently next time are the most valuable part.</p>
     </div>
     <div class="tags reveal">
       <span class="tag">Firebase</span>
