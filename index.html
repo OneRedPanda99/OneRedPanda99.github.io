@@ -122,23 +122,28 @@ section{padding:64px 48px;max-width:1100px;margin:0 auto;}
 
 /* ── PROJECTS ── */
 #projects .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px;}
-.focus-card{position:relative;border-radius:12px;overflow:hidden;height:260px;background:var(--muted);border:2px solid var(--border);transition:all 0.3s ease;cursor:pointer;display:block;text-decoration: none;cursor: pointer;}
-.cards-grid:hover .focus-card:not(:hover){filter:blur(2px);transform:scale(0.97);opacity:0.75;}
-.focus-card-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;}
-.focus-card:hover .focus-card-bg{transform:scale(1.06);}
-.focus-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.78) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;display:flex;align-items:flex-end;padding:20px 18px;}
-.focus-card:hover .focus-card-overlay{opacity:1;}
-.focus-card-title{font-family:var(--font-serif);font-size:1rem;font-weight:700;color:#fff;}
-.focus-card-link{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;color:rgba(200,230,201,0.9);margin-top:4px;text-decoration:none;display:block;}
+.focus-card{position:relative;border-radius:12px;overflow:hidden;height:280px;background:var(--muted);border:1px solid var(--border);display:block;text-decoration:none;color:#fff;transition:transform 0.3s ease,box-shadow 0.3s ease;}
+.focus-card.wide{grid-column:span 2;}
+.focus-card:hover,.focus-card:focus-visible{transform:translateY(-4px);box-shadow:0 18px 36px rgba(62,39,35,0.18);}
+.focus-card:focus-visible{outline:2px solid var(--primary);outline-offset:3px;}
+.focus-card-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform 0.5s ease;}
+.focus-card:hover .focus-card-bg{transform:scale(1.05);}
+.focus-card-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:20px;background:linear-gradient(to top,rgba(20,14,12,0.88) 0%,rgba(20,14,12,0.35) 45%,transparent 70%);transition:background 0.35s ease;}
+.focus-card:hover .focus-card-overlay,.focus-card:focus-visible .focus-card-overlay{background:linear-gradient(to top,rgba(20,14,12,0.94) 0%,rgba(20,14,12,0.78) 55%,rgba(20,14,12,0.35) 100%);}
+.focus-card-title{font-family:var(--font-serif);font-size:1.12rem;font-weight:700;color:#fff;line-height:1.25;}
+.focus-card-link{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.06em;color:rgba(200,230,201,0.92);margin-top:5px;display:block;}
+.focus-card-more{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 0.35s ease,opacity 0.3s ease;}
+.focus-card-more>div{overflow:hidden;}
+.focus-card:hover .focus-card-more,.focus-card:focus-visible .focus-card-more{grid-template-rows:1fr;opacity:1;}
+.focus-card-desc{font-size:0.82rem;line-height:1.55;color:rgba(255,255,255,0.88);margin-top:10px;max-width:520px;}
+.focus-card-cta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.18);}
+.focus-card-cta span{font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.7);}
+.focus-card-arrow{width:32px;height:32px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.25s ease;}
+.focus-card-arrow svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2.4;}
+.focus-card:hover .focus-card-arrow{transform:translateX(3px);}
 .focus-card-meta{position:absolute;top:12px;left:12px;background:rgba(248,245,240,0.95);border-radius:6px;padding:5px 10px;}
 .focus-card-meta-tag{font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--primary);}
-.focus-card.placeholder{background:var(--muted);border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;cursor:default;}
-.focus-card.placeholder:hover{filter:none;transform:none;opacity:1;}
-.placeholder-inner{position:relative;z-index:2;text-align:center;padding:20px;pointer-events:none;}
-.placeholder-icon{width:46px;height:46px;background:var(--secondary);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
-.placeholder-icon svg{width:22px;height:22px;stroke:var(--primary);fill:none;stroke-width:1.8;}
-.placeholder-label{font-family:var(--font-serif);font-size:0.9rem;font-weight:700;color:var(--foreground);}
-.placeholder-sub{font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted-foreground);margin-top:4px;}
+@media(hover:none){.focus-card-more{grid-template-rows:1fr;opacity:1;}.focus-card-overlay{background:linear-gradient(to top,rgba(20,14,12,0.92) 0%,rgba(20,14,12,0.6) 55%,rgba(20,14,12,0.15) 100%);}}
 
 /* ── EXPERIENCE ── */
 #experience{padding:64px 48px;max-width:1100px;margin:0 auto;}
@@ -208,6 +213,7 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
 @media(max-width:900px){
   #about{grid-template-columns:1fr;gap:40px;}
   #projects .cards-grid{grid-template-columns:repeat(2,1fr);}
+  .focus-card.wide{grid-column:span 2;}
   .contact-wrap{grid-template-columns:1fr;gap:40px;}
 }
 @media(max-width:680px){
@@ -230,8 +236,8 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
   .exp-dot{display:none;}
   #scroll-section{height:auto;padding:60px 20px;}
   .scroll-sticky{position:relative;top:0;}
-  .focus-card-overlay{opacity:1;background:linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 55%);}
-  .cards-grid:hover .focus-card:not(:hover){filter:none;transform:none;opacity:1;}
+  .focus-card.wide{grid-column:auto;}
+  .focus-card{height:300px;}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
@@ -428,7 +434,7 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
       <div class="exp-content">
         <div class="exp-role">Stage Manager</div>
         <div class="exp-company no-select">Cardinal Newman Theater</div>
-        <div class="exp-desc">Started on backstage crew in 7th grade, spent two years as Assistant Stage Manager, and now run the shows as Stage Manager, including this year's <em>Mary Poppins</em>. I'm also the theater department's photographer.</div>
+        <div class="exp-desc">Started on backstage crew in 7th grade, spent two years as Assistant Stage Manager, and now run the shows as Stage Manager, including this year's <em>Mary Poppins</em>. I built <a href="theater.html" style="color:var(--primary);">Ghost Light</a>, an app that tells the crew which set piece moves where in every scene. I'm also the theater department's photographer.</div>
         <div class="exp-tags"><span class="skill-tag">Leadership</span><span class="skill-tag">Organization</span><span class="skill-tag">Photography</span></div>
       </div>
     </div>
@@ -495,69 +501,96 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
   </div>
   <div class="cards-grid">
 
-    <a href="server.html" class="focus-card reveal">
-      <img class="focus-card-bg" src="images/projects/minecraftserverPROJECT.png" alt="Server Infrastructure">
-      <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Home Server Network</div></div>
+    <a href="theater.html" class="focus-card wide reveal">
+      <img class="focus-card-bg" src="images/projects/ghostlight.jpg" alt="Ghost Light set-change tracker showing a stage ground plan" loading="lazy">
+      <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Theater &amp; Software</div></div>
       <div class="focus-card-overlay">
-        <div>
-          <div class="focus-card-title">Minecraft Server</div>
-          <span class="focus-card-link">Static IP · BungeeCord · ~80 Members · Discord Bot</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="printing.html" class="focus-card reveal">
-      <img class="focus-card-bg" src="images/projects/Fusion360PROJECT.png" alt="3D Printing">
-      <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">3D Design</div></div>
-      <div class="focus-card-overlay">
-        <div>
-          <div class="focus-card-title">Fusion 360 Parts</div>
-          <span class="focus-card-link">CAD-designed mechanical components and enclosures</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="robotics.html" class="focus-card reveal">
-      <img class="focus-card-bg" src="images/robotics/WithBertPROJECT.jpg" alt="Robotics">
-      <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Robotics</div></div>
-      <div class="focus-card-overlay">
-        <div>
-          <div class="focus-card-title">Robotics &mdash; Cardinal Newman</div>
-          <span class="focus-card-link">Beta Club 4th place · Starting an FTC team</span>
-        </div>
-      </div>
-    </a>
-
-
-    <a href="scpressurepoint.html" class="focus-card reveal">
-      <img class="focus-card-bg" src="images/projects/SCPressurePointWebsite.png" alt="SC Pressure Point website — Pressure Washing in Columbia, SC">
-      <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Business &amp; Web</div></div>
-      <div class="focus-card-overlay">
-        <div>
-          <div class="focus-card-title">SC Pressure Point</div>
-          <span class="focus-card-link">scpressurepoint.com · Student-owned pressure washing</span>
-        </div>
+        <div class="focus-card-title">Ghost Light</div>
+        <span class="focus-card-link">Stage manager · Set-change tracker app · 59 tests</span>
+        <div class="focus-card-more"><div>
+          <p class="focus-card-desc">As stage manager, I built an app that shows every crew member's phone an animated ground plan of which set piece moves where, scene by scene.</p>
+          <div class="focus-card-cta"><span>Click to read more</span><span class="focus-card-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+        </div></div>
       </div>
     </a>
 
     <a href="clearline.html" class="focus-card reveal">
-      <img class="focus-card-bg" src="images/projects/clearline.svg" alt="Clearline — Firebase CRM">
+      <img class="focus-card-bg" src="images/projects/clearline-card.svg" alt="Clearline CRM" loading="lazy">
       <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Software / CRM</div></div>
       <div class="focus-card-overlay">
-        <div>
-          <div class="focus-card-title">Clearline</div>
-          <span class="focus-card-link">Firebase CRM for my business · unfinished</span>
-        </div>
+        <div class="focus-card-title">Clearline</div>
+        <span class="focus-card-link">Firebase CRM for my business · unfinished</span>
+        <div class="focus-card-more"><div>
+          <p class="focus-card-desc">The app I built to run SC Pressure Point: customers, jobs, measurements, estimates, and billing in one place.</p>
+          <div class="focus-card-cta"><span>Click to read more</span><span class="focus-card-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+        </div></div>
       </div>
     </a>
 
-    <div class="focus-card placeholder reveal">
-      <div class="placeholder-inner">
-        <div class="placeholder-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
-        <div class="placeholder-label">Coming Soon</div>
-        <div class="placeholder-sub">Next Project</div>
+    <a href="scpressurepoint.html" class="focus-card reveal">
+      <img class="focus-card-bg" src="images/projects/SCPressurePointWebsite.png" alt="SC Pressure Point website" loading="lazy">
+      <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Business &amp; Web</div></div>
+      <div class="focus-card-overlay">
+        <div class="focus-card-title">SC Pressure Point</div>
+        <span class="focus-card-link">Founder · 3 employees · ~20 jobs</span>
+        <div class="focus-card-more"><div>
+          <p class="focus-card-desc">The pressure washing business I started at 14 and made official in 2026, plus the website I built for it.</p>
+          <div class="focus-card-cta"><span>Click to read more</span><span class="focus-card-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+        </div></div>
       </div>
-    </div>
+    </a>
+
+    <a href="robotics.html" class="focus-card reveal">
+      <img class="focus-card-bg" src="images/robotics/WithBertPROJECT.jpg" alt="Beta Club robotics team with their robot" loading="lazy">
+      <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Robotics</div></div>
+      <div class="focus-card-overlay">
+        <div class="focus-card-title">Robotics</div>
+        <span class="focus-card-link">Beta Club 4th place · Starting an FTC team</span>
+        <div class="focus-card-more"><div>
+          <p class="focus-card-desc">B.E.R.T., our beach-cleanup robot, placed 4th, the school's first placement in six years. Now I'm working to start an FTC team.</p>
+          <div class="focus-card-cta"><span>Click to read more</span><span class="focus-card-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+        </div></div>
+      </div>
+    </a>
+
+    <a href="server.html" class="focus-card reveal">
+      <img class="focus-card-bg" src="images/projects/minecraftserverPROJECT.png" alt="Minecraft server network" loading="lazy">
+      <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">Home Server</div></div>
+      <div class="focus-card-overlay">
+        <div class="focus-card-title">Minecraft Server</div>
+        <span class="focus-card-link">BungeeCord · Java plugins · Discord bot</span>
+        <div class="focus-card-more"><div>
+          <p class="focus-card-desc">A home-hosted server I've run since age 10, with a proxy network, custom plugins, and a Discord bot.</p>
+          <div class="focus-card-cta"><span>Click to read more</span><span class="focus-card-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+        </div></div>
+      </div>
+    </a>
+
+    <a href="printing.html" class="focus-card reveal">
+      <img class="focus-card-bg" src="images/projects/Fusion360PROJECT.png" alt="Fusion 360 CAD parts" loading="lazy">
+      <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">3D Design</div></div>
+      <div class="focus-card-overlay">
+        <div class="focus-card-title">Fusion 360 Parts</div>
+        <span class="focus-card-link">CAD · FDM printing · tolerances</span>
+        <div class="focus-card-more"><div>
+          <p class="focus-card-desc">From printed ball bearings to 24 sets of clock hands for a classroom: learning how parts actually get made.</p>
+          <div class="focus-card-cta"><span>Click to read more</span><span class="focus-card-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+        </div></div>
+      </div>
+    </a>
+
+    <a href="https://github.com/OneRedPanda99/OneRedPanda99" target="_blank" rel="noopener noreferrer" class="focus-card wide reveal">
+      <img class="focus-card-bg" src="images/projects/handwriting.jpg" alt="Handwriting data collector app" loading="lazy">
+      <div class="focus-card-meta"><div class="focus-card-meta-tag no-select">In Progress</div></div>
+      <div class="focus-card-overlay">
+        <div class="focus-card-title">Handwriting Plotter</div>
+        <span class="focus-card-link">Data collection · AI model · pen plotter</span>
+        <div class="focus-card-more"><div>
+          <p class="focus-card-desc">A web app that records my handwriting stroke by stroke, building a dataset to train a model that writes like me on a pen plotter.</p>
+          <div class="focus-card-cta"><span>View on GitHub</span><span class="focus-card-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span></div>
+        </div></div>
+      </div>
+    </a>
 
   </div>
 </section>
@@ -676,10 +709,10 @@ footer{border-top:2px solid var(--border);padding:36px 48px;display:flex;justify
         <div class="contact-link-name">SC Pressure Point</div>
         <div class="contact-link-url">scpressurepoint.com</div>
       </a>
-      <a href="clearline.html" class="contact-link-card">
-        <div class="contact-link-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="21"/></svg></div>
-        <div class="contact-link-name">Clearline</div>
-        <div class="contact-link-url">Firebase CRM project</div>
+      <a href="https://vsco.co/parkerbranham/gallery" target="_blank" rel="noopener noreferrer" class="contact-link-card">
+        <div class="contact-link-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <div class="contact-link-name">VSCO</div>
+        <div class="contact-link-url">parkerbranham</div>
       </a>
       <a href="resume.pdf" target="_blank" rel="noopener noreferrer" class="contact-link-card">
         <div class="contact-link-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg></div>

@@ -13,6 +13,7 @@ Contact: GitHub https://github.com/OneRedPanda99 · LinkedIn https://www.linkedi
 ## Pages
 
 - [Home](https://www.parkerbranham.com/): Bio, project overview, experience, and contact.
+- [Theater & Ghost Light](https://www.parkerbranham.com/theater.html): Stage manager at Cardinal Newman, and Ghost Light, a live set-change tracker app he built for the theater crew.
 - [Clearline](https://www.parkerbranham.com/clearline.html): An unfinished Firebase-backed CRM built for SC Pressure Point: auth, data model, and security rules.
 - [SC Pressure Point](https://www.parkerbranham.com/scpressurepoint.html): Student-owned pressure washing business in Columbia, SC (paused), with published square-foot pricing. Live site: https://scpressurepoint.com
 - [Server Administrator](https://www.parkerbranham.com/server.html): Home-hosted Minecraft network with a BungeeCord proxy, custom plugins, a Discord bot, and about 80 members.
@@ -22,5 +23,6 @@ Contact: GitHub https://github.com/OneRedPanda99 · LinkedIn https://www.linkedi
 
 ## Optional
 
+- [Handwriting plotter (in progress)](https://github.com/OneRedPanda99/OneRedPanda99): A handwriting data collector for training a model to write like him on a pen plotter.
 - [Résumé (PDF)](https://www.parkerbranham.com/resume.pdf)
 - [Source code](https://github.com/OneRedPanda99/OneRedPanda99.github.io)

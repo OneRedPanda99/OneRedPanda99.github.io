@@ -16,23 +16,20 @@ SUBHEAD = ParagraphStyle('SUBHEAD', parent=styles['Normal'], fontName='Helvetica
 LABEL = ParagraphStyle('LABEL', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=9, textColor=PRIMARY, spaceBefore=8, spaceAfter=2, leading=11)
 ROLE = ParagraphStyle('ROLE', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=10.5, textColor=DARK, spaceBefore=4, leading=13)
 META = ParagraphStyle('META', parent=styles['Normal'], fontName='Helvetica', fontSize=8.5, textColor=SUB, spaceAfter=1, leading=11)
-BODY = ParagraphStyle('BODY', parent=styles['Normal'], fontName='Helvetica', fontSize=9, textColor=DARK, leading=12.5, spaceAfter=2)
+BODY = ParagraphStyle('BODY', parent=styles['Normal'], fontName='Helvetica', fontSize=8.8, textColor=DARK, leading=11.8, spaceAfter=1.5)
 BULLET = ParagraphStyle('BULLET', parent=BODY, leftIndent=10, spaceAfter=1)
 
 doc = SimpleDocTemplate('resume.pdf', pagesize=letter,
-                        leftMargin=0.7*inch, rightMargin=0.7*inch,
+                        leftMargin=0.6*inch, rightMargin=0.6*inch,
                         topMargin=0.5*inch, bottomMargin=0.5*inch,
                         title='Parker Branham — Resume', author='Parker Branham')
 E = []
 
 E.append(Paragraph('Parker Branham', H1))
 E.append(Paragraph('Columbia, SC &nbsp;·&nbsp; Class of 2027 (Senior) &nbsp;·&nbsp; parkerbranham@gmail.com', SUBHEAD))
-E.append(Paragraph('GitHub: github.com/OneRedPanda99 &nbsp;|&nbsp; LinkedIn: linkedin.com/in/parker-branham-9b32a5341/', SUBHEAD))
+E.append(Paragraph('parkerbranham.com &nbsp;|&nbsp; GitHub: OneRedPanda99 &nbsp;|&nbsp; LinkedIn: linkedin.com/in/parker-branham-9b32a5341/', SUBHEAD))
+E.append(Paragraph('Planning to study mechatronics engineering. Open to internships, tutoring, and project collaborations.', BODY))
 E.append(HRFlowable(width='100%', thickness=1, color=BORDER, spaceBefore=4, spaceAfter=6))
-
-E.append(Paragraph('OPEN TO', LABEL))
-E.append(Paragraph('Internships, tutoring, and project collaborations during my senior year. '
-                   'Planning to study mechatronics engineering.', BODY))
 
 E.append(Paragraph('EDUCATION', LABEL))
 E.append(Paragraph('Cardinal Newman School — Columbia, SC', ROLE))
@@ -75,13 +72,18 @@ E.append(Paragraph('Other: Aviation Club spokesperson; Beta Club member.', BODY)
 
 E.append(Paragraph('PROJECTS', LABEL))
 
+E.append(Paragraph('Ghost Light — Theater Set-Change Tracker', ROLE))
+E.append(Paragraph("A web app that shows the crew an animated ground plan of which set piece moves where in each scene, with move lists "
+                   "computed from scene to scene, a backstage dim mode, and 59 automated tests in CI. Built for my school's theater.", BODY))
+
 E.append(Paragraph('Clearline — Firebase CRM (unfinished)', ROLE))
 E.append(Paragraph("A vanilla-JS web app with a Firestore backend that handled customers, jobs, measurements, estimates, and billing "
                    "for SC Pressure Point. Worked through Firestore security rules, an access model, and a repeatable deploy. "
                    "Development stopped when the business paused.", BODY))
 
-E.append(Paragraph('3D Design &amp; Printing', ROLE))
-E.append(Paragraph("Fusion 360 CAD and FDM printing, from printed ball bearings to classroom materials.", BODY))
+E.append(Paragraph('3D Design &amp; Printing; Handwriting Plotter (in progress)', ROLE))
+E.append(Paragraph("Fusion 360 CAD and FDM printing, from printed ball bearings to classroom materials. Building a handwriting "
+                   "data collector to train a model that writes like me on a pen plotter.", BODY))
 
 E.append(Paragraph('SKILLS', LABEL))
 E.append(Paragraph('Fusion 360 / CAD · HTML, CSS, JavaScript · Firebase / Firestore · Java · Python (Flask) · GitHub Pages · '
