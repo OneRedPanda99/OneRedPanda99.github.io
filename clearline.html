@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Clearline — a Firebase-backed CRM Parker Branham built for his pressure washing business: auth, data model, security rules, and the bugs he had to fix along the way.">
+<meta name="description" content="Clearline is a Firebase-backed CRM Parker Branham built for his pressure washing business: auth, data model, security rules, and the bugs he had to fix along the way.">
 <link rel="canonical" href="https://www.parkerbranham.com/clearline.html">
 <meta name="author" content="Parker Branham">
 <meta name="theme-color" content="#2e7d32">
-<meta property="og:title" content="Clearline — Parker Branham">
-<meta property="og:description" content="A Firebase-backed CRM I built for my pressure washing business — real architecture and real bug-fixing.">
+<meta property="og:title" content="Clearline | Parker Branham">
+<meta property="og:description" content="A Firebase-backed CRM I built for my pressure washing business, with real architecture and real bug-fixing.">
 <meta property="og:image" content="https://www.parkerbranham.com/images/projects/clearline.svg">
 <meta property="og:url" content="https://www.parkerbranham.com/clearline.html">
 <meta property="og:type" content="article">
@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="images/me/PBLogo.png">
 <link rel="apple-touch-icon" href="images/me/PBLogo.png">
-<title>Clearline — Parker Branham</title>
+<title>Clearline | Parker Branham</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
@@ -78,7 +78,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:f
 
 .content-bullets{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:8px;}
 .content-bullets li{font-size:0.88rem;color:var(--sub);padding-left:18px;position:relative;line-height:1.5;}
-.content-bullets li::before{content:'—';position:absolute;left:0;color:var(--primary);}
+.content-bullets li::before{content:'•';position:absolute;left:0;color:var(--primary);}
 
 .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
 .tag{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.08em;padding:5px 12px;border-radius:100px;background:var(--muted);color:var(--dim);border:1px solid var(--border);}
@@ -142,7 +142,7 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
       "@type": "SoftwareApplication",
       "name": "Clearline",
       "url": "https://www.parkerbranham.com/clearline.html",
-      "description": "A Firebase-backed CRM built from scratch for a pressure washing business — real architecture and real bug-fixing.",
+      "description": "A Firebase-backed CRM built from scratch for a pressure washing business, with real architecture and real bug-fixing.",
       "image": "https://www.parkerbranham.com/images/projects/clearline.svg",
       "author": {
         "@id": "https://www.parkerbranham.com/#parker"
@@ -210,10 +210,10 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
     <p class="sec-label">Architecture &amp; decisions</p>
     <h2 class="sec-h2">What I<br><em>actually built</em></h2>
     <div class="prose">
-      <p>I chose a no-framework, vanilla-JS PWA on purpose — fewer moving parts to break, and it's something I fully understand end to end. Firebase Firestore handles the data; GitHub Pages serves the app.</p>
+      <p>I chose a no-framework, vanilla-JS PWA on purpose. It has fewer moving parts to break, and I understand it end to end. Firebase Firestore handles the data; GitHub Pages serves the app.</p>
       <ul class="content-bullets">
-        <li>Firestore as the live backend — jobs, customers, quotes, schedules</li>
-        <li>Vanilla JS PWA (no React/Vue) — small, fast, fully owned</li>
+        <li>Firestore as the live backend for jobs, customers, quotes, and schedules</li>
+        <li>Vanilla JS PWA with no React or Vue, so it stays small, fast, and fully mine</li>
         <li>GitHub Pages deploy that regenerates config from secrets on every push</li>
         <li>Access model built on a signed-in <strong>accessUids</strong> list, plus a backfill tool to grant access to existing records</li>
       </ul>
@@ -228,8 +228,8 @@ footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify
     <div class="prose">
       <p>Getting it working meant solving real problems, not toy ones:</p>
       <ul class="content-bullets">
-        <li>Firestore security rules: the jobs <strong>list</strong> query broke until I set the rule to <code>signedIn() &amp;&amp; uid() in accessUids</code> — a <code>get()</code>/owner check made array-contains queries unprovable</li>
-        <li>Chasing "permission-denied" errors that were sometimes stale rules, sometimes client bugs — had to pull the full console stack, not just the error text</li>
+        <li>Firestore security rules: the jobs <strong>list</strong> query broke until I set the rule to <code>signedIn() &amp;&amp; uid() in accessUids</code>. A <code>get()</code>/owner check made array-contains queries unprovable.</li>
+        <li>Chasing "permission-denied" errors that were sometimes stale rules, sometimes client bugs. I had to read the full console stack, not just the error text.</li>
         <li>Deploy discipline: rules publish manually; the deploy script rebuilds config from secrets each push (one unquoted secret once broke the live site)</li>
         <li>Tradeoffs between simplicity and a clean security model, decided and documented</li>
       </ul>
